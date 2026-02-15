@@ -36,6 +36,24 @@ public class BlockStateGenerator extends BlockStateProvider {
         sofa(ModBlocks.PURPLE_SOFA, "purple");
         sofa(ModBlocks.MAGENTA_SOFA, "magenta");
         sofa(ModBlocks.PINK_SOFA, "pink");
+
+        // 高脚凳
+        barStool(ModBlocks.WHITE_BAR_STOOL, "white");
+        barStool(ModBlocks.LIGHT_GRAY_BAR_STOOL, "light_gray");
+        barStool(ModBlocks.GRAY_BAR_STOOL, "gray");
+        barStool(ModBlocks.BLACK_BAR_STOOL, "black");
+        barStool(ModBlocks.BROWN_BAR_STOOL, "brown");
+        barStool(ModBlocks.RED_BAR_STOOL, "red");
+        barStool(ModBlocks.ORANGE_BAR_STOOL, "orange");
+        barStool(ModBlocks.YELLOW_BAR_STOOL, "yellow");
+        barStool(ModBlocks.LIME_BAR_STOOL, "lime");
+        barStool(ModBlocks.GREEN_BAR_STOOL, "green");
+        barStool(ModBlocks.CYAN_BAR_STOOL, "cyan");
+        barStool(ModBlocks.LIGHT_BLUE_BAR_STOOL, "light_blue");
+        barStool(ModBlocks.BLUE_BAR_STOOL, "blue");
+        barStool(ModBlocks.PURPLE_BAR_STOOL, "purple");
+        barStool(ModBlocks.MAGENTA_BAR_STOOL, "magenta");
+        barStool(ModBlocks.PINK_BAR_STOOL, "pink");
     }
 
     private void sofa(RegistryObject<Block> block, String color) {
@@ -43,6 +61,13 @@ public class BlockStateGenerator extends BlockStateProvider {
             ConnectionType connection = blockState.getValue(SofaBlock.CONNECTION);
             String type = connection.getSerializedName();
             ResourceLocation file = modLoc("block/deco/sofa/%s/%s".formatted(color, type));
+            return new ModelFile.UncheckedModelFile(file);
+        });
+    }
+
+    private void barStool(RegistryObject<Block> block, String color) {
+        horizontalBlock(block.get(), blockState -> {
+            ResourceLocation file = modLoc("block/deco/bar_stool/%s".formatted(color));
             return new ModelFile.UncheckedModelFile(file);
         });
     }

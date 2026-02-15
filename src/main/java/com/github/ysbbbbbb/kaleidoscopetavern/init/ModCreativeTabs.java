@@ -31,5 +31,22 @@ public class ModCreativeTabs {
                 output.accept(ModItems.PURPLE_SOFA.get());
                 output.accept(ModItems.MAGENTA_SOFA.get());
                 output.accept(ModItems.PINK_SOFA.get());
+
+                output.accept(ModItems.WHITE_BAR_STOOL.get());
+                output.accept(ModItems.LIGHT_GRAY_BAR_STOOL.get());
+                output.accept(ModItems.GRAY_BAR_STOOL.get());
+                output.accept(ModItems.BLACK_BAR_STOOL.get());
+                output.accept(ModItems.BROWN_BAR_STOOL.get());
+                output.accept(ModItems.RED_BAR_STOOL.get());
+                output.accept(ModItems.ORANGE_BAR_STOOL.get());
+                output.accept(ModItems.YELLOW_BAR_STOOL.get());
+                output.accept(ModItems.LIME_BAR_STOOL.get());
+                output.accept(ModItems.GREEN_BAR_STOOL.get());
+                output.accept(ModItems.CYAN_BAR_STOOL.get());
+                output.accept(ModItems.LIGHT_BLUE_BAR_STOOL.get());
+                output.accept(ModItems.BLUE_BAR_STOOL.get());
+                output.accept(ModItems.PURPLE_BAR_STOOL.get());
+                output.accept(ModItems.MAGENTA_BAR_STOOL.get());
+                output.accept(ModItems.PINK_BAR_STOOL.get());
             }).build());
 }

@@ -15,6 +15,10 @@ public interface TagMod {
      */
     TagKey<Block> SOFA = blockTag("sofa");
     /**
+     * 高脚凳
+     */
+    TagKey<Block> BAR_STOOL = blockTag("bar_stool");
+    /**
      * 可以坐在上面的方块
      */
     TagKey<Block> SITTABLE = blockTag("sittable");

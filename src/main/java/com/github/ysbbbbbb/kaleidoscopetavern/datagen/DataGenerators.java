@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.datagen;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.datagen.loottable.LootTableGenerator;
 import com.github.ysbbbbbb.kaleidoscopetavern.datagen.model.BlockModelGenerator;
 import com.github.ysbbbbbb.kaleidoscopetavern.datagen.model.BlockStateGenerator;
 import com.github.ysbbbbbb.kaleidoscopetavern.datagen.model.ItemModelGenerator;
@@ -21,6 +22,8 @@ public class DataGenerators {
         generator.addProvider(event.includeClient(), new BlockModelGenerator(pack, helper));
         generator.addProvider(event.includeClient(), new BlockStateGenerator(pack, helper));
         generator.addProvider(event.includeClient(), new ItemModelGenerator(pack, helper));
+
+        generator.addProvider(event.includeServer(), new LootTableGenerator(pack));
 
         var block = vanillaPack.addProvider(packOutput -> new TagBlock(packOutput, registries, helper));
     }
