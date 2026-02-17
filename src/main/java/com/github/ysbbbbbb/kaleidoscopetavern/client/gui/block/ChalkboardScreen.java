@@ -31,13 +31,14 @@ public class ChalkboardScreen extends Screen {
         int posX = this.width / 2 - 165;
         int posY = this.height / 2 - 80;
         int boxWidth = 256;
+        int characterLimit = this.blockEntity.isLarge() ? 1500 : 350;
 
         this.customSetting = this.addRenderableWidget(new MultiLineEditBox(font,
                 posX, posY, boxWidth, 120,
                 Component.translatable("gui.kaleidoscope_tavern.chalkboard.edit.placeholder"),
                 Component.literal("Custom Setting Box")));
         this.customSetting.setValue(text);
-        this.customSetting.setCharacterLimit(256);
+        this.customSetting.setCharacterLimit(characterLimit);
         this.customSetting.setValueListener(s -> text = s);
 
         this.addRenderableWidget(

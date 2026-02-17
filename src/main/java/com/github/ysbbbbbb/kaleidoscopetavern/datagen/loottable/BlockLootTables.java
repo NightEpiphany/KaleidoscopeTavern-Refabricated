@@ -72,6 +72,6 @@ public class BlockLootTables extends BlockLootSubProvider {
     }
 
     public ResourceLocation modLoc(String name) {
-        return new ResourceLocation(KaleidoscopeTavern.MOD_ID, name);
+        return KaleidoscopeTavern.modLoc(name);
     }
 }

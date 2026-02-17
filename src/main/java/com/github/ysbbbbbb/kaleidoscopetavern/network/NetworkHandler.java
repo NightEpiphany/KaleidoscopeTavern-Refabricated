@@ -3,7 +3,6 @@ package com.github.ysbbbbbb.kaleidoscopetavern.network;
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.message.ChalkboardOpenS2CMessage;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.message.ChalkboardUpdateC2SMessage;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkDirection;
@@ -16,7 +15,7 @@ import java.util.Optional;
 public class NetworkHandler {
     private static final String VERSION = "1.0.0";
 
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation(KaleidoscopeTavern.MOD_ID, "network"),
+    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(KaleidoscopeTavern.modLoc("network"),
             () -> VERSION, it -> it.equals(VERSION), it -> it.equals(VERSION));
 
     public static void init() {

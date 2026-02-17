@@ -12,12 +12,12 @@ import java.util.function.Supplier;
 public record ChalkboardUpdateC2SMessage(BlockPos pos, String text, ChalkboardBlockEntity.TextAlignment textAlignment) {
     public static void encode(ChalkboardUpdateC2SMessage message, FriendlyByteBuf buf) {
         buf.writeBlockPos(message.pos);
-        buf.writeUtf(message.text);
+        buf.writeUtf(message.text, 2048);
         buf.writeEnum(message.textAlignment);
     }
 
     public static ChalkboardUpdateC2SMessage decode(FriendlyByteBuf buf) {
-        return new ChalkboardUpdateC2SMessage(buf.readBlockPos(), buf.readUtf(), buf.readEnum(ChalkboardBlockEntity.TextAlignment.class));
+        return new ChalkboardUpdateC2SMessage(buf.readBlockPos(), buf.readUtf(2048), buf.readEnum(ChalkboardBlockEntity.TextAlignment.class));
     }
 
     public static void handle(ChalkboardUpdateC2SMessage message, Supplier<NetworkEvent.Context> contextSupplier) {

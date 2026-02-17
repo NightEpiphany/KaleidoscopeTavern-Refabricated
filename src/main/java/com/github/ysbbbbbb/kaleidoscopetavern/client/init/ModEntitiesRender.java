@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.init;
 
 
+import com.github.ysbbbbbb.kaleidoscopetavern.client.model.deco.LargeChalkboardModel;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.model.deco.SmallChalkboardModel;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.render.entity.SitRenderer;
 import com.github.ysbbbbbb.kaleidoscopetavern.entity.SitEntity;
@@ -20,5 +21,6 @@ public class ModEntitiesRender {
     @SubscribeEvent
     public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(SmallChalkboardModel.LAYER_LOCATION, SmallChalkboardModel::createBodyLayer);
+        event.registerLayerDefinition(LargeChalkboardModel.LAYER_LOCATION, LargeChalkboardModel::createBodyLayer);
     }
 }

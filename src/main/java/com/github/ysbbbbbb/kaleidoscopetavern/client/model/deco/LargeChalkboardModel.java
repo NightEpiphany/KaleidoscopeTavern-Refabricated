@@ -10,11 +10,11 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
 
-public class SmallChalkboardModel extends Model {
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(KaleidoscopeTavern.modLoc("small_chalk"), "main");
+public class LargeChalkboardModel extends Model {
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(KaleidoscopeTavern.modLoc("large_chalk"), "main");
     private final ModelPart bone;
 
-    public SmallChalkboardModel(ModelPart root) {
+    public LargeChalkboardModel(ModelPart root) {
         super(RenderType::entityCutoutNoCull);
         this.bone = root.getChild("bone");
     }
@@ -22,8 +22,8 @@ public class SmallChalkboardModel extends Model {
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
-        partdefinition.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 0).addBox(-16.0F, -30.0F, 15.0F, 16.0F, 28.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(8.0F, 24.0F, -8.0F));
-        return LayerDefinition.create(meshdefinition, 64, 64);
+        partdefinition.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 0).addBox(-32.0F, -30.0F, 15.0F, 48.0F, 28.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(8.0F, 24.0F, -8.0F));
+        return LayerDefinition.create(meshdefinition, 128, 64);
     }
 
     @Override
