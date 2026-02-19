@@ -57,12 +57,29 @@ public class TagBlock extends BlockTagsProvider {
                 ModBlocks.PINK_BAR_STOOL.get()
         );
 
+        this.tag(TagMod.SANDWICH_BOARD).add(
+                ModBlocks.BASE_SANDWICH_BOARD.get(),
+                ModBlocks.ALLIUM_SANDWICH_BOARD.get(),
+                ModBlocks.AZURE_BLUET_SANDWICH_BOARD.get(),
+                ModBlocks.CORNFLOWER_SANDWICH_BOARD.get(),
+                ModBlocks.ORCHID_SANDWICH_BOARD.get(),
+                ModBlocks.PEONY_SANDWICH_BOARD.get(),
+                ModBlocks.PINK_PETALS_SANDWICH_BOARD.get(),
+                ModBlocks.PITCHER_PLANT_SANDWICH_BOARD.get(),
+                ModBlocks.POPPY_SANDWICH_BOARD.get(),
+                ModBlocks.SUNFLOWER_SANDWICH_BOARD.get(),
+                ModBlocks.TORCHFLOWER_SANDWICH_BOARD.get(),
+                ModBlocks.TULIP_SANDWICH_BOARD.get(),
+                ModBlocks.WITHER_ROSE_SANDWICH_BOARD.get()
+        );
+
         this.tag(TagMod.SITTABLE)
                 .addTag(TagMod.SOFA)
                 .addTag(TagMod.BAR_STOOL);
 
         this.tag(BlockTags.MINEABLE_WITH_AXE)
                 .addTag(TagMod.SOFA)
-                .addTag(TagMod.BAR_STOOL);
+                .addTag(TagMod.BAR_STOOL)
+                .addTag(TagMod.SANDWICH_BOARD);
     }
 }

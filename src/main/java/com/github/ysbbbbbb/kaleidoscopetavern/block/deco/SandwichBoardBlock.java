@@ -1,14 +1,17 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.SandwichBlockEntity;
-import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
-import com.github.ysbbbbbb.kaleidoscopetavern.network.message.TextOpenS2CMessage;
+import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
+import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -30,9 +33,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("deprecation")
 public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+    public static final Map<Item, SandwichBoardBlock> TRANSFORM_MAP = Maps.newHashMap();
+
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -40,7 +46,12 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     public static final VoxelShape TOP_SHAPE = Block.box(2, -16, 2, 14, 6, 14);
     public static final VoxelShape BOTTOM_SHAPE = Block.box(2, 0, 2, 14, 22, 14);
 
-    public SandwichBoardBlock() {
+    /**
+     * 右键交互，可以变成此变种展板的物品。
+     */
+    public final List<Item> transformItems;
+
+    public SandwichBoardBlock(Item... transformItems) {
         super(Properties.of()
                 .mapColor(MapColor.WOOD)
                 .instrument(NoteBlockInstrument.GUITAR)
@@ -52,6 +63,8 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
                 .setValue(FACING, Direction.NORTH)
                 .setValue(HALF, Half.BOTTOM)
                 .setValue(WATERLOGGED, false));
+        this.transformItems = List.of(transformItems);
+        this.transformItems.forEach(item -> TRANSFORM_MAP.put(item, this));
     }
 
     @Override
@@ -60,18 +73,41 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
         Half half = state.getValue(HALF);
         BlockPos clickedPos = half == Half.BOTTOM ? pos : pos.below();
         if (level.getBlockEntity(clickedPos) instanceof SandwichBlockEntity sandwichBlock) {
-            if (sandwichBlock.isWaxed()) {
-                return InteractionResult.FAIL;
-            }
-            if (sandwichBlock.playerIsTooFarAwayToEdit(player.getUUID())) {
-                return InteractionResult.FAIL;
-            }
-            if (!level.isClientSide) {
-                NetworkHandler.sendToClient(player, new TextOpenS2CMessage(sandwichBlock.getBlockPos()));
-            }
-            return InteractionResult.SUCCESS;
-        }
+            // 优先判断是否可变样式
+            Item item = player.getItemInHand(hand).getItem();
+            // 如果在其他变种物品列表中，则变化种类
+            if (TRANSFORM_MAP.containsKey(item) && !transformItems.contains(item)) {
+                BlockState transform = TRANSFORM_MAP.get(item)
+                        .defaultBlockState()
+                        .setValue(FACING, state.getValue(FACING))
+                        .setValue(HALF, state.getValue(HALF))
+                        .setValue(WATERLOGGED, state.getValue(WATERLOGGED));
 
+                // 复制 BlockEntity 数据
+                CompoundTag tag = sandwichBlock.saveWithoutMetadata();
+
+                // 设置上下两个部分
+                level.setBlockAndUpdate(clickedPos, transform);
+                level.setBlockAndUpdate(clickedPos.above(), transform.setValue(HALF, Half.TOP));
+
+                // 粘贴 BlockEntity 数据
+                BlockEntity blockEntity = level.getBlockEntity(clickedPos);
+                if (blockEntity instanceof SandwichBlockEntity be) {
+                    be.load(tag);
+                    be.refresh();
+                }
+
+                level.playSound(null, pos, SoundType.GRASS.getPlaceSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                if (!player.isCreative()) {
+                    player.getItemInHand(hand).shrink(1);
+                }
+
+                return InteractionResult.SUCCESS;
+            } else {
+                // 否则打开界面
+                return TextBlockEntity.onItemUse(level, sandwichBlock, player, hand);
+            }
+        }
         return super.use(state, level, pos, player, hand, hitResult);
     }
 
@@ -85,7 +121,8 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
         boolean isBottom = half == Half.BOTTOM && direction == Direction.UP;
         boolean isTop = half == Half.TOP && direction == Direction.DOWN;
         if (direction.getAxis() == Direction.Axis.Y && (isBottom || isTop)) {
-            if (neighborState.is(this) && neighborState.getValue(HALF) != half) {
+            // 这里要用 instanceof，因为拿花切换种类时会触发此段
+            if (neighborState.getBlock() instanceof SandwichBoardBlock && neighborState.getValue(HALF) != half) {
                 return state.setValue(FACING, neighborState.getValue(FACING));
             }
             return Blocks.AIR.defaultBlockState();
@@ -174,5 +211,9 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     @Override
     public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
+    }
+
+    public List<Item> getTransformItems() {
+        return transformItems;
     }
 }

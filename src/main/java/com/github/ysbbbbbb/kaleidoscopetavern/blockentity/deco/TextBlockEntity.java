@@ -1,12 +1,19 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
+import com.github.ysbbbbbb.kaleidoscopetavern.network.message.TextOpenS2CMessage;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.TextAlignment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.StringUtils;
@@ -49,6 +56,79 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
         if (uuid != null && be.playerIsTooFarAwayToEdit(uuid)) {
             be.setPlayerWhoMayEdit(null);
         }
+    }
+
+    public static InteractionResult onItemUse(Level level, TextBlockEntity textBlock, Player player, InteractionHand hand) {
+        BlockPos pos = textBlock.getBlockPos();
+
+        // 如果玩家距离太远了，就不允许编辑
+        if (textBlock.playerIsTooFarAwayToEdit(player.getUUID())) {
+            return InteractionResult.PASS;
+        }
+
+        // 如果打蜡了，就不允许编辑
+        if (textBlock.isWaxed()) {
+            level.playSound(null, pos, SoundEvents.WAXED_SIGN_INTERACT_FAIL, SoundSource.BLOCKS);
+            return InteractionResult.PASS;
+        }
+
+        ItemStack itemInHand = player.getItemInHand(hand);
+
+        // 染料
+        if (itemInHand.getItem() instanceof DyeItem dyeItem) {
+            DyeColor newColor = dyeItem.getDyeColor();
+            if (newColor != textBlock.getColor()) {
+                textBlock.setColor(newColor);
+                textBlock.refresh();
+                level.playSound(null, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS);
+                if (!player.isCreative()) {
+                    itemInHand.shrink(1);
+                }
+                return InteractionResult.SUCCESS;
+            }
+        }
+
+        // 荧光墨囊
+        if (itemInHand.getItem() instanceof GlowInkSacItem) {
+            if (!textBlock.isGlowing()) {
+                textBlock.setGlowing(true);
+                textBlock.refresh();
+                level.playSound(null, pos, SoundEvents.GLOW_INK_SAC_USE, SoundSource.BLOCKS);
+                if (!player.isCreative()) {
+                    itemInHand.shrink(1);
+                }
+                return InteractionResult.SUCCESS;
+            }
+        }
+
+        // 普通墨囊
+        if (itemInHand.getItem() instanceof InkSacItem) {
+            if (textBlock.isGlowing()) {
+                textBlock.setGlowing(false);
+                textBlock.refresh();
+                level.playSound(null, pos, SoundEvents.INK_SAC_USE, SoundSource.BLOCKS);
+                if (!player.isCreative()) {
+                    itemInHand.shrink(1);
+                }
+                return InteractionResult.SUCCESS;
+            }
+        }
+
+        // 打蜡
+        if (itemInHand.getItem() instanceof HoneycombItem) {
+            textBlock.setWaxed(true);
+            textBlock.refresh();
+            level.levelEvent(null, LevelEvent.PARTICLES_AND_SOUND_WAX_ON, pos, 0);
+            if (!player.isCreative()) {
+                itemInHand.shrink(1);
+            }
+            return InteractionResult.SUCCESS;
+        }
+
+        if (!level.isClientSide) {
+            NetworkHandler.sendToClient(player, new TextOpenS2CMessage(pos));
+        }
+        return InteractionResult.SUCCESS;
     }
 
     /**

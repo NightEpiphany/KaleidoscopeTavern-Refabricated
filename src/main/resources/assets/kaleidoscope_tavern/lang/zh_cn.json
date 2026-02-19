@@ -32,5 +32,22 @@
   "block.kaleidoscope_tavern.purple_bar_stool": "紫色高脚凳",
   "block.kaleidoscope_tavern.magenta_bar_stool": "品红色高脚凳",
   "block.kaleidoscope_tavern.pink_bar_stool": "粉红色高脚凳",
-  "block.kaleidoscope_tavern.chalkboard": "黑板"
+  "block.kaleidoscope_tavern.chalkboard": "黑板",
+  "block.kaleidoscope_tavern.base_sandwich_board": "展板（基础款）",
+  "block.kaleidoscope_tavern.pink_petals_sandwich_board": "展板（粉色花瓣）",
+  "block.kaleidoscope_tavern.sunflower_sandwich_board": "展板（向日葵）",
+  "block.kaleidoscope_tavern.poppy_sandwich_board": "展板（虞美人）",
+  "block.kaleidoscope_tavern.cornflower_sandwich_board": "展板（矢车菊）",
+  "block.kaleidoscope_tavern.orchid_sandwich_board": "展板（兰花）",
+  "block.kaleidoscope_tavern.allium_sandwich_board": "展板（绒球葱）",
+  "block.kaleidoscope_tavern.azure_bluet_sandwich_board": "展板（蓝花美耳草）",
+  "block.kaleidoscope_tavern.tulip_sandwich_board": "展板（郁金香）",
+  "block.kaleidoscope_tavern.torchflower_sandwich_board": "展板（火把花）",
+  "block.kaleidoscope_tavern.wither_rose_sandwich_board": "展板（凋零玫瑰）",
+  "block.kaleidoscope_tavern.peony_sandwich_board": "展板（牡丹）",
+  "block.kaleidoscope_tavern.pitcher_plant_sandwich_board": "展板（瓶子草）",
+  "gui.kaleidoscope_tavern.text.edit.placeholder": "写点什么吧……",
+  "gui.kaleidoscope_tavern.text.edit.text_alignment.left": "左对齐",
+  "gui.kaleidoscope_tavern.text.edit.text_alignment.center": "居中",
+  "gui.kaleidoscope_tavern.text.edit.text_alignment.right": "右对齐"
 }

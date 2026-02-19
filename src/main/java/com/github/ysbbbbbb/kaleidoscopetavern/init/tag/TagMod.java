@@ -18,6 +18,10 @@ public interface TagMod {
      */
     TagKey<Block> BAR_STOOL = blockTag("bar_stool");
     /**
+     * 展板
+     */
+    TagKey<Block> SANDWICH_BOARD = blockTag("sandwich_board");
+    /**
      * 可以坐在上面的方块
      */
     TagKey<Block> SITTABLE = blockTag("sittable");

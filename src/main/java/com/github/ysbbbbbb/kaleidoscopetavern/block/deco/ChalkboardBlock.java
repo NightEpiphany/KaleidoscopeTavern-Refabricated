@@ -4,8 +4,6 @@ import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.PositionType;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.ChalkboardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
-import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
-import com.github.ysbbbbbb.kaleidoscopetavern.network.message.TextOpenS2CMessage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -96,16 +94,7 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
         }
 
         if (level.getBlockEntity(clickedPos) instanceof ChalkboardBlockEntity chalkboard) {
-            if (chalkboard.isWaxed()) {
-                return InteractionResult.FAIL;
-            }
-            if (chalkboard.playerIsTooFarAwayToEdit(player.getUUID())) {
-                return InteractionResult.FAIL;
-            }
-            if (!level.isClientSide) {
-                NetworkHandler.sendToClient(player, new TextOpenS2CMessage(chalkboard.getBlockPos()));
-            }
-            return InteractionResult.SUCCESS;
+            return TextBlockEntity.onItemUse(level, chalkboard, player, hand);
         }
 
         return super.use(state, level, pos, player, hand, hitResult);
