@@ -64,6 +64,7 @@ public class ItemModelGenerator extends ItemModelProvider {
 
         barCounter(ModItems.BAR_COUNTER);
         basicItem(ModItems.STEPLADDER.get());
+        basicItem(ModItems.GRAPEVINE.get());
     }
 
     private void sofa(String color) {

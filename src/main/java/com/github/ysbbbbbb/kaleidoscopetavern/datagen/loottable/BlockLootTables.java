@@ -2,6 +2,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.datagen.loottable;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
+import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
@@ -113,6 +114,9 @@ public class BlockLootTables extends BlockLootSubProvider {
         dropSelf(ModBlocks.BAR_COUNTER.get());
         // 人字梯
         dropSelf(ModBlocks.STEPLADDER.get());
+        // 野生葡萄藤
+        dropOther(ModBlocks.WILD_GRAPEVINE.get(), ModItems.GRAPEVINE.get());
+        dropOther(ModBlocks.WILD_GRAPEVINE_PLANT.get(), ModItems.GRAPEVINE.get());
     }
 
     @Override

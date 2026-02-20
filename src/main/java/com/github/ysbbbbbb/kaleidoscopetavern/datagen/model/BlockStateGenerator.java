@@ -113,6 +113,10 @@ public class BlockStateGenerator extends BlockStateProvider {
         barCounter(ModBlocks.BAR_COUNTER);
         // 人字梯
         stepladder(ModBlocks.STEPLADDER);
+
+        // 野生葡萄藤
+        simpleBlock(ModBlocks.WILD_GRAPEVINE.get(), new ModelFile.UncheckedModelFile(modLoc("block/plant/wild_grapevine")));
+        simpleBlock(ModBlocks.WILD_GRAPEVINE_PLANT.get(), new ModelFile.UncheckedModelFile(modLoc("block/plant/wild_grapevine_plant")));
     }
 
     private void sofa(RegistryObject<Block> block, String color) {

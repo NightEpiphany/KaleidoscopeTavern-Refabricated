@@ -4,6 +4,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.*;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -105,4 +106,6 @@ public class ModItems {
     public static RegistryObject<Item> BAR_COUNTER = ITEMS.register("bar_counter", () -> new BlockItem(ModBlocks.BAR_COUNTER.get(), new Item.Properties()));
     // 人字梯
     public static RegistryObject<Item> STEPLADDER = ITEMS.register("stepladder", () -> new BlockItem(ModBlocks.STEPLADDER.get(), new Item.Properties()));
+    // 野生葡萄藤
+    public static RegistryObject<Item> GRAPEVINE = ITEMS.register("grapevine", () -> new ItemNameBlockItem(ModBlocks.WILD_GRAPEVINE.get(), new Item.Properties()));
 }

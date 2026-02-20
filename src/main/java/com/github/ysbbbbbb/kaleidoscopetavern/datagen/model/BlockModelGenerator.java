@@ -48,6 +48,9 @@ public class BlockModelGenerator extends BlockModelProvider {
         painting("great_wave");
         painting("mona_lisa");
         painting("mondrian");
+
+        cross("block/plant/wild_grapevine", modLoc("block/plant/wild_grapevine")).renderType("cutout");
+        cross("block/plant/wild_grapevine_plant", modLoc("block/plant/wild_grapevine_plant")).renderType("cutout");
     }
 
     private void sofa(String color) {

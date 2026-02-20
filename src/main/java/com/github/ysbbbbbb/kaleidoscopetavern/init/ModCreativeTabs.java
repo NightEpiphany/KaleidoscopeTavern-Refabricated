@@ -101,5 +101,7 @@ public class ModCreativeTabs {
 
                 output.accept(ModItems.BAR_COUNTER.get());
                 output.accept(ModItems.STEPLADDER.get());
+
+                output.accept(ModItems.GRAPEVINE.get());
             }).build());
 }
