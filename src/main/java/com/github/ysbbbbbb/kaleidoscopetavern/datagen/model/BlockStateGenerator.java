@@ -4,8 +4,11 @@ import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.SandwichBoardBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.SofaBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.StepladderBlock;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.GrapeCropBlock;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.GrapevineTrellisBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.TrellisBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.ConnectionType;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.TrellisType;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -121,6 +124,9 @@ public class BlockStateGenerator extends BlockStateProvider {
         simpleBlock(ModBlocks.WILD_GRAPEVINE_PLANT.get(), new ModelFile.UncheckedModelFile(modLoc("block/plant/wild_grapevine_plant")));
         // 藤架
         trellis(ModBlocks.TRELLIS);
+        grapevineTrellis(ModBlocks.GRAPEVINE_TRELLIS);
+        // 葡萄作物
+        grapeCrop(ModBlocks.GRAPE_CROP);
     }
 
     private void sofa(RegistryObject<Block> block, String color) {
@@ -188,6 +194,32 @@ public class BlockStateGenerator extends BlockStateProvider {
         getVariantBuilder(block.get()).forAllStates(blockState -> {
             String type = blockState.getValue(TrellisBlock.TYPE).getSerializedName();
             ResourceLocation file = modLoc("block/plant/trellis/%s".formatted(type));
+            ModelFile.UncheckedModelFile modelFile = new ModelFile.UncheckedModelFile(file);
+            return ConfiguredModel.builder().modelFile(modelFile).build();
+        });
+    }
+
+    private void grapevineTrellis(RegistryObject<Block> block) {
+        getVariantBuilder(block.get()).forAllStates(blockState -> {
+            int age = blockState.getValue(GrapevineTrellisBlock.AGE);
+            var type = blockState.getValue(TrellisBlock.TYPE);
+
+            ResourceLocation file;
+            if (type == TrellisType.SINGLE) {
+                file = modLoc("block/plant/grapevine_trellis/%s_stage%d".formatted(type, age));
+            } else {
+                file = modLoc("block/plant/grapevine_trellis/%s".formatted(type));
+            }
+
+            ModelFile.UncheckedModelFile modelFile = new ModelFile.UncheckedModelFile(file);
+            return ConfiguredModel.builder().modelFile(modelFile).build();
+        });
+    }
+
+    private void grapeCrop(RegistryObject<Block> block) {
+        getVariantBuilder(block.get()).forAllStates(blockState -> {
+            int age = blockState.getValue(GrapeCropBlock.AGE);
+            ResourceLocation file = modLoc("block/plant/grape_crop/stage%d".formatted(age));
             ModelFile.UncheckedModelFile modelFile = new ModelFile.UncheckedModelFile(file);
             return ConfiguredModel.builder().modelFile(modelFile).build();
         });

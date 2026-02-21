@@ -2,9 +2,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.init;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.*;
-import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.TrellisBlock;
-import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.WildGrapevineBlock;
-import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.WildGrapevinePlantBlock;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.ChalkboardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.SandwichBlockEntity;
 import net.minecraft.world.item.Items;
@@ -121,6 +119,10 @@ public class ModBlocks {
 
     // 藤架
     public static RegistryObject<Block> TRELLIS = BLOCKS.register("trellis", TrellisBlock::new);
+    // 葡萄藤
+    public static RegistryObject<Block> GRAPEVINE_TRELLIS = BLOCKS.register("grapevine_trellis", GrapevineTrellisBlock::new);
+    // 葡萄
+    public static RegistryObject<Block> GRAPE_CROP = BLOCKS.register("grape_crop", GrapeCropBlock::new);
 
     // BlockEntity
     public static RegistryObject<BlockEntityType<ChalkboardBlockEntity>> CHALKBOARD_BE = BLOCK_ENTITIES.register(

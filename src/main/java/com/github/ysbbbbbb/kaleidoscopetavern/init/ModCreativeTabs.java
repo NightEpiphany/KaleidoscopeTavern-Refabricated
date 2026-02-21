@@ -104,5 +104,7 @@ public class ModCreativeTabs {
 
                 output.accept(ModItems.GRAPEVINE.get());
                 output.accept(ModItems.TRELLIS.get());
+
+                output.accept(ModItems.GRAPE.get());
             }).build());
 }

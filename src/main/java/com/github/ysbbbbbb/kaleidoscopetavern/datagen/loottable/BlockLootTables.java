@@ -6,8 +6,15 @@ import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -119,6 +126,10 @@ public class BlockLootTables extends BlockLootSubProvider {
         dropOther(ModBlocks.WILD_GRAPEVINE_PLANT.get(), ModItems.GRAPEVINE.get());
         // 藤架
         dropSelf(ModBlocks.TRELLIS.get());
+        // 葡萄藤
+        add(ModBlocks.GRAPEVINE_TRELLIS.get(), this.createMultiItemTable(ModItems.TRELLIS.get(), ModItems.GRAPEVINE.get()));
+        // 葡萄
+        add(ModBlocks.GRAPE_CROP.get(), this.createItemWithCountTable(ModItems.GRAPE.get(), UniformGenerator.between(1, 2)));
     }
 
     @Override
@@ -134,5 +145,26 @@ public class BlockLootTables extends BlockLootSubProvider {
 
     public ResourceLocation modLoc(String name) {
         return KaleidoscopeTavern.modLoc(name);
+    }
+
+    public LootTable.Builder createMultiItemTable(ItemLike... items) {
+        LootTable.Builder builder = LootTable.lootTable();
+        for (ItemLike item : items) {
+            LootPool.Builder pool = LootPool.lootPool()
+                    .setRolls(ConstantValue.exactly(1))
+                    .add(LootItem.lootTableItem(item));
+            builder.withPool(this.applyExplosionCondition(item, pool));
+        }
+        return builder;
+    }
+
+    protected LootTable.Builder createItemWithCountTable(ItemLike item, NumberProvider countProvider) {
+        LootTable.Builder builder = LootTable.lootTable();
+        LootPool.Builder pool = LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1))
+                .apply(SetItemCountFunction.setCount(countProvider))
+                .add(LootItem.lootTableItem(item));
+        builder.withPool(this.applyExplosionCondition(item, pool));
+        return builder;
     }
 }

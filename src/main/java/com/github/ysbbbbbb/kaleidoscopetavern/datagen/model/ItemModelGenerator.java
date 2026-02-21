@@ -26,7 +26,7 @@ public class ItemModelGenerator extends ItemModelProvider {
             barStool(color);
         }
 
-        basicItem(ModItems.CHALKBOARD.get(), "deco/chalkboard");
+        basicItem(ModItems.CHALKBOARD.get());
 
         sandwichBoard("grass");
         sandwichBoard("allium");
@@ -67,6 +67,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ModItems.GRAPEVINE.get());
 
         trellis(ModItems.TRELLIS);
+        basicItem(ModItems.GRAPE.get());
     }
 
     private void sofa(String color) {
@@ -98,13 +99,6 @@ public class ItemModelGenerator extends ItemModelProvider {
         getBuilder(key.toString())
                 .parent(new ModelFile.UncheckedModelFile("item/generated"))
                 .texture("layer0", new ResourceLocation(key.getNamespace(), "block/deco/painting/%s".formatted(name)));
-    }
-
-    private void basicItem(Item item, String texture) {
-        ResourceLocation key = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item));
-        getBuilder(key.toString())
-                .parent(new ModelFile.UncheckedModelFile("item/generated"))
-                .texture("layer0", new ResourceLocation(key.getNamespace(), "item/" + texture));
     }
 
     private void barCounter(RegistryObject<Item> item) {

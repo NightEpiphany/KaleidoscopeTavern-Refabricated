@@ -110,4 +110,6 @@ public class ModItems {
     public static RegistryObject<Item> GRAPEVINE = ITEMS.register("grapevine", () -> new ItemNameBlockItem(ModBlocks.WILD_GRAPEVINE.get(), new Item.Properties()));
     // 藤架
     public static RegistryObject<Item> TRELLIS = ITEMS.register("trellis", () -> new BlockItem(ModBlocks.TRELLIS.get(), new Item.Properties()));
+    // 葡萄
+    public static RegistryObject<Item> GRAPE = ITEMS.register("grape", () -> new Item(new Item.Properties().food(ModFoods.GRAPE)));
 }
