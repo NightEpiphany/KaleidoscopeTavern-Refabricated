@@ -49,7 +49,7 @@ public class StringLightsBlock extends HorizontalDirectionalBlock implements Sim
                 .instrument(NoteBlockInstrument.HAT)
                 .strength(0.8F)
                 .sound(SoundType.CHAIN)
-                .noOcclusion()
+                .noCollission()
                 .lightLevel(s -> 15));
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)

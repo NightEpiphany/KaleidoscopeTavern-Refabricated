@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.ForgeHooks;
@@ -49,6 +51,7 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
                 .randomTicks()
                 .instabreak()
                 .sound(SoundType.CROP)
+                .offsetType(BlockBehaviour.OffsetType.XYZ)
                 .pushReaction(PushReaction.DESTROY));
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(AGE, 0));
@@ -140,5 +143,10 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
             return super.getDrops(state, lootParamsBuilder);
         }
         return Collections.emptyList();
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+        return ModItems.GRAPE.get().getDefaultInstance();
     }
 }

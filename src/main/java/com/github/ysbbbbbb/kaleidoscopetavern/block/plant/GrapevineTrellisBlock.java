@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.ForgeHooks;
@@ -157,18 +158,13 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     /**
      * 下方能否生长葡萄方块
      * <p>
-     * 必须要求下方有两格的空气方块
+     * 必须要求下方有一格的空气方块
      */
     public boolean canGrowGrape(LevelReader level, BlockPos pos) {
-        if (pos.getY() < level.getMinBuildHeight() + 2) {
+        if (pos.getY() < level.getMinBuildHeight() + 1) {
             return false;
         }
-        BlockState below = level.getBlockState(pos.below());
-        if (!below.isAir()) {
-            return false;
-        }
-        BlockState belowBelow = level.getBlockState(pos.below(2));
-        return belowBelow.isAir();
+        return level.getBlockState(pos.below()).isAir();
     }
 
     public boolean canGrow(LevelReader level, BlockPos pos, BlockState state) {
@@ -197,9 +193,10 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
 
             // 如果所有方向都检查完了都不能生长，那么检查下方是否有两格空位，生长葡萄
             return canGrowGrape(level, pos);
+        } else {
+            // 其他朝向的，只要没有达到最大年龄，就可以继续生长
+            return true;
         }
-
-        return false;
     }
 
     public void doGrow(Level level, BlockPos pos, BlockState state) {
@@ -271,5 +268,10 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return selectShape(state.getValue(TYPE));
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+        return ModItems.GRAPEVINE.get().getDefaultInstance();
     }
 }
