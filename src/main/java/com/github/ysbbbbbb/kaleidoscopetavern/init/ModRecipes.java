@@ -1,0 +1,30 @@
+package com.github.ysbbbbbb.kaleidoscopetavern.init;
+
+import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
+import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
+import com.github.ysbbbbbb.kaleidoscopetavern.crafting.serializer.PressingTubRecipeSerializer;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
+import net.minecraftforge.registries.RegistryObject;
+
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+public class ModRecipes {
+    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, KaleidoscopeTavern.MOD_ID);
+
+    public static RegistryObject<RecipeSerializer<?>> PRESSING_TUB_SERIALIZER = RECIPE_SERIALIZERS.register("pressing_tub", PressingTubRecipeSerializer::new);
+
+    public static RecipeType<PressingTubRecipe> PRESSING_TUB_RECIPE;
+
+    @SubscribeEvent
+    public static void register(RegisterEvent evt) {
+        if (evt.getRegistryKey().equals(Registries.RECIPE_SERIALIZER)) {
+            PRESSING_TUB_RECIPE = RecipeType.simple(KaleidoscopeTavern.modLoc("pressing_tub"));
+        }
+    }
+}

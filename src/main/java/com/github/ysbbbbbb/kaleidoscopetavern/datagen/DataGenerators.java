@@ -4,6 +4,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.datagen.loottable.LootTableGenerat
 import com.github.ysbbbbbb.kaleidoscopetavern.datagen.model.BlockModelGenerator;
 import com.github.ysbbbbbb.kaleidoscopetavern.datagen.model.BlockStateGenerator;
 import com.github.ysbbbbbb.kaleidoscopetavern.datagen.model.ItemModelGenerator;
+import com.github.ysbbbbbb.kaleidoscopetavern.datagen.recipe.ModRecipeGenerator;
 import com.github.ysbbbbbb.kaleidoscopetavern.datagen.tag.TagBlock;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,6 +23,7 @@ public class DataGenerators {
         generator.addProvider(event.includeClient(), new BlockModelGenerator(pack, helper));
         generator.addProvider(event.includeClient(), new BlockStateGenerator(pack, helper));
         generator.addProvider(event.includeClient(), new ItemModelGenerator(pack, helper));
+        generator.addProvider(event.includeServer(), new ModRecipeGenerator(pack));
 
         generator.addProvider(event.includeServer(), new LootTableGenerator(pack));
 

@@ -1,9 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern;
 
-import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
-import com.github.ysbbbbbb.kaleidoscopetavern.init.ModCreativeTabs;
-import com.github.ysbbbbbb.kaleidoscopetavern.init.ModEntities;
-import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
+import com.github.ysbbbbbb.kaleidoscopetavern.init.*;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -24,6 +21,7 @@ public class KaleidoscopeTavern {
         ModItems.ITEMS.register(modEventBus);
         ModCreativeTabs.TABS.register(modEventBus);
         ModEntities.ENTITY_TYPES.register(modEventBus);
+        ModRecipes.RECIPE_SERIALIZERS.register(modEventBus);
     }
 
     public static ResourceLocation modLoc(String path) {

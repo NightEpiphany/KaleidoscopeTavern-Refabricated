@@ -98,7 +98,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         ResourceLocation key = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item.get()));
         getBuilder(key.toString())
                 .parent(new ModelFile.UncheckedModelFile("item/generated"))
-                .texture("layer0", new ResourceLocation(key.getNamespace(), "block/deco/painting/%s".formatted(name)));
+                .texture("layer0", modLoc("block/deco/painting/%s".formatted(name)));
     }
 
     private void barCounter(RegistryObject<Item> item) {

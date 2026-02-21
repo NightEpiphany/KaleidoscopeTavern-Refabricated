@@ -1,0 +1,13 @@
+{
+  "type": "kaleidoscope_tavern:pressing_tub",
+  "carrier": {
+    "item": "minecraft:bucket"
+  },
+  "ingredient": {
+    "item": "kaleidoscope_tavern:grape"
+  },
+  "liquid_texture": "kaleidoscope_tavern:block/pressing_tub/grape_juice",
+  "result": {
+    "item": "kaleidoscope_tavern:grapevine"
+  }
+}
