@@ -130,6 +130,9 @@ public class BlockLootTables extends BlockLootSubProvider {
         add(ModBlocks.GRAPEVINE_TRELLIS.get(), this.createMultiItemTable(ModItems.TRELLIS.get(), ModItems.GRAPEVINE.get()));
         // 葡萄
         add(ModBlocks.GRAPE_CROP.get(), this.createItemWithCountTable(ModItems.GRAPE.get(), UniformGenerator.between(1, 2)));
+
+        // 果盆
+        dropSelf(ModBlocks.PRESSING_TUB.get());
     }
 
     @Override

@@ -123,7 +123,8 @@ public class TagBlock extends BlockTagsProvider {
                 .add(ModBlocks.CHALKBOARD.get())
                 .add(ModBlocks.BAR_COUNTER.get())
                 .add(ModBlocks.TRELLIS.get())
-                .add(ModBlocks.GRAPEVINE_TRELLIS.get());
+                .add(ModBlocks.GRAPEVINE_TRELLIS.get())
+                .add(ModBlocks.PRESSING_TUB.get());
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .addTag(TagMod.STRING_LIGHTS);

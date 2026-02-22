@@ -101,10 +101,13 @@ public class ModCreativeTabs {
 
                 output.accept(ModItems.BAR_COUNTER.get());
                 output.accept(ModItems.STEPLADDER.get());
-
                 output.accept(ModItems.GRAPEVINE.get());
                 output.accept(ModItems.TRELLIS.get());
-
                 output.accept(ModItems.GRAPE.get());
+
+                output.accept(ModItems.PRESSING_TUB.get());
+                output.accept(ModItems.GRAPE_BUCKET.get());
+                output.accept(ModItems.SWEET_BERRIES_BUCKET.get());
+                output.accept(ModItems.GLOW_BERRIES_BUCKET.get());
             }).build());
 }

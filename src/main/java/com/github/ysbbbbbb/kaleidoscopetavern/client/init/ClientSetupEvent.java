@@ -2,6 +2,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.client.init;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.render.block.ChalkboardBlockEntityRender;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.render.block.PressingTubBlockEntityRender;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.render.block.SandwichBlockEntityRender;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -16,5 +17,6 @@ public class ClientSetupEvent {
     public static void onEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         BlockEntityRenderers.register(ModBlocks.CHALKBOARD_BE.get(), ChalkboardBlockEntityRender::new);
         BlockEntityRenderers.register(ModBlocks.SANDWICH_BOARD_BE.get(), SandwichBlockEntityRender::new);
+        BlockEntityRenderers.register(ModBlocks.PRESSING_TUB_BE.get(), PressingTubBlockEntityRender::new);
     }
 }

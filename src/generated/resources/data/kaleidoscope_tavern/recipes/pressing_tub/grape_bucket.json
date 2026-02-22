@@ -6,8 +6,8 @@
   "ingredient": {
     "item": "kaleidoscope_tavern:grape"
   },
-  "liquid_texture": "kaleidoscope_tavern:block/pressing_tub/grape_juice",
+  "liquid_texture": "kaleidoscope_tavern:textures/pressing_tub/grape_juice.png",
   "result": {
-    "item": "kaleidoscope_tavern:grapevine"
+    "item": "kaleidoscope_tavern:grape_bucket"
   }
 }

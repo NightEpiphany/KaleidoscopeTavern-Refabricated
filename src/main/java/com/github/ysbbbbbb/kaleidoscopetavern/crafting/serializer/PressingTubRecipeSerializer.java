@@ -17,7 +17,7 @@ import static net.minecraft.util.GsonHelper.getAsJsonObject;
 
 public class PressingTubRecipeSerializer implements RecipeSerializer<PressingTubRecipe> {
     public static final Ingredient DEFAULT_CARRIER = Ingredient.of(Items.BUCKET);
-    public static final ResourceLocation DEFAULT_LIQUID_TEXTURE = KaleidoscopeTavern.modLoc("block/pressing_tub/default_liquid");
+    public static final ResourceLocation DEFAULT_LIQUID_TEXTURE = KaleidoscopeTavern.modLoc("block/pressing_tub/water");
 
     @Override
     public PressingTubRecipe fromJson(ResourceLocation recipeId, JsonObject json) {

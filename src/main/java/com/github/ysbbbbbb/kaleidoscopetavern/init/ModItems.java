@@ -112,4 +112,11 @@ public class ModItems {
     public static RegistryObject<Item> TRELLIS = ITEMS.register("trellis", () -> new BlockItem(ModBlocks.TRELLIS.get(), new Item.Properties()));
     // 葡萄
     public static RegistryObject<Item> GRAPE = ITEMS.register("grape", () -> new Item(new Item.Properties().food(ModFoods.GRAPE)));
+
+    // 果盆
+    public static RegistryObject<Item> PRESSING_TUB = ITEMS.register("pressing_tub", () -> new BlockItem(ModBlocks.PRESSING_TUB.get(), new Item.Properties()));
+    // 果汁桶
+    public static RegistryObject<Item> GRAPE_BUCKET = ITEMS.register("grape_bucket", JuiceBucketItem::new);
+    public static RegistryObject<Item> SWEET_BERRIES_BUCKET = ITEMS.register("sweet_berries_bucket", JuiceBucketItem::new);
+    public static RegistryObject<Item> GLOW_BERRIES_BUCKET = ITEMS.register("glow_berries_bucket", JuiceBucketItem::new);
 }

@@ -68,6 +68,12 @@ public class ItemModelGenerator extends ItemModelProvider {
 
         trellis(ModItems.TRELLIS);
         basicItem(ModItems.GRAPE.get());
+
+        withExistingParent("item/pressing_tub", modLoc("block/brew/pressing_tub"));
+
+        basicItem(ModItems.GRAPE_BUCKET.get());
+        basicItem(ModItems.SWEET_BERRIES_BUCKET.get());
+        basicItem(ModItems.GLOW_BERRIES_BUCKET.get());
     }
 
     private void sofa(String color) {

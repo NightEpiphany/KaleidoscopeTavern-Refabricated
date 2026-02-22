@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -51,5 +52,33 @@ public class PressingTubRecipe extends SingleItemRecipe {
 
     public ResourceLocation getLiquidTexture() {
         return liquidTexture;
+    }
+
+    /**
+     * 仅用于 BlockEntity 的缓存，避免每次都要查询配方来获取这些信息
+     *
+     */
+    public record PressingTubRecipeCache(
+            ResourceLocation id,
+            ItemStack result,
+            ResourceLocation liquidTexture) {
+        public static PressingTubRecipeCache fromRecipe(PressingTubRecipe recipe) {
+            return new PressingTubRecipeCache(recipe.getId(), recipe.getResult(), recipe.getLiquidTexture());
+        }
+
+        public static PressingTubRecipeCache fromTag(CompoundTag tag) {
+            ResourceLocation id = new ResourceLocation(tag.getString("id"));
+            ItemStack result = ItemStack.of(tag.getCompound("result"));
+            ResourceLocation liquidTexture = new ResourceLocation(tag.getString("liquid_texture"));
+            return new PressingTubRecipeCache(id, result, liquidTexture);
+        }
+
+        public CompoundTag toTag() {
+            CompoundTag tag = new CompoundTag();
+            tag.putString("id", id.toString());
+            tag.put("result", result.save(new CompoundTag()));
+            tag.putString("liquid_texture", liquidTexture.toString());
+            return tag;
+        }
     }
 }

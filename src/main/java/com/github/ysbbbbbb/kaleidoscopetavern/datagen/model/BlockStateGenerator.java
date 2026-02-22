@@ -127,6 +127,9 @@ public class BlockStateGenerator extends BlockStateProvider {
         grapevineTrellis(ModBlocks.GRAPEVINE_TRELLIS);
         // 葡萄作物
         grapeCrop(ModBlocks.GRAPE_CROP);
+
+        // 果盘
+        simpleBlock(ModBlocks.PRESSING_TUB.get(), new ModelFile.UncheckedModelFile(modLoc("block/brew/pressing_tub")));
     }
 
     private void sofa(RegistryObject<Block> block, String color) {

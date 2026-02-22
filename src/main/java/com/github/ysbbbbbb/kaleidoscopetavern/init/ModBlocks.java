@@ -1,8 +1,10 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.init;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.PressingTubBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.*;
+import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PressingTubBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.ChalkboardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.SandwichBlockEntity;
 import net.minecraft.world.item.Items;
@@ -112,17 +114,18 @@ public class ModBlocks {
     public static RegistryObject<Block> BAR_COUNTER = BLOCKS.register("bar_counter", BarCounterBlock::new);
     // 人字梯
     public static RegistryObject<Block> STEPLADDER = BLOCKS.register("stepladder", StepladderBlock::new);
-
     // 野生葡萄藤
     public static RegistryObject<Block> WILD_GRAPEVINE = BLOCKS.register("wild_grapevine", WildGrapevineBlock::new);
     public static RegistryObject<Block> WILD_GRAPEVINE_PLANT = BLOCKS.register("wild_grapevine_plant", WildGrapevinePlantBlock::new);
-
     // 藤架
     public static RegistryObject<Block> TRELLIS = BLOCKS.register("trellis", TrellisBlock::new);
     // 葡萄藤
     public static RegistryObject<Block> GRAPEVINE_TRELLIS = BLOCKS.register("grapevine_trellis", GrapevineTrellisBlock::new);
     // 葡萄
     public static RegistryObject<Block> GRAPE_CROP = BLOCKS.register("grape_crop", GrapeCropBlock::new);
+
+    // 果盆
+    public static RegistryObject<Block> PRESSING_TUB = BLOCKS.register("pressing_tub", PressingTubBlock::new);
 
     // BlockEntity
     public static RegistryObject<BlockEntityType<ChalkboardBlockEntity>> CHALKBOARD_BE = BLOCK_ENTITIES.register(
@@ -148,5 +151,11 @@ public class ModBlocks {
                     TULIP_SANDWICH_BOARD.get(),
                     WITHER_ROSE_SANDWICH_BOARD.get()
             ).build(null)
+    );
+
+    public static RegistryObject<BlockEntityType<PressingTubBlockEntity>> PRESSING_TUB_BE = BLOCK_ENTITIES.register(
+            "pressing_tub", () -> BlockEntityType.Builder
+                    .of(PressingTubBlockEntity::new, PRESSING_TUB.get())
+                    .build(null)
     );
 }
