@@ -1,12 +1,11 @@
 {
 	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
-	"ambientocclusion": true,
 	"render_type": "cutout",
 	"texture_size": [64, 64],
 	"textures": {
 		"0": "kaleidoscope_tavern:block/plant/grapevine_trellis",
-		"particle": "kaleidoscope_tavern:block/plant/grapevine_trellis"
+		"particle": "kaleidoscope_tavern:block/plant/wild_grapevine_plant"
 	},
 	"elements": [
 		{

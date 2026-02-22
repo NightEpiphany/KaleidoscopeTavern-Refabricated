@@ -5,7 +5,7 @@
 	"texture_size": [64, 64],
 	"textures": {
 		"0": "kaleidoscope_tavern:block/plant/grapevine_trellis",
-		"particle": "kaleidoscope_tavern:block/plant/grapevine_trellis"
+		"particle": "kaleidoscope_tavern:block/plant/wild_grapevine_plant"
 	},
 	"elements": [
 		{
