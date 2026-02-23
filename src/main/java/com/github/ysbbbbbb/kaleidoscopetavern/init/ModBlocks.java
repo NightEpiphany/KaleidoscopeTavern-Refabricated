@@ -1,12 +1,10 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.init;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
-import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.BottleBlock;
-import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.DrinkBlock;
-import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.PressingTubBlock;
-import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.TapBlock;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.*;
+import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.BarrelBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.DrinkBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PressingTubBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.ChalkboardBlockEntity;
@@ -137,6 +135,8 @@ public class ModBlocks {
     public static RegistryObject<Block> EMPTY_BOTTLE = BLOCKS.register("empty_bottle", BottleBlock::new);
     // 燃烧瓶
     public static RegistryObject<Block> MOLOTOV = BLOCKS.register("molotov", BottleBlock::new);
+    // 酒桶
+    public static RegistryObject<Block> BARREL = BLOCKS.register("barrel", BarrelBlock::new);
 
     // 酒
     public static RegistryObject<Block> WINE = BLOCKS.register("wine", DrinkBlock.create().maxCount(4).shapes(
@@ -269,5 +269,11 @@ public class ModBlocks {
                             WINE.get(), CHAMPAGNE.get(), VODKA.get(), BRANDY.get(), CARIGNAN.get(),
                             SAKURA_WINE.get(), PLUM_WINE.get(), WHISKEY.get(), ICE_WINE.get(), VINEGAR.get()
                     ).build(null)
+    );
+
+    public static RegistryObject<BlockEntityType<BarrelBlockEntity>> BARREL_BE = BLOCK_ENTITIES.register(
+            "barrel", () -> BlockEntityType.Builder
+                    .of(BarrelBlockEntity::new, BARREL.get())
+                    .build(null)
     );
 }

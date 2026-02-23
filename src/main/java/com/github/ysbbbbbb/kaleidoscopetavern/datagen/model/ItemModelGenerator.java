@@ -76,6 +76,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ModItems.GLOW_BERRIES_BUCKET.get());
 
         basicItem(ModItems.TAP.get());
+        basicItem(ModItems.BARREL.get());
 
         basicItem(ModItems.EMPTY_BOTTLE.get());
         basicItem(ModItems.MOLOTOV.get());

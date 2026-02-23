@@ -135,6 +135,8 @@ public class BlockStateGenerator extends BlockStateProvider {
 
         // 龙头
         tap(ModBlocks.TAP);
+        // 木桶
+        simpleBlock(ModBlocks.BARREL.get(), new ModelFile.UncheckedModelFile(modLoc("block/brew/barrel")));
 
         // 空瓶
         horizontalBlock(ModBlocks.EMPTY_BOTTLE.get(), new ModelFile.UncheckedModelFile(modLoc("block/brew/empty_bottle")));
