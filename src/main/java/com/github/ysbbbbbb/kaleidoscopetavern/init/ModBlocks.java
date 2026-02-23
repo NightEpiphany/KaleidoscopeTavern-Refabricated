@@ -4,6 +4,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.BottleBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.DrinkBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.PressingTubBlock;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.TapBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.DrinkBlockEntity;
@@ -130,6 +131,8 @@ public class ModBlocks {
 
     // 果盆
     public static RegistryObject<Block> PRESSING_TUB = BLOCKS.register("pressing_tub", PressingTubBlock::new);
+    // 龙头
+    public static RegistryObject<Block> TAP = BLOCKS.register("tap", TapBlock::new);
     // 空瓶
     public static RegistryObject<Block> EMPTY_BOTTLE = BLOCKS.register("empty_bottle", BottleBlock::new);
     // 燃烧瓶

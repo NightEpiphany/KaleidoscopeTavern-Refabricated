@@ -119,6 +119,8 @@ public class ModItems {
     public static RegistryObject<Item> GRAPE_BUCKET = ITEMS.register("grape_bucket", JuiceBucketItem::new);
     public static RegistryObject<Item> SWEET_BERRIES_BUCKET = ITEMS.register("sweet_berries_bucket", JuiceBucketItem::new);
     public static RegistryObject<Item> GLOW_BERRIES_BUCKET = ITEMS.register("glow_berries_bucket", JuiceBucketItem::new);
+    // 龙头
+    public static RegistryObject<Item> TAP = ITEMS.register("tap", () -> new BlockItem(ModBlocks.TAP.get(), new Item.Properties()));
 
     // 空瓶
     public static RegistryObject<Item> EMPTY_BOTTLE = ITEMS.register("empty_bottle", () -> new BottleBlockItem(ModBlocks.EMPTY_BOTTLE.get()));

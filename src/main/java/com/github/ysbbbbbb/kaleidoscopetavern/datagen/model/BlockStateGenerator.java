@@ -2,6 +2,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.datagen.model;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.DrinkBlock;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.TapBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.SandwichBoardBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.SofaBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.StepladderBlock;
@@ -132,9 +133,13 @@ public class BlockStateGenerator extends BlockStateProvider {
         // 果盆
         simpleBlock(ModBlocks.PRESSING_TUB.get(), new ModelFile.UncheckedModelFile(modLoc("block/brew/pressing_tub")));
 
+        // 龙头
+        tap(ModBlocks.TAP);
+
         // 空瓶
         horizontalBlock(ModBlocks.EMPTY_BOTTLE.get(), new ModelFile.UncheckedModelFile(modLoc("block/brew/empty_bottle")));
         horizontalBlock(ModBlocks.MOLOTOV.get(), new ModelFile.UncheckedModelFile(modLoc("block/brew/molotov")));
+
         // 酒
         drink(ModBlocks.WINE.get(), "wine");
         drink(ModBlocks.CHAMPAGNE.get(), "champagne");
@@ -252,5 +257,13 @@ public class BlockStateGenerator extends BlockStateProvider {
                 return new ModelFile.UncheckedModelFile(file);
             });
         }
+    }
+
+    private void tap(RegistryObject<Block> block) {
+        horizontalBlock(block.get(), blockState -> {
+            boolean open = blockState.getValue(TapBlock.OPEN);
+            ResourceLocation file = modLoc("block/brew/tap/%s".formatted(open ? "open" : "close"));
+            return new ModelFile.UncheckedModelFile(file);
+        });
     }
 }
