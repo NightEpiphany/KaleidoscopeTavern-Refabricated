@@ -9,10 +9,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 
-public class JuiceBucketItem extends Item implements IHasContainer {
-    public JuiceBucketItem() {
-        super(new Properties().stacksTo(16).craftRemainder(Items.BUCKET));
+import java.util.function.Supplier;
+
+public class JuiceBucketItem extends BucketItem implements IHasContainer {
+    public JuiceBucketItem(Supplier<? extends Fluid> supplier) {
+        super(supplier, new Properties()
+                .stacksTo(16)
+                .craftRemainder(Items.BUCKET));
     }
 
     @Override

@@ -13,6 +13,7 @@ public class ModRecipeGenerator extends ModRecipeProvider {
     public ModRecipeGenerator(PackOutput output) {
         super(output);
         providers.add(new PressingTubRecipeProvider(output));
+        providers.add(new BarrelRecipeProvider(output));
     }
 
     @Override
