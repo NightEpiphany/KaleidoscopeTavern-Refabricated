@@ -20,6 +20,11 @@ public class BarrelBlockEntity extends BaseBlockEntity {
         }
     };
 
+    /**
+     * 酒桶开盖状态，只有关闭盖子才会进行发酵判定
+     */
+    private boolean open = true;
+
     public BarrelBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.BARREL_BE.get(), pos, state);
     }
@@ -28,12 +33,14 @@ public class BarrelBlockEntity extends BaseBlockEntity {
     public void load(CompoundTag tag) {
         super.load(tag);
         this.items.deserializeNBT(tag.getCompound("items"));
+        this.open = tag.getBoolean("open");
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
         tag.put("items", this.items.serializeNBT());
+        tag.putBoolean("open", this.open);
     }
 
     @Override
@@ -43,5 +50,13 @@ public class BarrelBlockEntity extends BaseBlockEntity {
 
     public ItemStackHandler getItems() {
         return items;
+    }
+
+    public void setOpen(boolean open) {
+        this.open = open;
+    }
+
+    public boolean isOpen() {
+        return open;
     }
 }

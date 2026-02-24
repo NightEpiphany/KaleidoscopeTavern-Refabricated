@@ -35,6 +35,12 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
         poseStack.translate(0.5, 1.5, 0.5);
         poseStack.mulPose(Axis.ZN.rotationDegrees(180));
         poseStack.mulPose(Axis.YN.rotationDegrees(180 - facing.get2DDataValue() * 90));
+
+        // 根据酒桶的开盖状态切换模型显示
+        boolean open = barrel.isOpen();
+        this.model.getOpen().visible = open;
+        this.model.getClose().visible = !open;
+
         VertexConsumer consumer = buffer.getBuffer(RenderType.entityCutoutNoCull(LARGE_TEXTURE));
         model.renderToBuffer(poseStack, consumer, packedLight, packedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
         poseStack.popPose();
