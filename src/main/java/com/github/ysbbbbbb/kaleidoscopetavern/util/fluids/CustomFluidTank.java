@@ -13,13 +13,13 @@ import net.minecraft.world.level.material.Fluid;
  * 替代forge流体系统的流体槽，用于果盆方块存储流体
  */
 @SuppressWarnings("UnstableApiUsage")
-public class PressingTubFluidTank extends SingleVariantStorage<FluidVariant> {
+public class CustomFluidTank extends SingleVariantStorage<FluidVariant> {
     public static final int MB_PER_BUCKET = 1000;
 
     private final long capacity;
     private final Runnable onContentsChanged;
 
-    public PressingTubFluidTank(long capacity, Runnable onContentsChanged) {
+    public CustomFluidTank(long capacity, Runnable onContentsChanged) {
         this.capacity = capacity;
         this.onContentsChanged = onContentsChanged;
         this.variant = FluidVariant.blank();

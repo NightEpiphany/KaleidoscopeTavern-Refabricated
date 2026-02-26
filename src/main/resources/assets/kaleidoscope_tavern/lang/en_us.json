@@ -99,5 +99,10 @@
   "gui.kaleidoscope_tavern.text.edit.placeholder": "Write something...",
   "gui.kaleidoscope_tavern.text.edit.text_alignment.left": "Left",
   "gui.kaleidoscope_tavern.text.edit.text_alignment.center": "Center",
-  "gui.kaleidoscope_tavern.text.edit.text_alignment.right": "Right"
+  "gui.kaleidoscope_tavern.text.edit.text_alignment.right": "Right",
+  "message.kaleidoscope_tavern.barrel.brewing_unable_to_open": "Can't open the barrel while brewing!",
+  "message.kaleidoscope_tavern.barrel.add_ingredient_fluid_not_full": "Fill the barrel with fluid before adding ingredients!",
+  "message.kaleidoscope_tavern.barrel.add_ingredient_no_space": "Barrel is full, can't add more ingredients!",
+  "message.kaleidoscope_tavern.barrel.add_fluid_ingredient_not_empty": "Remove all ingredients before adding fluid!",
+  "message.kaleidoscope_tavern.barrel.remove_fluid_ingredient_not_empty": "Remove all ingredients before taking out fluid!"
 }

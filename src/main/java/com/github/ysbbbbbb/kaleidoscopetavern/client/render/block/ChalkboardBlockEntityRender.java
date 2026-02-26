@@ -7,12 +7,15 @@ import com.github.ysbbbbbb.kaleidoscopetavern.client.model.deco.SmallChalkboardM
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 
+@Environment(EnvType.CLIENT)
 public class ChalkboardBlockEntityRender extends TextBlockEntityRender<ChalkboardBlockEntity> {
     private static final ResourceLocation SMALL_TEXTURE = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/entity/deco/small_chalkboard.png");
     private static final ResourceLocation LARGE_TEXTURE = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/entity/deco/large_chalkboard.png");

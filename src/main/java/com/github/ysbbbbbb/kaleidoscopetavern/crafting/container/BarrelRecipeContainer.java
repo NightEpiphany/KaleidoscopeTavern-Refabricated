@@ -1,21 +1,21 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.crafting.container;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.IItemHandler;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 
-import java.util.List;
-
 public class BarrelRecipeContainer extends SimpleContainer {
     private final Fluid fluid;
 
-    public BarrelRecipeContainer(List<ItemStack> items, Fluid fluid) {
-        super(items.size());
-        for (int i = 0; i < items.size(); i++) {
-            this.setItem(i, items.get(i));
+    public BarrelRecipeContainer(IItemHandler items, CustomFluidTank fluid) {
+        super(items.getSlots());
+        for (int i = 0; i < items.getSlots(); i++) {
+            this.setItem(i, items.getStackInSlot(i));
         }
-        this.fluid = fluid;
+        this.fluid = fluid.getFluid();
     }
 
     public Fluid getFluid() {

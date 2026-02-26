@@ -2,7 +2,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IPressingTub;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PressingTubBlockEntity;
-import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.PressingTubFluidTank;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
@@ -185,7 +185,7 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
             return stack;
         }
         // 判断产物是否是铁桶容器的
-        PressingTubFluidTank fluidTank = pressingTub.getFluid();
+        CustomFluidTank fluidTank = pressingTub.getFluid();
         Fluid fluid = fluidTank.getFluid();
         Item bucket = fluid.getBucket();
         if (bucket instanceof BucketItem) {

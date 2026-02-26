@@ -33,7 +33,27 @@ public class ClientRegistry {
                 SUNFLOWER_SANDWICH_BOARD,
                 TORCHFLOWER_SANDWICH_BOARD,
                 TULIP_SANDWICH_BOARD,
-                WITHER_ROSE_SANDWICH_BOARD
+                WITHER_ROSE_SANDWICH_BOARD,
+                STRING_LIGHTS_COLORLESS,
+                STRING_LIGHTS_WHITE,
+                STRING_LIGHTS_LIGHT_BLUE,
+                STRING_LIGHTS_GRAY,
+                STRING_LIGHTS_BLACK,
+                STRING_LIGHTS_BROWN,
+                STRING_LIGHTS_RED,
+                STRING_LIGHTS_ORANGE,
+                STRING_LIGHTS_YELLOW,
+                STRING_LIGHTS_LIME,
+                STRING_LIGHTS_GREEN,
+                STRING_LIGHTS_CYAN,
+                STRING_LIGHTS_LIGHT_GRAY,
+                STRING_LIGHTS_BLUE,
+                STRING_LIGHTS_PURPLE,
+                STRING_LIGHTS_MAGENTA,
+                STRING_LIGHTS_PINK,
+                EMPTY_BOTTLE,
+                MOLOTOV,
+                VODKA
         );
     }
 }

@@ -3,6 +3,8 @@ package com.github.ysbbbbbb.kaleidoscopetavern.client.gui.block;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.message.TextUpdateC2SMessage;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.TextAlignment;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -12,6 +14,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
+@Environment(EnvType.CLIENT)
 public class TextScreen extends Screen {
     private final TextBlockEntity blockEntity;
 

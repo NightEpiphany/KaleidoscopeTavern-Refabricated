@@ -257,8 +257,8 @@ public class ModBlocks {
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "light_gray_sofa"), LIGHT_GRAY_SOFA);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "cyan_sofa"), CYAN_SOFA);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "magenta_sofa"), MAGENTA_SOFA);
-        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "lime_chair"), LIME_SOFA);
-        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "light_blue_chair"), LIGHT_BLUE_SOFA);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "lime_sofa"), LIME_SOFA);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "light_blue_sofa"), LIGHT_BLUE_SOFA);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "white_bar_stool"), WHITE_BAR_STOOL);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "light_gray_bar_stool"), LIGHT_GRAY_BAR_STOOL);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "black_bar_stool"), BLACK_BAR_STOOL);

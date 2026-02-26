@@ -4,6 +4,8 @@ import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.ChalkboardBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.TextAlignment;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -25,6 +27,7 @@ import org.joml.Matrix4f;
 
 import java.util.List;
 
+@Environment(EnvType.CLIENT)
 public abstract class TextBlockEntityRender<T extends TextBlockEntity> implements BlockEntityRenderer<T> {
     protected static final int OUTLINE_RENDER_DISTANCE = Mth.square(16);
     protected final Font font;

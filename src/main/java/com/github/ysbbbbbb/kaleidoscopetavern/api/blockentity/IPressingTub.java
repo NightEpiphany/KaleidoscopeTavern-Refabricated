@@ -1,6 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity;
 
-import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.PressingTubFluidTank;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemStackHandler;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,12 +11,16 @@ import net.minecraft.world.item.ItemStack;
  * <p>
  * 果盆允许玩家放入食材并通过跳踩进行压榨，液体量达到 {@value #MAX_FLUID_AMOUNT} 后可用容器取出产物。
  */
+@SuppressWarnings("UnstableApiUsage")
 public interface IPressingTub {
     /**
      * 果盆内液体的最大容量，单位为毫桶（mB），默认为 1000 mB，相当于一个标准桶的容量。
      */
-    int MAX_FLUID_AMOUNT = PressingTubFluidTank.MB_PER_BUCKET;
+    int MAX_FLUID_AMOUNT = CustomFluidTank.MB_PER_BUCKET;
     long MAX_FLUID_AMOUNT_TRANSFER = FluidConstants.BUCKET;
+    /**
+     * 触发压榨操作所需的最小下落高度，单位为方块，默认为 0.5F，即实体需要至少从半个方块的高度落下才能触发压榨。
+     */
     float MIN_FALL_DISTANCE = 0.5F;
 
     /**
@@ -31,7 +35,7 @@ public interface IPressingTub {
      * <p>
      * 果盆内只能容纳一种液体，最大容量为 {@value #MAX_FLUID_AMOUNT} 毫桶。
      */
-    PressingTubFluidTank getFluid();
+    CustomFluidTank getFluid();
 
     /**
      * 获取果盆当前积累的液体量。

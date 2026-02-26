@@ -96,6 +96,24 @@ public class RenderUtils {
                 .endVertex();
     }
 
+    /**
+     * 基于方块坐标、物品索引和通道号生成稳定的伪随机浮点数，范围 [-1, 1]。
+     * <p>
+     * 使用 64 位位混淆哈希（Splitmix64 变体），无对象分配，适合逐帧调用。
+     *
+     * @param posSeed 方块坐标的 long 表示，作为基础种子
+     * @param index   物品在槽位中的索引，保证每个物品结果不同
+     * @param channel 通道编号，保证同一物品的不同旋转轴结果不同
+     * @return [-1, 1] 范围内的伪随机浮点数
+     */
+    public static float stableRandom(long posSeed, int index, int channel) {
+        long h = posSeed ^ ((long) index * 0x9e3779b97f4a7c15L) ^ ((long) channel * 0x6c62272e07bb0142L);
+        h = (h ^ (h >>> 30)) * 0xbf58476d1ce4e5b9L;
+        h = (h ^ (h >>> 27)) * 0x94d049bb133111ebL;
+        h ^= (h >>> 31);
+        return (float) (int) h / (float) Integer.MAX_VALUE;
+    }
+
     private static TextureAtlasSprite getStillFluidSprite(BlockAndTintGetter level, BlockPos pos, Fluid fluid) {
         FluidState state = fluid.defaultFluidState();
         FluidRenderHandler handler = FluidRenderHandlerRegistry.INSTANCE.get(fluid);

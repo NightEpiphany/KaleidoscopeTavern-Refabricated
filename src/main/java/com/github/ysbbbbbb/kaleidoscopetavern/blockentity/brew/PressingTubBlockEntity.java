@@ -6,7 +6,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
-import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.PressingTubFluidTank;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemStackHandler;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -57,7 +57,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     /**
      * 当前压榨桶内的液体量，最大为 1000 mb
      */
-    private final PressingTubFluidTank fluid = new PressingTubFluidTank(FluidConstants.BUCKET, this::refresh);
+    private final CustomFluidTank fluid = new CustomFluidTank(FluidConstants.BUCKET, this::refresh);
 
     public PressingTubBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.PRESSING_TUB_BE, pos, state);
@@ -393,7 +393,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     }
 
     @Override
-    public PressingTubFluidTank getFluid() {
+    public CustomFluidTank getFluid() {
         return fluid;
     }
 
@@ -406,7 +406,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
         if (milliBuckets <= 0) {
             return 0;
         }
-        return (long) milliBuckets * FluidConstants.BUCKET / (long) PressingTubFluidTank.MB_PER_BUCKET;
+        return (long) milliBuckets * FluidConstants.BUCKET / (long) CustomFluidTank.MB_PER_BUCKET;
     }
 
     private static SoundEvent getBucketFillSound(FluidVariant variant) {

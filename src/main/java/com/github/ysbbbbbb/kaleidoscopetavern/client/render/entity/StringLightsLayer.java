@@ -3,6 +3,8 @@ package com.github.ysbbbbbb.kaleidoscopetavern.client.render.entity;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.StringLightsBlockItem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -15,6 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
+@Environment(EnvType.CLIENT)
 public class StringLightsLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
     private final ItemInHandRenderer itemRenderer;
 

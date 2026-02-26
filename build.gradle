@@ -11,7 +11,11 @@ base {
 }
 
 repositories {
-	
+	maven {
+    name = "Terraformers"
+    url = "https://maven.terraformersmc.com/"
+  }
+  maven { url = "https://api.modrinth.com/maven" }
 }
 
 loom {
@@ -23,6 +27,8 @@ dependencies {
 	mappings loom.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+//	implementation("com.terraformersmc:modmenu:${project.modmenu_version}")
+	modImplementation "maven.modrinth:jade:${project.jade_version}"
 }
 
 processResources {
