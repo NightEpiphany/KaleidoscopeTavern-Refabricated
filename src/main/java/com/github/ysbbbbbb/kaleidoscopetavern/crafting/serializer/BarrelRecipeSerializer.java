@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.crafting.serializer;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.BarrelRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
 import com.google.gson.JsonArray;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
+    public static final ResourceLocation EMPTY_RECIPE_ID = KaleidoscopeTavern.modLoc("empty");
     public static final ResourceLocation DEFAULT_FLUID_ID = new ResourceLocation("minecraft", "water");
     public static final int DEFAULT_UNIT_TIME = 2400;
     public static final int MAX_INGREDIENTS = 4;

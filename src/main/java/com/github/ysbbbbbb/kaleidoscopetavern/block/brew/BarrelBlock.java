@@ -1,8 +1,15 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.BarrelBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.FluidUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -12,18 +19,24 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @SuppressWarnings("deprecation")
 public class BarrelBlock extends BaseEntityBlock {
@@ -62,6 +75,95 @@ public class BarrelBlock extends BaseEntityBlock {
                 .setValue(FACING, Direction.NORTH)
                 .setValue(LAYER, AttachFace.FLOOR)
                 .setValue(INDEX, 4));
+    }
+
+    @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
+                                 InteractionHand hand, BlockHitResult hitResult) {
+        if (hand != InteractionHand.MAIN_HAND) {
+            return InteractionResult.PASS;
+        }
+        BarrelBlockEntity barrelEntity = getBarrelEntity(level, pos, state);
+        if (barrelEntity == null) {
+            return InteractionResult.PASS;
+        }
+        // 只有顶层可以交互
+        if (isCeiling(state)) {
+            if (!barrelEntity.isOpen()) {
+                // 如果是关着的，此时点击顶层会尝试开盖
+                return barrelEntity.openLid(player) ? InteractionResult.SUCCESS : InteractionResult.PASS;
+            }
+
+            boolean clickedLid = isLid(state);
+            ItemStack itemInHand = player.getItemInHand(hand);
+
+            // 如果的空手，且没有点击中心，则尝试关盖
+            if (itemInHand.isEmpty() && !clickedLid) {
+                return barrelEntity.closeLid(player) ? InteractionResult.SUCCESS : InteractionResult.PASS;
+            }
+
+            // 只有点击中心，才能进行添加物品或流体的交互
+            if (clickedLid) {
+                // 如果拿的是流体容器
+                if (FluidUtils.isFluidContainer(itemInHand)) {
+                    Optional<FluidStack> optional = FluidUtil.getFluidContained(itemInHand);
+                    // 尝试先从容器中倒出流体到酒桶里，如果成功了就结束了
+                    if (optional.isPresent() && barrelEntity.addFluid(player, itemInHand)) {
+                        return InteractionResult.SUCCESS;
+                    }
+                    // 如果倒出失败了，再尝试从酒桶里装流体到容器里
+                    if (barrelEntity.removeFluid(player, itemInHand)) {
+                        return InteractionResult.SUCCESS;
+                    }
+                    // 流体容器不可作为原料输入
+                    return InteractionResult.PASS;
+                }
+
+                // 其他情况，有物品，则尝试添加
+                if (!itemInHand.isEmpty() && barrelEntity.addIngredient(player, itemInHand)) {
+                    return InteractionResult.SUCCESS;
+                }
+
+                // 没有物品，则尝试取出
+                if (itemInHand.isEmpty() && barrelEntity.removeIngredient(player)) {
+                    return InteractionResult.SUCCESS;
+                }
+            }
+        } else {
+            int brewLevel = barrelEntity.getBrewLevel();
+            ResourceLocation id = barrelEntity.getRecipeId();
+            int time = barrelEntity.getBrewTime() / 20;
+            if (id != null && !level.isClientSide) {
+                String text = "Level: %d, Recipe: %s, Time: %ds".formatted(brewLevel, id, time);
+                MutableComponent literal = Component.literal(text);
+                player.sendSystemMessage(literal);
+            }
+        }
+        return super.use(state, level, pos, player, hand, hitResult);
+    }
+
+    /**
+     * 判断是否为顶盖，只有顶盖可以添加物品和流体交互
+     */
+    private boolean isLid(BlockState state) {
+        return state.getValue(LAYER) == AttachFace.CEILING && state.getValue(INDEX) == 4;
+    }
+
+    /**
+     * 判断是否为顶部，用于开盖和关盖判断
+     */
+    private boolean isCeiling(BlockState state) {
+        return state.getValue(LAYER) == AttachFace.CEILING;
+    }
+
+    @Override
+    @Nullable
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+        if (level.isClientSide) {
+            return null;
+        }
+        return createTickerHelper(blockEntityType, ModBlocks.BARREL_BE.get(),
+                (levelIn, pos, stateIn, barrel) -> barrel.tick(levelIn));
     }
 
     @Override
@@ -135,20 +237,38 @@ public class BarrelBlock extends BaseEntityBlock {
         super.onBlockExploded(state, level, pos, explosion);
     }
 
-    private static void handleRemove(Level level, BlockPos pos, BlockState state, @Nullable Player player) {
-        if (level.isClientSide) {
-            return;
-        }
-
+    public static BlockPos getOriginPos(BlockPos pos, BlockState state) {
         AttachFace layer = state.getValue(LAYER);
         int index = state.getValue(INDEX);
-        boolean drop = player == null || !player.isCreative();
 
         // 根据当前方块的 LAYER 和 INDEX 反推原点位置（FLOOR 层中心, INDEX 4）
         int yOffset = layer == AttachFace.FLOOR ? 0 : layer == AttachFace.WALL ? 1 : 2;
         int col = index % 3;
         int row = index / 3;
-        BlockPos origin = pos.offset(-(col - 1), -yOffset, -(row - 1));
+
+        // 返回原点位置
+        return pos.offset(-(col - 1), -yOffset, -(row - 1));
+    }
+
+    @Nullable
+    public static BarrelBlockEntity getBarrelEntity(Level level, BlockPos clickPos, BlockState clickState) {
+        if (clickState.getBlock() instanceof BarrelBlock) {
+            BlockPos origin = getOriginPos(clickPos, clickState);
+            // 获取原点位置的 BlockEntity，并检查是否为 BarrelBlockEntity
+            if (level.getBlockEntity(origin) instanceof BarrelBlockEntity barrelEntity) {
+                return barrelEntity;
+            }
+        }
+        return null;
+    }
+
+    private static void handleRemove(Level level, BlockPos pos, BlockState state, @Nullable Player player) {
+        if (level.isClientSide) {
+            return;
+        }
+
+        boolean drop = player == null || !player.isCreative();
+        BlockPos origin = getOriginPos(pos, state);
 
         // 破坏 3x3x3 范围
         for (int y = 0; y < 3; y++) {

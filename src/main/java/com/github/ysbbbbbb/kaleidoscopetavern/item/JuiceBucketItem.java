@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.item;
 
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -10,7 +11,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
 
+import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public class JuiceBucketItem extends BucketItem implements IHasContainer {
@@ -37,6 +41,10 @@ public class JuiceBucketItem extends BucketItem implements IHasContainer {
         return returnContainerToEntity(stack, level, entity);
     }
 
+    @Override
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
+        return new FluidBucketWrapper(stack);
+    }
 
     @Override
     public int getUseDuration(ItemStack stack) {

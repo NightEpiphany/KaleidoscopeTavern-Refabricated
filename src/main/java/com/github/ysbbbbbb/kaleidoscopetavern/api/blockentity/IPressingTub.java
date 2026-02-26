@@ -16,6 +16,10 @@ public interface IPressingTub {
      * 果盆内液体的最大容量，单位为毫桶（mB），默认为 1000 mB，相当于一个标准桶的容量。
      */
     int MAX_FLUID_AMOUNT = FluidType.BUCKET_VOLUME;
+
+    /**
+     * 触发压榨操作所需的最小下落高度，单位为方块，默认为 0.5F，即实体需要至少从半个方块的高度落下才能触发压榨。
+     */
     float MIN_FALL_DISTANCE = 0.5F;
 
     /**
