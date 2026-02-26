@@ -7,6 +7,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.BarrelBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.DrinkBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PressingTubBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.TapBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.ChalkboardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.SandwichBlockEntity;
 import net.minecraft.world.item.Items;
@@ -274,6 +275,12 @@ public interface ModBlocks {
     RegistryObject<BlockEntityType<BarrelBlockEntity>> BARREL_BE = BLOCK_ENTITIES.register(
             "barrel", () -> BlockEntityType.Builder
                     .of(BarrelBlockEntity::new, BARREL.get())
+                    .build(null)
+    );
+
+    RegistryObject<BlockEntityType<TapBlockEntity>> TAP_BE = BLOCK_ENTITIES.register(
+            "tap", () -> BlockEntityType.Builder
+                    .of(TapBlockEntity::new, TAP.get())
                     .build(null)
     );
 }

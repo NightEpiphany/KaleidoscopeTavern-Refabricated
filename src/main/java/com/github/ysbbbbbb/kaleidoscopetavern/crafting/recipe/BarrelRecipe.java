@@ -48,7 +48,15 @@ public record BarrelRecipe(
 
     @Override
     public ItemStack assemble(BarrelRecipeContainer container, RegistryAccess registryAccess) {
-        return getResultItem(registryAccess).copy();
+        // 遍历容器，找出数量最少的输入物品数量，作为酿造结果的数量
+        // 默认数量为 16，超过这个数量的输入物品不会增加输出物品的数量
+        int count = 16;
+        for (ItemStack itemStack : container.getItems()) {
+            if (!itemStack.isEmpty()) {
+                count = Math.min(count, itemStack.getCount());
+            }
+        }
+        return getResultItem(registryAccess).copyWithCount(count);
     }
 
     @Override

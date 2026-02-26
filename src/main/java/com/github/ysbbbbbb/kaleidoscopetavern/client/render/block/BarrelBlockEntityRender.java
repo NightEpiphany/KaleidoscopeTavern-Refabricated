@@ -93,11 +93,11 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
         float time = barrel.getLevel().getGameTime() + partialTick;
         long seed = barrel.getBlockPos().asLong();
 
-        ItemStackHandler items = barrel.getItems();
+        ItemStackHandler items = barrel.getIngredient();
 
         for (int index = 0; index < items.getSlots(); index++) {
             ItemStack stack = items.getStackInSlot(index);
-            int count = stack.getCount() / 8 + 1;
+            int count = stack.getCount() / 2 + 1;
             if (!stack.isEmpty()) {
                 for (int i = 0; i < count; i++) {
                     poseStack.pushPose();
