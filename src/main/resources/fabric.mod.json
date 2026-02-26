@@ -1,0 +1,26 @@
+{
+	"schemaVersion": 1,
+	"id": "kaleidoscope_tavern",
+	"version": "${version}",
+	"name": "Kaleidoscope Tavern",
+	"description": "Brew wine in a unique & fancy way!",
+	"authors": [
+		"ysbbbbbb", "NightEpiphany", "tartaric_acid"
+	],
+	"license": "BSD-3-Clause + CC BY-NC-SA 4.0",
+	"icon": "assets/kaleidoscope_tavern/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern"],
+		"client": ["com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavernClient"]
+	},
+	"mixins": [
+		"kaleidoscope_tavern.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	}
+}

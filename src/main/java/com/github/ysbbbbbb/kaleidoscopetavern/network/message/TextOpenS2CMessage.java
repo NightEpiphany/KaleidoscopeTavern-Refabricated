@@ -2,36 +2,40 @@ package com.github.ysbbbbbb.kaleidoscopetavern.network.message;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.gui.block.TextScreen;
+import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.networking.v1.FabricPacket;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent;
 
-import java.util.function.Supplier;
+public record TextOpenS2CMessage(BlockPos pos) implements FabricPacket {
+    public static final PacketType<TextOpenS2CMessage> TYPE = PacketType.create(NetworkHandler.TEXT_OPEN_S2C_PACKET, TextOpenS2CMessage::new);
 
-public record TextOpenS2CMessage(BlockPos pos) {
-    public static void encode(TextOpenS2CMessage message, FriendlyByteBuf buf) {
-        buf.writeBlockPos(message.pos);
+    public TextOpenS2CMessage(FriendlyByteBuf buf) {
+        this(buf.readBlockPos());
     }
 
-    public static TextOpenS2CMessage decode(FriendlyByteBuf buf) {
-        return new TextOpenS2CMessage(buf.readBlockPos());
+    @Override
+    public void write(FriendlyByteBuf friendlyByteBuf) {
+        friendlyByteBuf.writeBlockPos(pos);
     }
 
-    public static void handle(TextOpenS2CMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
-        if (context.getDirection().getReceptionSide().isClient()) {
-            context.enqueueWork(() -> onHandle(message));
-        }
-        context.setPacketHandled(true);
+    @Override
+    public PacketType<?> getType() {
+        return TYPE;
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private static void onHandle(TextOpenS2CMessage message) {
+    @Environment(EnvType.CLIENT)
+    public static void receive(TextOpenS2CMessage message, LocalPlayer localPlayer, PacketSender packetSender) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) {
             return;

@@ -2,21 +2,26 @@ package com.github.ysbbbbbb.kaleidoscopetavern.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraft.world.level.material.FluidState;
 import org.joml.Matrix4f;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class RenderUtils {
     /**
      * 渲染流体的工具方法
@@ -29,8 +34,14 @@ public class RenderUtils {
      * @param y         流体平面贴图的高度，根据实际流体显示高度调整
      */
     public static void renderFluid(Fluid fluid, PoseStack poseStack, MultiBufferSource buffer, int light, int size, float y) {
-        TextureAtlasSprite sprite = getStillFluidSprite(fluid);
-        int color = getFluidColor(fluid);
+        TextureAtlasSprite sprite = getStillFluidSprite(null, null, fluid);
+        int color = getFluidColor(null, null, fluid);
+        renderSurface(poseStack, buffer, sprite, color, light, Mth.clamp(size, 1, 16), y);
+    }
+
+    public static void renderFluid(BlockAndTintGetter level, BlockPos pos, Fluid fluid, PoseStack poseStack, MultiBufferSource buffer, int light, int size, float y) {
+        TextureAtlasSprite sprite = getStillFluidSprite(level, pos, fluid);
+        int color = getFluidColor(level, pos, fluid);
         renderSurface(poseStack, buffer, sprite, color, light, Mth.clamp(size, 1, 16), y);
     }
 
@@ -85,14 +96,28 @@ public class RenderUtils {
                 .endVertex();
     }
 
-    private static TextureAtlasSprite getStillFluidSprite(Fluid fluid) {
-        IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluid);
-        ResourceLocation fluidStill = renderProperties.getStillTexture();
-        return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
+    private static TextureAtlasSprite getStillFluidSprite(BlockAndTintGetter level, BlockPos pos, Fluid fluid) {
+        FluidState state = fluid.defaultFluidState();
+        FluidRenderHandler handler = FluidRenderHandlerRegistry.INSTANCE.get(fluid);
+        if (handler != null) {
+            TextureAtlasSprite[] sprites = handler.getFluidSprites(level, pos, state);
+            if (sprites != null && sprites.length > 0 && sprites[0] != null) {
+                return sprites[0];
+            }
+        }
+        ResourceLocation missing = MissingTextureAtlasSprite.getLocation();
+        return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(missing);
     }
 
-    private static int getFluidColor(Fluid fluid) {
-        IClientFluidTypeExtensions ext = IClientFluidTypeExtensions.of(fluid);
-        return ext.getTintColor();
+    private static int getFluidColor(BlockAndTintGetter level, BlockPos pos, Fluid fluid) {
+        if (level == null || pos == null) {
+            return 0xFFFFFFFF;
+        }
+        FluidState state = fluid.defaultFluidState();
+        FluidRenderHandler handler = FluidRenderHandlerRegistry.INSTANCE.get(fluid);
+        if (handler == null) {
+            return 0xFFFFFFFF;
+        }
+        return handler.getFluidColor(level, pos, state);
     }
 }

@@ -6,8 +6,17 @@ import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.PressingTubFluidTank;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemStackHandler;
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -27,23 +36,11 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.SoundActions;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings("UnstableApiUsage")
 public class PressingTubBlockEntity extends BaseBlockEntity implements IPressingTub {
     private final RecipeManager.CachedCheck<Container, PressingTubRecipe> quickCheck = RecipeManager.createCheck(ModRecipes.PRESSING_TUB_RECIPE);
 
@@ -60,25 +57,10 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     /**
      * 当前压榨桶内的液体量，最大为 1000 mb
      */
-    private final FluidTank fluid = new FluidTank(FluidType.BUCKET_VOLUME) {
-        @Override
-        protected void onContentsChanged() {
-            // 液体量改变时，需要强制刷新状态，以便客户端同步
-            refresh();
-        }
-    };
-
-    /**
-     * 物品栏的 Capability，用于漏斗自动化
-     */
-    private @Nullable LazyOptional<IItemHandler> itemCapability = null;
-    /**
-     * 流体栏的 Capability，用于科技模组的自动化
-     */
-    private @Nullable LazyOptional<FluidTank> fluidCapability = null;
+    private final PressingTubFluidTank fluid = new PressingTubFluidTank(FluidConstants.BUCKET, this::refresh);
 
     public PressingTubBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlocks.PRESSING_TUB_BE.get(), pos, state);
+        super(ModBlocks.PRESSING_TUB_BE, pos, state);
     }
 
     @Override
@@ -159,12 +141,10 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
 
         SimpleContainer container = new SimpleContainer(stack);
         return this.quickCheck.getRecipeFor(container, level).map(recipe -> {
-            // 准备放入的流体
-            FluidStack fluidStack = new FluidStack(recipe.getFluid(), recipe.getFluidAmount());
-            FluidStack fluidInTub = this.fluid.getFluid();
+            FluidVariant fluidVariant = FluidVariant.of(recipe.getFluid());
+            FluidVariant fluidInTub = this.fluid.getFluidVariant();
 
-            // 如果已经有流体，但是结果不匹配，无法继续压榨
-            if (!fluidInTub.isEmpty() && !fluidStack.isFluidEqual(fluidInTub)) {
+            if (!fluidInTub.isBlank() && !fluidVariant.equals(fluidInTub)) {
                 playFailPressEffect(stack);
                 // 丢出内容物并刷新状态
                 if (this.dropContents()) {
@@ -174,7 +154,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
             }
 
             // 液体已满，无法继续压榨
-            if (this.getFluidAmount() >= IPressingTub.MAX_FLUID_AMOUNT) {
+            if (this.fluid.getFluidAmountTransfer() >= IPressingTub.MAX_FLUID_AMOUNT_TRANSFER) {
                 playFinishedPressEffect();
                 return false;
             }
@@ -186,8 +166,19 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
                 return false;
             }
 
-            // 成功压榨，增加液体量，减少物品槽内的物品数量
-            this.fluid.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+            long insertAmount = toTransferAmount(recipe.getFluidAmount());
+            boolean inserted = false;
+            try (Transaction transaction = Transaction.openOuter()) {
+                long actual = this.fluid.insert(fluidVariant, insertAmount, transaction);
+                if (actual > 0) {
+                    inserted = true;
+                    transaction.commit();
+                }
+            }
+            if (!inserted) {
+                playFinishedPressEffect();
+                return false;
+            }
             this.items.extractItem(0, 1, false);
 
             playSuccessPressEffect(stack);
@@ -248,7 +239,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
                     this.level.random.nextFloat() * 0.3F + 0.7F);
 
             if (stack == null) {
-                BlockState state = ModBlocks.PRESSING_TUB.get().defaultBlockState();
+                BlockState state = ModBlocks.PRESSING_TUB.defaultBlockState();
                 BlockParticleOption option = new BlockParticleOption(ParticleTypes.BLOCK, state);
                 serverLevel.sendParticles(option,
                         worldPosition.getX() + 0.5,
@@ -294,37 +285,47 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
             return false;
         }
         // 必须完全满液体才能取出产物
-        if (this.fluid.getFluidAmount() < IPressingTub.MAX_FLUID_AMOUNT) {
+        if (this.fluid.getFluidAmountTransfer() < IPressingTub.MAX_FLUID_AMOUNT_TRANSFER) {
             return false;
         }
 
-        // 复制一份物品
-        ItemStack copy = carriedStack.copyWithCount(1);
-        // 开始把果盆中的流体转移到容器里
-        return FluidUtil.getFluidHandler(copy).map(stackFluid -> {
-            // 先模拟转移一次
-            FluidStack transfer = FluidUtil.tryFluidTransfer(stackFluid, fluid, IPressingTub.MAX_FLUID_AMOUNT, false);
-            // 如果成功转移
-            if (!transfer.isEmpty()) {
-                // 真正转移液体
-                FluidUtil.tryFluidTransfer(stackFluid, fluid, IPressingTub.MAX_FLUID_AMOUNT, true);
-                // 获取结果
-                ItemStack result = stackFluid.getContainer();
-                // 扣除玩家物品
-                if (!(target instanceof Player player) || !player.isCreative()) {
-                    carriedStack.shrink(1);
-                }
-                // 给玩家物品
-                ItemUtils.getItemToLivingEntity(target, result);
-                // 播放音效
-                SoundEvent sound = transfer.getFluid().getFluidType().getSound(transfer, SoundActions.BUCKET_FILL);
-                if (sound != null) {
-                    target.playSound(sound);
-                }
-                return true;
-            }
+        FluidVariant fluidVariant = this.fluid.getFluidVariant();
+        if (fluidVariant.isBlank()) {
             return false;
-        }).orElse(false);
+        }
+
+        ItemStack copy = carriedStack.copyWithCount(1);
+        ContainerItemContext context = ContainerItemContext.withConstant(copy);
+        Storage<FluidVariant> itemStorage = context.find(FluidStorage.ITEM);
+        if (itemStorage == null) {
+            return false;
+        }
+
+        try (Transaction transaction = Transaction.openOuter()) {
+            long extracted = this.fluid.extract(fluidVariant, IPressingTub.MAX_FLUID_AMOUNT_TRANSFER, transaction);
+            if (extracted != IPressingTub.MAX_FLUID_AMOUNT_TRANSFER) {
+                return false;
+            }
+            long inserted = itemStorage.insert(fluidVariant, extracted, transaction);
+            if (inserted != extracted) {
+                return false;
+            }
+            transaction.commit();
+        }
+
+        ItemVariant resultVariant = context.getItemVariant();
+        ItemStack resultStack = resultVariant.toStack((int) Math.min(Integer.MAX_VALUE, context.getAmount()));
+
+        if (!(target instanceof Player player) || !player.isCreative()) {
+            carriedStack.shrink(1);
+        }
+        ItemUtils.getItemToLivingEntity(target, resultStack);
+
+        SoundEvent sound = getBucketFillSound(fluidVariant);
+        if (sound != null) {
+            target.playSound(sound);
+        }
+        return true;
     }
 
     public boolean dropContents() {
@@ -379,7 +380,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     }
 
     private void popResource(Level level, Supplier<ItemEntity> supplier, ItemStack stack) {
-        if (!level.isClientSide && !stack.isEmpty() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) && !level.restoringBlockSnapshots) {
+        if (!level.isClientSide && !stack.isEmpty() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
             ItemEntity entity = supplier.get();
             entity.setDefaultPickUpDelay();
             level.addFreshEntity(entity);
@@ -392,67 +393,26 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     }
 
     @Override
-    public FluidTank getFluid() {
+    public PressingTubFluidTank getFluid() {
         return fluid;
     }
 
     @Override
     public int getFluidAmount() {
-        return this.fluid.getFluidAmount();
+        return this.fluid.getFluidAmountMb();
     }
 
-    @Override
-    @SuppressWarnings("all")
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (!this.remove) {
-            // 物品只能输入，不能输出
-            if (cap == ForgeCapabilities.ITEM_HANDLER && (side == null || side.getAxis() != Direction.Axis.Y)) {
-                if (this.itemCapability == null) {
-                    this.itemCapability = LazyOptional.of(() -> this.items);
-                }
-                return this.itemCapability.cast();
-            }
-
-            // 流体可以输入输出
-            if (cap == ForgeCapabilities.FLUID_HANDLER) {
-                if (this.fluidCapability == null) {
-                    this.fluidCapability = LazyOptional.of(() -> this.fluid);
-                }
-                return this.fluidCapability.cast();
-            }
+    private static long toTransferAmount(int milliBuckets) {
+        if (milliBuckets <= 0) {
+            return 0;
         }
-        return super.getCapability(cap, side);
+        return (long) milliBuckets * FluidConstants.BUCKET / (long) PressingTubFluidTank.MB_PER_BUCKET;
     }
 
-    @Override
-    public void setBlockState(BlockState blockState) {
-        super.setBlockState(blockState);
-
-        if (this.itemCapability != null) {
-            LazyOptional<?> oldHandler = this.itemCapability;
-            this.itemCapability = null;
-            oldHandler.invalidate();
+    private static SoundEvent getBucketFillSound(FluidVariant variant) {
+        if (variant.isBlank()) {
+            return null;
         }
-
-        if (this.fluidCapability != null) {
-            LazyOptional<?> oldHandler = this.fluidCapability;
-            this.fluidCapability = null;
-            oldHandler.invalidate();
-        }
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-
-        if (itemCapability != null) {
-            itemCapability.invalidate();
-            itemCapability = null;
-        }
-
-        if (fluidCapability != null) {
-            fluidCapability.invalidate();
-            fluidCapability = null;
-        }
+        return FluidVariantAttributes.getFillSound(variant);
     }
 }

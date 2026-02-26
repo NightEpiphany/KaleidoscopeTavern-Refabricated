@@ -1,9 +1,9 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.gui.block;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
-import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.message.TextUpdateC2SMessage;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.TextAlignment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -112,7 +112,7 @@ public class TextScreen extends Screen {
     }
 
     private void onDone() {
-        NetworkHandler.sendToServer(new TextUpdateC2SMessage(blockEntity.getBlockPos(), text, textAlignment));
+        ClientPlayNetworking.send(new TextUpdateC2SMessage(blockEntity.getBlockPos(), text, textAlignment));
         this.onClose();
     }
 

@@ -1,10 +1,10 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.PressingTubFluidTank;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemStackHandler;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.ItemStackHandler;
 
 /**
  * 果盆方块实体的接口，定义果盆的核心交互逻辑。
@@ -15,7 +15,8 @@ public interface IPressingTub {
     /**
      * 果盆内液体的最大容量，单位为毫桶（mB），默认为 1000 mB，相当于一个标准桶的容量。
      */
-    int MAX_FLUID_AMOUNT = FluidType.BUCKET_VOLUME;
+    int MAX_FLUID_AMOUNT = PressingTubFluidTank.MB_PER_BUCKET;
+    long MAX_FLUID_AMOUNT_TRANSFER = FluidConstants.BUCKET;
     float MIN_FALL_DISTANCE = 0.5F;
 
     /**
@@ -30,7 +31,7 @@ public interface IPressingTub {
      * <p>
      * 果盆内只能容纳一种液体，最大容量为 {@value #MAX_FLUID_AMOUNT} 毫桶。
      */
-    FluidTank getFluid();
+    PressingTubFluidTank getFluid();
 
     /**
      * 获取果盆当前积累的液体量。

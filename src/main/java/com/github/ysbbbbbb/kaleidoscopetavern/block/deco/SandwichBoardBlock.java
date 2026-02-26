@@ -1,6 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 
-import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.SandwichBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.SandwichBoardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
 import com.google.common.collect.Maps;
 import net.minecraft.ChatFormatting;
@@ -76,7 +76,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
                                  InteractionHand hand, BlockHitResult hitResult) {
         Half half = state.getValue(HALF);
         BlockPos clickedPos = half == Half.BOTTOM ? pos : pos.below();
-        if (level.getBlockEntity(clickedPos) instanceof SandwichBlockEntity sandwichBlock) {
+        if (level.getBlockEntity(clickedPos) instanceof SandwichBoardBlockEntity sandwichBlock) {
             // 优先判断是否可变样式
             Item item = player.getItemInHand(hand).getItem();
             // 如果在其他变种物品列表中，则变化种类
@@ -96,7 +96,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
 
                 // 粘贴 BlockEntity 数据
                 BlockEntity blockEntity = level.getBlockEntity(clickedPos);
-                if (blockEntity instanceof SandwichBlockEntity be) {
+                if (blockEntity instanceof SandwichBoardBlockEntity be) {
                     be.load(tag);
                     be.refresh();
                 }
@@ -152,7 +152,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     @Nullable
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         if (state.getValue(HALF) == Half.BOTTOM) {
-            return new SandwichBlockEntity(pos, state);
+            return new SandwichBoardBlockEntity(pos, state);
         }
         return null;
     }

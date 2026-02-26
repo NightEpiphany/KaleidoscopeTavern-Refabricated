@@ -2,10 +2,12 @@ package com.github.ysbbbbbb.kaleidoscopetavern.crafting.serializer;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.BarrelRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.RecipeMatcher;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -14,8 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -26,7 +27,7 @@ public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
     public static final int MAX_INGREDIENTS = 4;
 
     @Override
-    public BarrelRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+    public @NotNull BarrelRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
         // ingredients 字段可能不存在
         JsonArray ingredientsJson = GsonHelper.getAsJsonArray(json, "ingredients", new JsonArray());
         NonNullList<Ingredient> ingredients = NonNullList.withSize(MAX_INGREDIENTS, Ingredient.EMPTY);
@@ -40,10 +41,7 @@ public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
 
         String fluidJson = GsonHelper.getAsString(json, "fluid", DEFAULT_FLUID_ID.toString());
         ResourceLocation fluidId = ResourceLocation.tryParse(fluidJson);
-        Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidId);
-        if (fluid == null) {
-            throw new JsonParseException("Unknown fluid: " + fluidId);
-        }
+        Fluid fluid = BuiltInRegistries.FLUID.get(fluidId);
 
         JsonObject carrierJson = GsonHelper.getAsJsonObject(json, "carrier");
         Ingredient carrier = Ingredient.fromJson(carrierJson);
@@ -55,7 +53,7 @@ public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
         });
 
         JsonObject resultJson = GsonHelper.getAsJsonObject(json, "result");
-        ItemStack result = CraftingHelper.getItemStack(resultJson, true, true);
+        ItemStack result = RecipeMatcher.getItemStack(resultJson, true, true);
         if (!(result.getItem() instanceof BottleBlockItem)) {
             throw new JsonParseException("Result must extend class BottleBlockItem, but found: " + result.getItem());
         }
@@ -69,14 +67,14 @@ public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
     }
 
     @Override
-    public BarrelRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+    public @NotNull BarrelRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
         int size = Math.min(MAX_INGREDIENTS, buffer.readVarInt());
         NonNullList<Ingredient> ingredients = NonNullList.withSize(size, Ingredient.EMPTY);
         for (int i = 0; i < size; i++) {
             ingredients.set(i, Ingredient.fromNetwork(buffer));
         }
         ResourceLocation fluidId = buffer.readResourceLocation();
-        Fluid fluid = Objects.requireNonNull(ForgeRegistries.FLUIDS.getValue(fluidId));
+        Fluid fluid = Objects.requireNonNull(BuiltInRegistries.FLUID.get(fluidId));
         Ingredient carrier = Ingredient.fromNetwork(buffer);
         ItemStack result = buffer.readItem();
         int unitTime = buffer.readVarInt();
@@ -89,7 +87,7 @@ public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
         for (Ingredient ingredient : recipe.ingredients()) {
             ingredient.toNetwork(buffer);
         }
-        ResourceLocation fluidId = ForgeRegistries.FLUIDS.getKey(recipe.fluid());
+        ResourceLocation fluidId = BuiltInRegistries.FLUID.getKey(recipe.fluid());
         buffer.writeResourceLocation(Objects.requireNonNull(fluidId));
         recipe.carrier().toNetwork(buffer);
         buffer.writeItem(recipe.result());

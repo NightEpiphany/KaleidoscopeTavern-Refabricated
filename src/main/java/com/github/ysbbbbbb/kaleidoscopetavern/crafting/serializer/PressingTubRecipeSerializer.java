@@ -3,14 +3,14 @@ package com.github.ysbbbbbb.kaleidoscopetavern.crafting.serializer;
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IPressingTub;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -22,7 +22,7 @@ public class PressingTubRecipeSerializer implements RecipeSerializer<PressingTub
     public static final int DEFAULT_FLUID_AMOUNT = IPressingTub.MAX_FLUID_AMOUNT / 8;
 
     @Override
-    public PressingTubRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+    public @NotNull PressingTubRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
         Ingredient ingredient;
         if (GsonHelper.isArrayNode(json, "ingredient")) {
             ingredient = Ingredient.fromJson(getAsJsonArray(json, "ingredient"), false);
@@ -31,10 +31,7 @@ public class PressingTubRecipeSerializer implements RecipeSerializer<PressingTub
         }
 
         ResourceLocation fluidId = new ResourceLocation(GsonHelper.getAsString(json, "fluid", DEFAULT_FLUID_ID.toString()));
-        Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidId);
-        if (fluid == null) {
-            throw new JsonParseException("Unknown fluid: " + fluidId);
-        }
+        Fluid fluid = BuiltInRegistries.FLUID.get(fluidId);
 
         int fluidAmount = GsonHelper.getAsInt(json, "fluid_amount", DEFAULT_FLUID_AMOUNT);
 
@@ -42,10 +39,10 @@ public class PressingTubRecipeSerializer implements RecipeSerializer<PressingTub
     }
 
     @Override
-    public PressingTubRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+    public @NotNull PressingTubRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
         Ingredient ingredient = Ingredient.fromNetwork(buffer);
         ResourceLocation fluidId = buffer.readResourceLocation();
-        Fluid fluid = Objects.requireNonNull(ForgeRegistries.FLUIDS.getValue(fluidId));
+        Fluid fluid = Objects.requireNonNull(BuiltInRegistries.FLUID.get(fluidId));
         int fluidAmount = buffer.readInt();
         return new PressingTubRecipe(recipeId, ingredient, fluid, fluidAmount);
     }
@@ -53,7 +50,7 @@ public class PressingTubRecipeSerializer implements RecipeSerializer<PressingTub
     @Override
     public void toNetwork(FriendlyByteBuf buffer, PressingTubRecipe recipe) {
         recipe.getIngredient().toNetwork(buffer);
-        ResourceLocation fluidId = Objects.requireNonNull(ForgeRegistries.FLUIDS.getKey(recipe.getFluid()));
+        ResourceLocation fluidId = Objects.requireNonNull(BuiltInRegistries.FLUID.getKey(recipe.getFluid()));
         buffer.writeResourceLocation(fluidId);
         buffer.writeInt(recipe.getFluidAmount());
     }

@@ -1,11 +1,12 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
-import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.message.TextOpenS2CMessage;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.TextAlignment;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -17,8 +18,8 @@ import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.UUID;
 
 public abstract class TextBlockEntity extends BaseBlockEntity {
@@ -125,8 +126,8 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
             return InteractionResult.SUCCESS;
         }
 
-        if (!level.isClientSide) {
-            NetworkHandler.sendToClient(player, new TextOpenS2CMessage(pos));
+        if (player instanceof ServerPlayer serverPlayer) {
+            ServerPlayNetworking.send(serverPlayer, new TextOpenS2CMessage(pos));
         }
         return InteractionResult.SUCCESS;
     }

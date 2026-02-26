@@ -30,6 +30,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static com.github.ysbbbbbb.kaleidoscopetavern.block.plant.ITrellis.*;
@@ -52,11 +53,11 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock, ITrel
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                 InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
+                                          InteractionHand hand, BlockHitResult hitResult) {
         // 玩家手持的是葡萄藤
         ItemStack itemInHand = player.getItemInHand(hand);
-        if (!itemInHand.is(ModItems.GRAPEVINE.get())) {
+        if (!itemInHand.is(ModItems.GRAPEVINE)) {
             return super.use(state, level, pos, player, hand, hitResult);
         }
         // 如果藤架是单个的
@@ -67,7 +68,7 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock, ITrel
         // 并且下方是泥土，那么可以种植
         BlockState belowState = level.getBlockState(pos.below());
         if (belowState.is(BlockTags.DIRT)) {
-            BlockState plantedState = ModBlocks.GRAPEVINE_TRELLIS.get()
+            BlockState plantedState = ModBlocks.GRAPEVINE_TRELLIS
                     .defaultBlockState()
                     .setValue(WATERLOGGED, state.getValue(WATERLOGGED));
             level.setBlockAndUpdate(pos, plantedState);
@@ -81,8 +82,8 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock, ITrel
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                  LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
+                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -98,7 +99,7 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock, ITrel
 
     @Override
     public boolean sameType(BlockState state) {
-        return state.is(ModBlocks.TRELLIS.get()) || state.is(ModBlocks.GRAPEVINE_TRELLIS.get());
+        return state.is(ModBlocks.TRELLIS) || state.is(ModBlocks.GRAPEVINE_TRELLIS);
     }
 
     @Override
@@ -119,12 +120,12 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock, ITrel
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return collisionShape(state.getValue(TYPE));
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return selectShape(state.getValue(TYPE));
     }
 
@@ -134,7 +135,7 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock, ITrel
     }
 
     @Override
-    public FluidState getFluidState(BlockState state) {
+    public @NotNull FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 }

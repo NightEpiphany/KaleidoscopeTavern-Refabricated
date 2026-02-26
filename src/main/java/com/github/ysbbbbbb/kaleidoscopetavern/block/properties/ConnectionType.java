@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.properties;
 
 import net.minecraft.util.StringRepresentable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
@@ -16,7 +17,7 @@ public enum ConnectionType implements StringRepresentable {
     RIGHT_CORNER;
 
     @Override
-    public String getSerializedName() {
+    public @NotNull String getSerializedName() {
         return this.name().toLowerCase(Locale.ENGLISH);
     }
 

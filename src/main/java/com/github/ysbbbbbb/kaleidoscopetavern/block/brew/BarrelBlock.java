@@ -20,6 +20,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -130,9 +131,9 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion) {
-        handleRemove(level, pos, state, null);
-        super.onBlockExploded(state, level, pos, explosion);
+    public void wasExploded(Level level, BlockPos blockPos, Explosion explosion) {
+        handleRemove(level, blockPos, level.getBlockState(blockPos), null);
+        super.wasExploded(level, blockPos, explosion);
     }
 
     private static void handleRemove(Level level, BlockPos pos, BlockState state, @Nullable Player player) {
@@ -162,7 +163,7 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         // 仅原点方块（FLOOR 层中心）掉落物品，避免重复掉落
         if (state.getValue(LAYER) == AttachFace.FLOOR && state.getValue(INDEX) == 4) {
             return super.getDrops(state, builder);
@@ -188,7 +189,7 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction facing = state.getValue(FACING);
         int index = state.getValue(INDEX);
         int col = index % 3;
@@ -201,7 +202,7 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState state) {
+    public @NotNull RenderShape getRenderShape(BlockState state) {
         // 仅底层中间方块能显示
         AttachFace layer = state.getValue(LAYER);
         int index = state.getValue(INDEX);

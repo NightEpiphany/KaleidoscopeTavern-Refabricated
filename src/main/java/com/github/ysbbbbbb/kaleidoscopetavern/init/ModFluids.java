@@ -1,71 +1,122 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.init;
 
-import com.github.ysbbbbbb.kaleidoscopetavern.fluid.JuiceFluidType;
+import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
+import com.github.ysbbbbbb.kaleidoscopetavern.fluid.JuiceFluid;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
+import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
+import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRenderHandler;
+import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.ForgeFlowingFluid.Flowing;
-import net.minecraftforge.fluids.ForgeFlowingFluid.Properties;
-import net.minecraftforge.fluids.ForgeFlowingFluid.Source;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries.Keys;
-import net.minecraftforge.registries.RegisterEvent;
-import net.minecraftforge.registries.RegistryObject;
 
-import static com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern.MOD_ID;
-import static com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern.modLoc;
-import static net.minecraftforge.registries.ForgeRegistries.FLUIDS;
-import static net.minecraftforge.registries.ForgeRegistries.Keys.FLUID_TYPES;
-
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@SuppressWarnings("UnstableApiUsage")
 public class ModFluids {
-    // ID
-    public static final ResourceLocation GRAPE_JUICE_ID = modLoc("grape_juice");
-    public static final ResourceLocation FLOWING_GRAPE_JUICE_ID = modLoc("flowing_grape_juice");
+    public static final FlowingFluid GRAPE_JUICE = new JuiceFluid.Still(
+            () -> ModFluids.FLOWING_GRAPE_JUICE,
+            () -> ModFluids.GRAPE_JUICE,
+            () -> ModItems.GRAPE_BUCKET,
+            () -> ModFluids.GRAPE_JUICE_BLOCK
+    );
+    public static final FlowingFluid FLOWING_GRAPE_JUICE = new JuiceFluid.Flowing(
+            () -> ModFluids.FLOWING_GRAPE_JUICE,
+            () -> ModFluids.GRAPE_JUICE,
+            () -> ModItems.GRAPE_BUCKET,
+            () -> ModFluids.GRAPE_JUICE_BLOCK
+    );
+    public static final LiquidBlock GRAPE_JUICE_BLOCK = new LiquidBlock(GRAPE_JUICE, BlockBehaviour.Properties.copy(Blocks.WATER));
 
-    public static final ResourceLocation SWEET_BERRIES_JUICE_ID = modLoc("sweet_berries_juice");
-    public static final ResourceLocation FLOWING_SWEET_BERRIES_JUICE_ID = modLoc("flowing_sweet_berries_juice");
+    public static final FlowingFluid SWEET_BERRIES_JUICE = new JuiceFluid.Still(
+            () -> ModFluids.FLOWING_SWEET_BERRIES_JUICE,
+            () -> ModFluids.SWEET_BERRIES_JUICE,
+            () -> ModItems.SWEET_BERRIES_BUCKET,
+            () -> ModFluids.SWEET_BERRIES_JUICE_BLOCK
+    );
+    public static final FlowingFluid FLOWING_SWEET_BERRIES_JUICE = new JuiceFluid.Flowing(
+            () -> ModFluids.FLOWING_SWEET_BERRIES_JUICE,
+            () -> ModFluids.SWEET_BERRIES_JUICE,
+            () -> ModItems.SWEET_BERRIES_BUCKET,
+            () -> ModFluids.SWEET_BERRIES_JUICE_BLOCK
+    );
+    public static final LiquidBlock SWEET_BERRIES_JUICE_BLOCK = new LiquidBlock(SWEET_BERRIES_JUICE, BlockBehaviour.Properties.copy(Blocks.WATER));
 
-    public static final ResourceLocation GLOW_BERRIES_JUICE_ID = modLoc("glow_berries_juice");
-    public static final ResourceLocation FLOWING_GLOW_BERRIES_JUICE_ID = modLoc("flowing_glow_berries_juice");
+    public static final FlowingFluid GLOW_BERRIES_JUICE = new JuiceFluid.Still(
+            () -> ModFluids.FLOWING_GLOW_BERRIES_JUICE,
+            () -> ModFluids.GLOW_BERRIES_JUICE,
+            () -> ModItems.GLOW_BERRIES_BUCKET,
+            () -> ModFluids.GLOW_BERRIES_JUICE_BLOCK
+    );
+    public static final FlowingFluid FLOWING_GLOW_BERRIES_JUICE = new JuiceFluid.Flowing(
+            () -> ModFluids.FLOWING_GLOW_BERRIES_JUICE,
+            () -> ModFluids.GLOW_BERRIES_JUICE,
+            () -> ModItems.GLOW_BERRIES_BUCKET,
+            () -> ModFluids.GLOW_BERRIES_JUICE_BLOCK
+    );
+    public static final LiquidBlock GLOW_BERRIES_JUICE_BLOCK = new LiquidBlock(GLOW_BERRIES_JUICE, BlockBehaviour.Properties.copy(Blocks.WATER));
 
-    // FluidType
-    public static final RegistryObject<FluidType> GRAPE_JUICE_TYPE = RegistryObject.create(GRAPE_JUICE_ID, FLUID_TYPES.location(), MOD_ID);
-    public static final RegistryObject<FluidType> SWEET_BERRIES_JUICE_TYPE = RegistryObject.create(SWEET_BERRIES_JUICE_ID, FLUID_TYPES.location(), MOD_ID);
-    public static final RegistryObject<FluidType> GLOW_BERRIES_JUICE_TYPE = RegistryObject.create(GLOW_BERRIES_JUICE_ID, FLUID_TYPES.location(), MOD_ID);
+    public static void registerFluids() {
+        register("grape_juice", GRAPE_JUICE, FLOWING_GRAPE_JUICE, GRAPE_JUICE_BLOCK, "grape_bucket", ModItems.GRAPE_BUCKET);
+        register("sweet_berries_juice", SWEET_BERRIES_JUICE, FLOWING_SWEET_BERRIES_JUICE, SWEET_BERRIES_JUICE_BLOCK, "sweet_berries_bucket", ModItems.SWEET_BERRIES_BUCKET);
+        register("glow_berries_juice", GLOW_BERRIES_JUICE, FLOWING_GLOW_BERRIES_JUICE, GLOW_BERRIES_JUICE_BLOCK, "glow_berries_bucket", ModItems.GLOW_BERRIES_BUCKET);
+    }
 
-    // Fluid
-    public static final RegistryObject<Fluid> GRAPE_JUICE = RegistryObject.create(GRAPE_JUICE_ID, FLUIDS);
-    public static final RegistryObject<Fluid> FLOWING_GRAPE_JUICE = RegistryObject.create(FLOWING_GRAPE_JUICE_ID, FLUIDS);
+    @Environment(EnvType.CLIENT)
+    public static void registerFluidRenderers() {
+        registerRender(GRAPE_JUICE, FLOWING_GRAPE_JUICE, "block/grape_juice_still", "block/grape_juice_flow", 0xFFFFFFFF);
+        registerRender(SWEET_BERRIES_JUICE, FLOWING_SWEET_BERRIES_JUICE, "block/sweet_berries_juice_still", "block/sweet_berries_juice_flow", 0xFFFFFFFF);
+        registerRender(GLOW_BERRIES_JUICE, FLOWING_GLOW_BERRIES_JUICE, "block/glow_berries_juice_still", "block/glow_berries_juice_flow", 0xFFFFFFFF);
+    }
 
-    public static final RegistryObject<Fluid> SWEET_BERRIES_JUICE = RegistryObject.create(SWEET_BERRIES_JUICE_ID, FLUIDS);
-    public static final RegistryObject<Fluid> FLOWING_SWEET_BERRIES_JUICE = RegistryObject.create(FLOWING_SWEET_BERRIES_JUICE_ID, FLUIDS);
+    private static void register(String name,
+                                 FlowingFluid still,
+                                 FlowingFluid flowing,
+                                 Block block,
+                                 String bucketName,
+                                 Item bucket) {
+        Registry.register(BuiltInRegistries.FLUID, id(name), still);
+        Registry.register(BuiltInRegistries.FLUID, id("flowing_" + name), flowing);
+        Registry.register(BuiltInRegistries.BLOCK, id(name), block);
+    }
 
-    public static final RegistryObject<Fluid> GLOW_BERRIES_JUICE = RegistryObject.create(GLOW_BERRIES_JUICE_ID, FLUIDS);
-    public static final RegistryObject<Fluid> FLOWING_GLOW_BERRIES_JUICE = RegistryObject.create(FLOWING_GLOW_BERRIES_JUICE_ID, FLUIDS);
+    @Environment(EnvType.CLIENT)
+    private static void registerRender(Fluid still, Fluid flowing, String stillTexture, String flowTexture, int color) {
+        ResourceLocation stillId = id(stillTexture);
+        ResourceLocation flowId = id(flowTexture);
+        FluidRenderHandlerRegistry.INSTANCE.register(still, flowing, new SimpleFluidRenderHandler(stillId, flowId, color));
+        registration(still, color, stillId, flowId);
+        registration(flowing, color, stillId, flowId);
+    }
 
-    @SubscribeEvent
-    public static void register(RegisterEvent event) {
-        event.register(Keys.FLUID_TYPES, helper -> {
-            helper.register(GRAPE_JUICE_ID, new JuiceFluidType(GRAPE_JUICE_ID, 0));
-            helper.register(SWEET_BERRIES_JUICE_ID, new JuiceFluidType(SWEET_BERRIES_JUICE_ID, 0));
-            helper.register(GLOW_BERRIES_JUICE_ID, new JuiceFluidType(GLOW_BERRIES_JUICE_ID, 14));
+    private static void registration(Fluid fluid, int color, ResourceLocation stillId, ResourceLocation flowId) {
+        FluidVariantRendering.register(fluid, new FluidVariantRenderHandler() {
+            @Override
+            public TextureAtlasSprite[] getSprites(FluidVariant fluidVariant) {
+                TextureAtlasSprite stillSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(stillId);
+                TextureAtlasSprite flowSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(flowId);
+                return new TextureAtlasSprite[]{stillSprite, flowSprite};
+            }
+
+            @Override
+            public int getColor(FluidVariant fluidVariant, net.minecraft.world.level.BlockAndTintGetter view, net.minecraft.core.BlockPos pos) {
+                return color;
+            }
         });
+    }
 
-        event.register(Keys.FLUIDS, helper -> {
-            Properties grapeJuice = new Properties(GRAPE_JUICE_TYPE, GRAPE_JUICE, FLOWING_GRAPE_JUICE).bucket(ModItems.GRAPE_BUCKET);
-            Properties sweetBerriesJuice = new Properties(SWEET_BERRIES_JUICE_TYPE, SWEET_BERRIES_JUICE, FLOWING_SWEET_BERRIES_JUICE).bucket(ModItems.SWEET_BERRIES_BUCKET);
-            Properties glowBerriesJuice = new Properties(GLOW_BERRIES_JUICE_TYPE, GLOW_BERRIES_JUICE, FLOWING_GLOW_BERRIES_JUICE).bucket(ModItems.GLOW_BERRIES_BUCKET);
-
-            helper.register(GRAPE_JUICE_ID, new Source(grapeJuice));
-            helper.register(FLOWING_GRAPE_JUICE_ID, new Flowing(grapeJuice));
-
-            helper.register(SWEET_BERRIES_JUICE_ID, new Source(sweetBerriesJuice));
-            helper.register(FLOWING_SWEET_BERRIES_JUICE_ID, new Flowing(sweetBerriesJuice));
-
-            helper.register(GLOW_BERRIES_JUICE_ID, new Source(glowBerriesJuice));
-            helper.register(FLOWING_GLOW_BERRIES_JUICE_ID, new Flowing(glowBerriesJuice));
-        });
+    private static ResourceLocation id(String path) {
+        return new ResourceLocation(KaleidoscopeTavern.MOD_ID, path);
     }
 }

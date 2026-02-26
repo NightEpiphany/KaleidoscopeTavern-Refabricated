@@ -1,12 +1,12 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.item;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemHandlerHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.ItemHandlerHelper;
 
 /**
  * 标记会返还容器的物品

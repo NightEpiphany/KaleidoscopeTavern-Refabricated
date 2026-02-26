@@ -16,7 +16,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 
 public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockEntity> {
-    private static final ResourceLocation LARGE_TEXTURE = KaleidoscopeTavern.modLoc("textures/entity/brew/barrel.png");
+    private static final ResourceLocation LARGE_TEXTURE = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/entity/brew/barrel.png");
 
     private final ItemRenderer itemRenderer;
     private final BarrelModel model;

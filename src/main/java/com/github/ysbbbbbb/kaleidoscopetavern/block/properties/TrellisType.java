@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.properties;
 
 import net.minecraft.util.StringRepresentable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
@@ -17,7 +18,7 @@ public enum TrellisType implements StringRepresentable {
     CROSS_UP_DOWN;
 
     @Override
-    public String getSerializedName() {
+    public @NotNull String getSerializedName() {
         return this.name().toLowerCase(Locale.ENGLISH);
     }
 

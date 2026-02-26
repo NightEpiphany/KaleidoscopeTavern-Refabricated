@@ -22,7 +22,7 @@ public class PressingTubRecipe extends SingleItemRecipe {
 
     public PressingTubRecipe(ResourceLocation id, Ingredient ingredient,
                              Fluid fluid, int fluidAmount) {
-        super(ModRecipes.PRESSING_TUB_RECIPE, ModRecipes.PRESSING_TUB_SERIALIZER.get(),
+        super(ModRecipes.PRESSING_TUB_RECIPE, ModRecipes.PRESSING_TUB_SERIALIZER,
                 id, StringUtils.EMPTY, ingredient, fluid.getBucket().getDefaultInstance());
         this.fluid = fluid;
         this.fluidAmount = fluidAmount;

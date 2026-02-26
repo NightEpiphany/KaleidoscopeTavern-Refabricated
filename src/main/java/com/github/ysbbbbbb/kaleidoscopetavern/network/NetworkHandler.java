@@ -3,38 +3,24 @@ package com.github.ysbbbbbb.kaleidoscopetavern.network;
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.message.TextOpenS2CMessage;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.message.TextUpdateC2SMessage;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
-
-import java.util.Optional;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.resources.ResourceLocation;
 
 public class NetworkHandler {
-    private static final String VERSION = "1.0.0";
-
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(KaleidoscopeTavern.modLoc("network"),
-            () -> VERSION, it -> it.equals(VERSION), it -> it.equals(VERSION));
+    public static final ResourceLocation TEXT_UPDATE_C2S_PACKET = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "text_update");
+    public static final ResourceLocation TEXT_OPEN_S2C_PACKET = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "text_open");
 
     public static void init() {
-        CHANNEL.registerMessage(0, TextUpdateC2SMessage.class,
-                TextUpdateC2SMessage::encode, TextUpdateC2SMessage::decode,
-                TextUpdateC2SMessage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-
-        CHANNEL.registerMessage(1, TextOpenS2CMessage.class,
-                TextOpenS2CMessage::encode, TextOpenS2CMessage::decode,
-                TextOpenS2CMessage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        ServerPlayNetworking.registerGlobalReceiver(TextUpdateC2SMessage.TYPE, TextUpdateC2SMessage::receive);
     }
 
-    public static void sendToClient(Player player, Object packet) {
-        if (player instanceof ServerPlayer serverPlayer) {
-            CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), packet);
+    @Environment(EnvType.CLIENT)
+    public static class Clientside {
+        public static void init() {
+            ClientPlayNetworking.registerGlobalReceiver(TextOpenS2CMessage.TYPE, TextOpenS2CMessage::receive);
         }
-    }
-
-    public static void sendToServer(Object packet) {
-        CHANNEL.sendToServer(packet);
     }
 }

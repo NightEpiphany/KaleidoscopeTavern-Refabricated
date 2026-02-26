@@ -15,7 +15,7 @@ public class DrinkBlockEntity extends BaseBlockEntity {
     private final NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
 
     public DrinkBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlocks.DRINK_BE.get(), pos, state);
+        super(ModBlocks.DRINK_BE, pos, state);
     }
 
     public boolean addItem(ItemStack stack) {

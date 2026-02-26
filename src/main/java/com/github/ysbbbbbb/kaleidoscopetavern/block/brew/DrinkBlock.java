@@ -2,6 +2,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.DrinkBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.VoxelShapeUtils;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemHandlerHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -23,7 +24,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.items.ItemHandlerHelper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
@@ -71,8 +72,8 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                 InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
+                                          InteractionHand hand, BlockHitResult hitResult) {
         // 如果是空手，那么可以尝试取回
         if (!player.getItemInHand(hand).isEmpty()) {
             return super.use(state, level, pos, player, hand, hitResult);
@@ -119,7 +120,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         if (this.shapes.length == 0) {
             return super.getShape(state, level, pos, context);
         }
@@ -163,8 +164,8 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
             return this;
         }
 
-        public Supplier<? extends Block> build() {
-            return () -> new DrinkBlock(maxCount, shapes);
+        public Block build() {
+            return new DrinkBlock(maxCount, shapes);
         }
     }
 }

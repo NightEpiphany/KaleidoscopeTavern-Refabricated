@@ -10,20 +10,19 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
-
-import java.util.function.Supplier;
+import org.jetbrains.annotations.NotNull;
 
 public class JuiceBucketItem extends BucketItem implements IHasContainer {
-    public JuiceBucketItem(Supplier<? extends Fluid> supplier) {
-        super(supplier, new Properties()
+    public JuiceBucketItem(Fluid fluid) {
+        super(fluid, new Properties()
                 .stacksTo(16)
                 .craftRemainder(Items.BUCKET));
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+    public @NotNull ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (!level.isClientSide) {
-            entity.curePotionEffects(stack);
+            entity.removeAllEffects();
         }
         if (entity instanceof ServerPlayer serverPlayer) {
             CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayer, stack);
@@ -44,12 +43,12 @@ public class JuiceBucketItem extends BucketItem implements IHasContainer {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
+    public @NotNull UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.DRINK;
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         return ItemUtils.startUsingInstantly(level, player, hand);
     }
 

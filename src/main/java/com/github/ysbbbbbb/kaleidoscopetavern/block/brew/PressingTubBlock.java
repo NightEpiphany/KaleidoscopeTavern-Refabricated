@@ -2,6 +2,9 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IPressingTub;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PressingTubBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.PressingTubFluidTank;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -23,6 +26,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -32,8 +36,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -59,8 +62,8 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                 InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
+                                          InteractionHand hand, BlockHitResult hitResult) {
         if (!(level.getBlockEntity(pos) instanceof IPressingTub pressingTub)) {
             return InteractionResult.PASS;
         }
@@ -103,7 +106,7 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState pState, LootParams.Builder pParams) {
+    public @NotNull List<ItemStack> getDrops(BlockState pState, LootParams.Builder pParams) {
         List<ItemStack> stacks = super.getDrops(pState, pParams);
         BlockEntity blockEntity = pParams.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (blockEntity instanceof IPressingTub pressingTub) {
@@ -116,8 +119,8 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                  LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
+                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -130,12 +133,12 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    public @NotNull VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return SHAPE;
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState state) {
+    public @NotNull RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
@@ -146,7 +149,7 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public FluidState getFluidState(BlockState state) {
+    public @NotNull FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
@@ -165,7 +168,7 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState state) {
+    public @NotNull ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState state) {
         ItemStack stack = SimpleWaterloggedBlock.super.pickupBlock(level, pos, state);
         if (!stack.isEmpty()) {
             return stack;
@@ -182,11 +185,18 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
             return stack;
         }
         // 判断产物是否是铁桶容器的
-        FluidTank fluid = pressingTub.getFluid();
-        Item bucket = fluid.getFluid().getFluid().getBucket();
+        PressingTubFluidTank fluidTank = pressingTub.getFluid();
+        Fluid fluid = fluidTank.getFluid();
+        Item bucket = fluid.getBucket();
         if (bucket instanceof BucketItem) {
-            fluid.drain(IPressingTub.MAX_FLUID_AMOUNT, IFluidHandler.FluidAction.EXECUTE);
-            return bucket.getDefaultInstance();
+            FluidVariant variant = fluidTank.getFluidVariant();
+            try (Transaction transaction = Transaction.openOuter()) {
+                long extracted = fluidTank.extract(variant, IPressingTub.MAX_FLUID_AMOUNT_TRANSFER, transaction);
+                if (extracted == IPressingTub.MAX_FLUID_AMOUNT_TRANSFER) {
+                    transaction.commit();
+                    return bucket.getDefaultInstance();
+                }
+            }
         }
         return stack;
     }

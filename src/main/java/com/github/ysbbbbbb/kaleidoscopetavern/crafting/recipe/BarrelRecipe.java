@@ -2,6 +2,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.container.BarrelRecipeContainer;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.RecipeMatcher;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
@@ -12,7 +13,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.util.RecipeMatcher;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 酒桶的配方类
@@ -47,32 +48,32 @@ public record BarrelRecipe(
     }
 
     @Override
-    public ItemStack assemble(BarrelRecipeContainer container, RegistryAccess registryAccess) {
+    public @NotNull ItemStack assemble(BarrelRecipeContainer container, RegistryAccess registryAccess) {
         return getResultItem(registryAccess).copy();
     }
 
     @Override
-    public NonNullList<Ingredient> getIngredients() {
+    public @NotNull NonNullList<Ingredient> getIngredients() {
         return this.ingredients;
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess registryAccess) {
+    public @NotNull ItemStack getResultItem(RegistryAccess registryAccess) {
         return this.result;
     }
 
     @Override
-    public ResourceLocation getId() {
+    public @NotNull ResourceLocation getId() {
         return this.id;
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.BARREL_SERIALIZER.get();
+    public @NotNull RecipeSerializer<?> getSerializer() {
+        return ModRecipes.BARREL_SERIALIZER;
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public @NotNull RecipeType<?> getType() {
         return ModRecipes.BARREL_RECIPE;
     }
 

@@ -3,6 +3,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.plant;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.TrellisType;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.event.EventHooks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -13,6 +14,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -31,11 +33,9 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.ToolActions;
+import org.jetbrains.annotations.NotNull;
 
 import static com.github.ysbbbbbb.kaleidoscopetavern.block.plant.ITrellis.axisHasTrellis;
 import static com.github.ysbbbbbb.kaleidoscopetavern.block.plant.ITrellis.updateType;
@@ -69,28 +69,28 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                 InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
+                                          InteractionHand hand, BlockHitResult hitResult) {
         // 如果玩家拿的是剪刀，可以剪下葡萄藤
         ItemStack itemInHand = player.getItemInHand(hand);
-        if (!itemInHand.canPerformAction(ToolActions.SHEARS_HARVEST)) {
+        if (!itemInHand.is(Items.SHEARS)) {
             return super.use(state, level, pos, player, hand, hitResult);
         }
-        BlockState newState = ModBlocks.TRELLIS.get()
+        BlockState newState = ModBlocks.TRELLIS
                 .defaultBlockState()
                 .setValue(TYPE, state.getValue(TYPE))
                 .setValue(WATERLOGGED, state.getValue(WATERLOGGED));
         level.setBlockAndUpdate(pos, newState);
         // 掉落一个葡萄藤物品
-        Block.popResource(level, pos, ModItems.GRAPEVINE.get().getDefaultInstance());
+        Block.popResource(level, pos, ModItems.GRAPEVINE.getDefaultInstance());
         itemInHand.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
         player.playSound(SoundEvents.BEEHIVE_SHEAR);
         return InteractionResult.SUCCESS;
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                  LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
+                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -105,12 +105,12 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
 
     @Override
     public boolean sameType(BlockState state) {
-        return state.is(ModBlocks.TRELLIS.get()) || state.is(ModBlocks.GRAPEVINE_TRELLIS.get());
+        return state.is(ModBlocks.TRELLIS) || state.is(ModBlocks.GRAPEVINE_TRELLIS);
     }
 
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (ForgeHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.growPerTickProbability)) {
+        if (EventHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.growPerTickProbability)) {
             this.doGrow(level, pos, state);
         }
     }
@@ -139,7 +139,7 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
      * 指定位置是否能够生长葡萄藤
      */
     public boolean canGrowInto(BlockState checkState) {
-        return checkState.is(ModBlocks.TRELLIS.get());
+        return checkState.is(ModBlocks.TRELLIS);
     }
 
     /**
@@ -211,7 +211,7 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
             // 如果没有达到最大年龄，直接增加年龄
             if (!isMaxAge(state)) {
                 level.setBlockAndUpdate(pos, state.cycle(AGE));
-                ForgeHooks.onCropsGrowPost(level, pos, state);
+                EventHooks.onCropsGrowPost(level, pos, state);
                 return;
             }
         }
@@ -224,20 +224,20 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
                 if (this.canGrowInto(checkState)) {
                     BlockState growIntoState = this.getGrowIntoState(direction, checkState);
                     level.setBlockAndUpdate(checkPos, growIntoState);
-                    ForgeHooks.onCropsGrowPost(level, checkPos, checkState);
+                    EventHooks.onCropsGrowPost(level, checkPos, checkState);
                     return;
                 }
             }
 
             // 如果所有方向都检查完了都不能生长，那么检查下方是否有两格空位，生长葡萄
             if (canGrowGrape(level, pos)) {
-                level.setBlockAndUpdate(pos.below(), ModBlocks.GRAPE_CROP.get().defaultBlockState());
-                ForgeHooks.onCropsGrowPost(level, pos.below(), state);
+                level.setBlockAndUpdate(pos.below(), ModBlocks.GRAPE_CROP.defaultBlockState());
+                EventHooks.onCropsGrowPost(level, pos.below(), state);
             }
         } else {
             // 其他朝向的，直接加满
             level.setBlockAndUpdate(pos, state.setValue(AGE, MAX_AGE));
-            ForgeHooks.onCropsGrowPost(level, pos, state);
+            EventHooks.onCropsGrowPost(level, pos, state);
         }
     }
 
@@ -262,22 +262,22 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return collisionShape(state.getValue(TYPE));
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return selectShape(state.getValue(TYPE));
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
-        return ModItems.GRAPEVINE.get().getDefaultInstance();
+    public @NotNull ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
+        return ModItems.GRAPEVINE.getDefaultInstance();
     }
 
     @Override
-    public FluidState getFluidState(BlockState state) {
+    public @NotNull FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 }

@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.plant;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.event.EventHooks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -10,6 +11,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -18,7 +20,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -27,11 +28,9 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.ToolActions;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -51,7 +50,7 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
                 .randomTicks()
                 .instabreak()
                 .sound(SoundType.CROP)
-                .offsetType(BlockBehaviour.OffsetType.XYZ)
+                .offsetType(OffsetType.XYZ)
                 .pushReaction(PushReaction.DESTROY));
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(AGE, 0));
@@ -59,14 +58,14 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                 InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
+                                          InteractionHand hand, BlockHitResult hitResult) {
         // 只有成熟的葡萄才可以被剪刀收获
         ItemStack heldItem = player.getItemInHand(hand);
-        if (heldItem.canPerformAction(ToolActions.SHEARS_HARVEST) && isMaxAge(state)) {
+        if (heldItem.is(Items.SHEARS) && isMaxAge(state)) {
             level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
             // FIXME: 这里应该走 LootTable？
-            Block.popResource(level, pos, new ItemStack(ModItems.GRAPE.get(), 3));
+            Block.popResource(level, pos, new ItemStack(ModItems.GRAPE, 3));
             heldItem.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
             player.playSound(SoundEvents.BEEHIVE_SHEAR);
             return InteractionResult.SUCCESS;
@@ -81,15 +80,15 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
 
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (ForgeHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.growPerTickProbability)) {
+        if (EventHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.growPerTickProbability)) {
             level.setBlockAndUpdate(pos, state.cycle(AGE));
-            ForgeHooks.onCropsGrowPost(level, pos, state);
+            EventHooks.onCropsGrowPost(level, pos, state);
         }
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                  LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
+                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.canSurvive(level, pos)) {
             return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
         }
@@ -132,12 +131,12 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    public @NotNull VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return SHAPE;
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder lootParamsBuilder) {
+    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder lootParamsBuilder) {
         // 只有成熟的葡萄才会掉落物品
         if (isMaxAge(state)) {
             return super.getDrops(state, lootParamsBuilder);
@@ -146,7 +145,7 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
-        return ModItems.GRAPE.get().getDefaultInstance();
+    public @NotNull ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
+        return ModItems.GRAPE.getDefaultInstance();
     }
 }

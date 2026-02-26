@@ -14,8 +14,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 
 public class ChalkboardBlockEntityRender extends TextBlockEntityRender<ChalkboardBlockEntity> {
-    private static final ResourceLocation SMALL_TEXTURE = KaleidoscopeTavern.modLoc("textures/entity/deco/small_chalkboard.png");
-    private static final ResourceLocation LARGE_TEXTURE = KaleidoscopeTavern.modLoc("textures/entity/deco/large_chalkboard.png");
+    private static final ResourceLocation SMALL_TEXTURE = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/entity/deco/small_chalkboard.png");
+    private static final ResourceLocation LARGE_TEXTURE = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/entity/deco/large_chalkboard.png");
 
     private static final float TEXT_SCALE = 0.012f;
     private static final int LINE_HEIGHT = 12;

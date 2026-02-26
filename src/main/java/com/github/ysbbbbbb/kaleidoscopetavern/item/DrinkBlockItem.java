@@ -24,13 +24,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
     public DrinkBlockItem(Block block) {
         super(block, new Properties()
                 .stacksTo(16)
-                .craftRemainder(ModItems.EMPTY_BOTTLE.get()));
+                .craftRemainder(ModItems.EMPTY_BOTTLE));
     }
 
     @Override
@@ -39,12 +40,12 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
+    public @NotNull UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.DRINK;
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
+    public @NotNull InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         Player player = context.getPlayer();
         BlockPos pos = context.getClickedPos();
@@ -69,8 +70,8 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
 
     private boolean tryIncreaseCount(Block self, BlockState state, Level level, BlockPos pos, ItemStack stack, Player player) {
         if (self instanceof DrinkBlock drink && state.is(self) && drink.tryIncreaseCount(level, pos, state, stack)) {
-            SoundType soundType = state.getSoundType(level, pos, player);
-            SoundEvent sound = this.getPlaceSound(state, level, pos, player);
+            SoundType soundType = state.getSoundType();
+            SoundEvent sound = this.getPlaceSound(state);
             level.playSound(
                     player, pos, sound, SoundSource.BLOCKS,
                     (soundType.getVolume() + 1) / 2f,
@@ -94,12 +95,12 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         return ItemUtils.startUsingInstantly(level, player, hand);
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+    public @NotNull ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (entity instanceof ServerPlayer serverPlayer) {
             CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayer, stack);
             serverPlayer.awardStat(Stats.ITEM_USED.get(this));
@@ -112,6 +113,6 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
 
     @Override
     public Item getContainerItem() {
-        return ModItems.EMPTY_BOTTLE.get();
+        return ModItems.EMPTY_BOTTLE;
     }
 }

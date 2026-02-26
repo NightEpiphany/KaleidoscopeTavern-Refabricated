@@ -10,13 +10,13 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.GrowingPlantHeadBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -24,7 +24,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.ToolActions;
+import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("deprecation")
 public class WildGrapevineBlock extends GrowingPlantHeadBlock implements BonemealableBlock {
@@ -34,7 +34,7 @@ public class WildGrapevineBlock extends GrowingPlantHeadBlock implements Bonemea
     public static BooleanProperty SHEARED = BooleanProperty.create("sheared");
 
     private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 16, 15);
-    private static final BlockBehaviour.Properties PROPERTIES = Properties.of()
+    private static final Properties PROPERTIES = Properties.of()
             .mapColor(MapColor.PLANT)
             .randomTicks()
             .noCollission()
@@ -50,10 +50,10 @@ public class WildGrapevineBlock extends GrowingPlantHeadBlock implements Bonemea
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                 InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
+                                          InteractionHand hand, BlockHitResult hitResult) {
         ItemStack item = player.getItemInHand(hand);
-        if (item.canPerformAction(ToolActions.SHEARS_CARVE)) {
+        if (item.is(Items.SHEARS)) {
             if (state.getValue(SHEARED)) {
                 return InteractionResult.CONSUME;
             } else {
@@ -98,7 +98,7 @@ public class WildGrapevineBlock extends GrowingPlantHeadBlock implements Bonemea
     }
 
     @Override
-    protected Block getBodyBlock() {
-        return ModBlocks.WILD_GRAPEVINE_PLANT.get();
+    protected @NotNull Block getBodyBlock() {
+        return ModBlocks.WILD_GRAPEVINE_PLANT;
     }
 }

@@ -2,11 +2,10 @@ package com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemStackHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class BarrelBlockEntity extends BaseBlockEntity {
     /**
@@ -26,7 +25,7 @@ public class BarrelBlockEntity extends BaseBlockEntity {
     private boolean open = true;
 
     public BarrelBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlocks.BARREL_BE.get(), pos, state);
+        super(ModBlocks.BARREL_BE, pos, state);
     }
 
     @Override
@@ -41,11 +40,6 @@ public class BarrelBlockEntity extends BaseBlockEntity {
         super.saveAdditional(tag);
         tag.put("items", this.items.serializeNBT());
         tag.putBoolean("open", this.open);
-    }
-
-    @Override
-    public AABB getRenderBoundingBox() {
-        return new AABB(worldPosition.offset(-2, 0, -2), worldPosition.offset(2, 3, 2));
     }
 
     public ItemStackHandler getItems() {

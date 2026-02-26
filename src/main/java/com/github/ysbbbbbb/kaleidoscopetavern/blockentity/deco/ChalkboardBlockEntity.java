@@ -12,7 +12,7 @@ public class ChalkboardBlockEntity extends TextBlockEntity {
     private boolean isLarge = false;
 
     public ChalkboardBlockEntity(BlockPos pos, BlockState blockState) {
-        super(ModBlocks.CHALKBOARD_BE.get(), pos, blockState);
+        super(ModBlocks.CHALKBOARD_BE, pos, blockState);
     }
 
     public static ChalkboardBlockEntity small(BlockPos pos, BlockState blockState) {
@@ -30,15 +30,6 @@ public class ChalkboardBlockEntity extends TextBlockEntity {
     @Override
     public int getMaxTextLength() {
         return this.isLarge() ? 1500 : 350;
-    }
-
-    @Override
-    public AABB getRenderBoundingBox() {
-        BlockPos pos = this.getBlockPos();
-        if (this.isLarge) {
-            return new AABB(pos.offset(-1, 0, -1), pos.offset(2, 2, 2));
-        }
-        return new AABB(pos, pos.offset(1, 2, 1));
     }
 
     public boolean isLarge() {

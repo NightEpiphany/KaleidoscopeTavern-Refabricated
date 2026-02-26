@@ -1,129 +1,137 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.init;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
 
-public interface ModCreativeTabs {
-    DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, KaleidoscopeTavern.MOD_ID);
+public class ModCreativeTabs {
+    private static final ResourceLocation MAIN_ICON_ID = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "wine");
 
-    RegistryObject<CreativeModeTab> TAVERN_MAIN_TAB = TABS.register("tavern_main", () -> CreativeModeTab.builder()
-            .title(Component.translatable("item_group.kaleidoscope_tavern.tavern_main.name"))
-            .icon(Items.APPLE::getDefaultInstance)
-            .displayItems((par, output) -> {
-                output.accept(ModItems.WHITE_SOFA.get());
-                output.accept(ModItems.LIGHT_GRAY_SOFA.get());
-                output.accept(ModItems.GRAY_SOFA.get());
-                output.accept(ModItems.BLACK_SOFA.get());
-                output.accept(ModItems.BROWN_SOFA.get());
-                output.accept(ModItems.RED_SOFA.get());
-                output.accept(ModItems.ORANGE_SOFA.get());
-                output.accept(ModItems.YELLOW_SOFA.get());
-                output.accept(ModItems.LIME_SOFA.get());
-                output.accept(ModItems.GREEN_SOFA.get());
-                output.accept(ModItems.CYAN_SOFA.get());
-                output.accept(ModItems.LIGHT_BLUE_SOFA.get());
-                output.accept(ModItems.BLUE_SOFA.get());
-                output.accept(ModItems.PURPLE_SOFA.get());
-                output.accept(ModItems.MAGENTA_SOFA.get());
-                output.accept(ModItems.PINK_SOFA.get());
+    private static final ResourceKey<CreativeModeTab> TAVERN_MAIN_TAB = ResourceKey.create(Registries.CREATIVE_MODE_TAB,
+            new ResourceLocation(KaleidoscopeTavern.MOD_ID, "tavern_main"));
 
-                output.accept(ModItems.WHITE_BAR_STOOL.get());
-                output.accept(ModItems.LIGHT_GRAY_BAR_STOOL.get());
-                output.accept(ModItems.GRAY_BAR_STOOL.get());
-                output.accept(ModItems.BLACK_BAR_STOOL.get());
-                output.accept(ModItems.BROWN_BAR_STOOL.get());
-                output.accept(ModItems.RED_BAR_STOOL.get());
-                output.accept(ModItems.ORANGE_BAR_STOOL.get());
-                output.accept(ModItems.YELLOW_BAR_STOOL.get());
-                output.accept(ModItems.LIME_BAR_STOOL.get());
-                output.accept(ModItems.GREEN_BAR_STOOL.get());
-                output.accept(ModItems.CYAN_BAR_STOOL.get());
-                output.accept(ModItems.LIGHT_BLUE_BAR_STOOL.get());
-                output.accept(ModItems.BLUE_BAR_STOOL.get());
-                output.accept(ModItems.PURPLE_BAR_STOOL.get());
-                output.accept(ModItems.MAGENTA_BAR_STOOL.get());
-                output.accept(ModItems.PINK_BAR_STOOL.get());
 
-                output.accept(ModItems.CHALKBOARD.get());
+    public static void registerTabs() {
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TAVERN_MAIN_TAB, FabricItemGroup.builder()
+                .title(Component.translatable("item_group.kaleidoscope_tavern.tavern_main.name"))
+                .icon(() -> BuiltInRegistries.ITEM.get(MAIN_ICON_ID).getDefaultInstance())
+                .displayItems((par, output) -> {
+                    output.accept(ModItems.WHITE_SOFA);
+                    output.accept(ModItems.LIGHT_GRAY_SOFA);
+                    output.accept(ModItems.GRAY_SOFA);
+                    output.accept(ModItems.BLACK_SOFA);
+                    output.accept(ModItems.BROWN_SOFA);
+                    output.accept(ModItems.RED_SOFA);
+                    output.accept(ModItems.ORANGE_SOFA);
+                    output.accept(ModItems.YELLOW_SOFA);
+                    output.accept(ModItems.LIME_SOFA);
+                    output.accept(ModItems.GREEN_SOFA);
+                    output.accept(ModItems.CYAN_SOFA);
+                    output.accept(ModItems.LIGHT_BLUE_SOFA);
+                    output.accept(ModItems.BLUE_SOFA);
+                    output.accept(ModItems.PURPLE_SOFA);
+                    output.accept(ModItems.MAGENTA_SOFA);
+                    output.accept(ModItems.PINK_SOFA);
 
-                output.accept(ModItems.BASE_SANDWICH_BOARD.get());
-                output.accept(ModItems.GRASS_SANDWICH_BOARD.get());
-                output.accept(ModItems.ALLIUM_SANDWICH_BOARD.get());
-                output.accept(ModItems.AZURE_BLUET_SANDWICH_BOARD.get());
-                output.accept(ModItems.CORNFLOWER_SANDWICH_BOARD.get());
-                output.accept(ModItems.ORCHID_SANDWICH_BOARD.get());
-                output.accept(ModItems.PEONY_SANDWICH_BOARD.get());
-                output.accept(ModItems.PINK_PETALS_SANDWICH_BOARD.get());
-                output.accept(ModItems.PITCHER_PLANT_SANDWICH_BOARD.get());
-                output.accept(ModItems.POPPY_SANDWICH_BOARD.get());
-                output.accept(ModItems.SUNFLOWER_SANDWICH_BOARD.get());
-                output.accept(ModItems.TORCHFLOWER_SANDWICH_BOARD.get());
-                output.accept(ModItems.TULIP_SANDWICH_BOARD.get());
-                output.accept(ModItems.WITHER_ROSE_SANDWICH_BOARD.get());
+                    output.accept(ModItems.WHITE_BAR_STOOL);
+                    output.accept(ModItems.LIGHT_GRAY_BAR_STOOL);
+                    output.accept(ModItems.GRAY_BAR_STOOL);
+                    output.accept(ModItems.BLACK_BAR_STOOL);
+                    output.accept(ModItems.BROWN_BAR_STOOL);
+                    output.accept(ModItems.RED_BAR_STOOL);
+                    output.accept(ModItems.ORANGE_BAR_STOOL);
+                    output.accept(ModItems.YELLOW_BAR_STOOL);
+                    output.accept(ModItems.LIME_BAR_STOOL);
+                    output.accept(ModItems.GREEN_BAR_STOOL);
+                    output.accept(ModItems.CYAN_BAR_STOOL);
+                    output.accept(ModItems.LIGHT_BLUE_BAR_STOOL);
+                    output.accept(ModItems.BLUE_BAR_STOOL);
+                    output.accept(ModItems.PURPLE_BAR_STOOL);
+                    output.accept(ModItems.MAGENTA_BAR_STOOL);
+                    output.accept(ModItems.PINK_BAR_STOOL);
 
-                output.accept(ModItems.STRING_LIGHTS_COLORLESS.get());
-                output.accept(ModItems.STRING_LIGHTS_WHITE.get());
-                output.accept(ModItems.STRING_LIGHTS_LIGHT_GRAY.get());
-                output.accept(ModItems.STRING_LIGHTS_GRAY.get());
-                output.accept(ModItems.STRING_LIGHTS_BLACK.get());
-                output.accept(ModItems.STRING_LIGHTS_BROWN.get());
-                output.accept(ModItems.STRING_LIGHTS_RED.get());
-                output.accept(ModItems.STRING_LIGHTS_ORANGE.get());
-                output.accept(ModItems.STRING_LIGHTS_YELLOW.get());
-                output.accept(ModItems.STRING_LIGHTS_LIME.get());
-                output.accept(ModItems.STRING_LIGHTS_GREEN.get());
-                output.accept(ModItems.STRING_LIGHTS_CYAN.get());
-                output.accept(ModItems.STRING_LIGHTS_LIGHT_BLUE.get());
-                output.accept(ModItems.STRING_LIGHTS_BLUE.get());
-                output.accept(ModItems.STRING_LIGHTS_PURPLE.get());
-                output.accept(ModItems.STRING_LIGHTS_MAGENTA.get());
-                output.accept(ModItems.STRING_LIGHTS_PINK.get());
+                    output.accept(ModItems.CHALKBOARD);
 
-                output.accept(ModItems.YSBB_PAINTING.get());
-                output.accept(ModItems.TARTARIC_ACID_PAINTING.get());
-                output.accept(ModItems.CR019_PAINTING.get());
-                output.accept(ModItems.UNKNOWN_PAINTING.get());
-                output.accept(ModItems.MASTER_MARISA_PAINTING.get());
-                output.accept(ModItems.SON_OF_MAN_PAINTING.get());
-                output.accept(ModItems.DAVID_PAINTING.get());
-                output.accept(ModItems.GIRL_WITH_PEARL_EARRING_PAINTING.get());
-                output.accept(ModItems.STARRY_NIGHT_PAINTING.get());
-                output.accept(ModItems.VAN_GOGH_SELF_PORTRAIT_PAINTING.get());
-                output.accept(ModItems.FATHER_PAINTING.get());
-                output.accept(ModItems.GREAT_WAVE_PAINTING.get());
-                output.accept(ModItems.MONA_LISA_PAINTING.get());
-                output.accept(ModItems.MONDRIAN_PAINTING.get());
+                    output.accept(ModItems.BASE_SANDWICH_BOARD);
+                    output.accept(ModItems.GRASS_SANDWICH_BOARD);
+                    output.accept(ModItems.ALLIUM_SANDWICH_BOARD);
+                    output.accept(ModItems.AZURE_BLUET_SANDWICH_BOARD);
+                    output.accept(ModItems.CORNFLOWER_SANDWICH_BOARD);
+                    output.accept(ModItems.ORCHID_SANDWICH_BOARD);
+                    output.accept(ModItems.PEONY_SANDWICH_BOARD);
+                    output.accept(ModItems.PINK_PETALS_SANDWICH_BOARD);
+                    output.accept(ModItems.PITCHER_PLANT_SANDWICH_BOARD);
+                    output.accept(ModItems.POPPY_SANDWICH_BOARD);
+                    output.accept(ModItems.SUNFLOWER_SANDWICH_BOARD);
+                    output.accept(ModItems.TORCHFLOWER_SANDWICH_BOARD);
+                    output.accept(ModItems.TULIP_SANDWICH_BOARD);
+                    output.accept(ModItems.WITHER_ROSE_SANDWICH_BOARD);
 
-                output.accept(ModItems.BAR_COUNTER.get());
-                output.accept(ModItems.STEPLADDER.get());
-                output.accept(ModItems.GRAPEVINE.get());
-                output.accept(ModItems.TRELLIS.get());
-                output.accept(ModItems.GRAPE.get());
+                    output.accept(ModItems.STRING_LIGHTS_COLORLESS);
+                    output.accept(ModItems.STRING_LIGHTS_WHITE);
+                    output.accept(ModItems.STRING_LIGHTS_LIGHT_GRAY);
+                    output.accept(ModItems.STRING_LIGHTS_GRAY);
+                    output.accept(ModItems.STRING_LIGHTS_BLACK);
+                    output.accept(ModItems.STRING_LIGHTS_BROWN);
+                    output.accept(ModItems.STRING_LIGHTS_RED);
+                    output.accept(ModItems.STRING_LIGHTS_ORANGE);
+                    output.accept(ModItems.STRING_LIGHTS_YELLOW);
+                    output.accept(ModItems.STRING_LIGHTS_LIME);
+                    output.accept(ModItems.STRING_LIGHTS_GREEN);
+                    output.accept(ModItems.STRING_LIGHTS_CYAN);
+                    output.accept(ModItems.STRING_LIGHTS_LIGHT_BLUE);
+                    output.accept(ModItems.STRING_LIGHTS_BLUE);
+                    output.accept(ModItems.STRING_LIGHTS_PURPLE);
+                    output.accept(ModItems.STRING_LIGHTS_MAGENTA);
+                    output.accept(ModItems.STRING_LIGHTS_PINK);
 
-                output.accept(ModItems.PRESSING_TUB.get());
-                output.accept(ModItems.GRAPE_BUCKET.get());
-                output.accept(ModItems.SWEET_BERRIES_BUCKET.get());
-                output.accept(ModItems.GLOW_BERRIES_BUCKET.get());
+                    output.accept(ModItems.YSBB_PAINTING);
+                    output.accept(ModItems.TARTARIC_ACID_PAINTING);
+                    output.accept(ModItems.CR019_PAINTING);
+                    output.accept(ModItems.UNKNOWN_PAINTING);
+                    output.accept(ModItems.MASTER_MARISA_PAINTING);
+                    output.accept(ModItems.SON_OF_MAN_PAINTING);
+                    output.accept(ModItems.DAVID_PAINTING);
+                    output.accept(ModItems.GIRL_WITH_PEARL_EARRING_PAINTING);
+                    output.accept(ModItems.STARRY_NIGHT_PAINTING);
+                    output.accept(ModItems.VAN_GOGH_SELF_PORTRAIT_PAINTING);
+                    output.accept(ModItems.FATHER_PAINTING);
+                    output.accept(ModItems.GREAT_WAVE_PAINTING);
+                    output.accept(ModItems.MONA_LISA_PAINTING);
+                    output.accept(ModItems.MONDRIAN_PAINTING);
 
-                output.accept(ModItems.TAP.get());
-                output.accept(ModItems.BARREL.get());
+                    output.accept(ModItems.BAR_COUNTER);
+                    output.accept(ModItems.STEPLADDER);
+                    output.accept(ModItems.GRAPEVINE);
+                    output.accept(ModItems.TRELLIS);
+                    output.accept(ModItems.GRAPE);
 
-                output.accept(ModItems.EMPTY_BOTTLE.get());
-                output.accept(ModItems.MOLOTOV.get());
-                output.accept(ModItems.WINE.get());
-                output.accept(ModItems.CHAMPAGNE.get());
-                output.accept(ModItems.VODKA.get());
-                output.accept(ModItems.BRANDY.get());
-                output.accept(ModItems.CARIGNAN.get());
-                output.accept(ModItems.SAKURA_WINE.get());
-                output.accept(ModItems.PLUM_WINE.get());
-                output.accept(ModItems.WHISKEY.get());
-                output.accept(ModItems.ICE_WINE.get());
-                output.accept(ModItems.VINEGAR.get());
-            }).build());
+                    output.accept(ModItems.PRESSING_TUB);
+                    output.accept(ModItems.GRAPE_BUCKET);
+                    output.accept(ModItems.SWEET_BERRIES_BUCKET);
+                    output.accept(ModItems.GLOW_BERRIES_BUCKET);
+
+                    output.accept(ModItems.TAP);
+                    output.accept(ModItems.BARREL);
+
+                    output.accept(ModItems.EMPTY_BOTTLE);
+                    output.accept(ModItems.MOLOTOV);
+                    output.accept(ModItems.WINE);
+                    output.accept(ModItems.CHAMPAGNE);
+                    output.accept(ModItems.VODKA);
+                    output.accept(ModItems.BRANDY);
+                    output.accept(ModItems.CARIGNAN);
+                    output.accept(ModItems.SAKURA_WINE);
+                    output.accept(ModItems.PLUM_WINE);
+                    output.accept(ModItems.WHISKEY);
+                    output.accept(ModItems.ICE_WINE);
+                    output.accept(ModItems.VINEGAR);
+                }).build());
+    }
 }

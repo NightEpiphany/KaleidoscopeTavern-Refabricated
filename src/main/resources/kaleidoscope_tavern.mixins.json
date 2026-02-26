@@ -1,14 +1,15 @@
 {
   "required": true,
-  "minVersion": "0.8",
   "package": "com.github.ysbbbbbb.kaleidoscopetavern.mixin",
   "compatibilityLevel": "JAVA_17",
-  "refmap": "kaleidoscope_tavern.refmap.json",
-  "mixins": [
-  ],
-  "client": [
-  ],
+  "mixins": [],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  },
+  "client": [
+    "client.EntityRendererDispatcherMixin"
+  ]
 }

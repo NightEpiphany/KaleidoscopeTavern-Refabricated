@@ -6,15 +6,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
 public class WildGrapevinePlantBlock extends GrowingPlantBodyBlock implements BonemealableBlock {
     private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 16, 15);
-    private static final BlockBehaviour.Properties PROPERTIES = BlockBehaviour.Properties.of()
+    private static final Properties PROPERTIES = Properties.of()
             .mapColor(MapColor.PLANT)
             .noCollission()
             .instabreak()
@@ -26,8 +26,8 @@ public class WildGrapevinePlantBlock extends GrowingPlantBodyBlock implements Bo
     }
 
     @Override
-    protected GrowingPlantHeadBlock getHeadBlock() {
-        return (GrowingPlantHeadBlock) ModBlocks.WILD_GRAPEVINE.get();
+    protected @NotNull GrowingPlantHeadBlock getHeadBlock() {
+        return (GrowingPlantHeadBlock) ModBlocks.WILD_GRAPEVINE;
     }
 
     @Override

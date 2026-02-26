@@ -1,6 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.render.block;
 
-import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.SandwichBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.SandwichBoardBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.ChatFormatting;
@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 
-public class SandwichBlockEntityRender extends TextBlockEntityRender<SandwichBlockEntity> {
+public class SandwichBlockEntityRender extends TextBlockEntityRender<SandwichBoardBlockEntity> {
     private static final float TEXT_SCALE = 0.01f;
     private static final int LINE_HEIGHT = 10;
     private static final int MAX_LINES = 8;
@@ -19,13 +19,13 @@ public class SandwichBlockEntityRender extends TextBlockEntityRender<SandwichBlo
     }
 
     @Override
-    protected void renderModel(SandwichBlockEntity textBlock, PoseStack poseStack, MultiBufferSource buffer,
+    protected void renderModel(SandwichBoardBlockEntity textBlock, PoseStack poseStack, MultiBufferSource buffer,
                                int packedLight, int packedOverlay, Direction facing) {
         // 展板使用的是方块模型，不需要特殊渲染
     }
 
     @Override
-    protected void renderText(SandwichBlockEntity textBlock, PoseStack poseStack, MultiBufferSource buffer,
+    protected void renderText(SandwichBoardBlockEntity textBlock, PoseStack poseStack, MultiBufferSource buffer,
                               int packedLight, int packedOverlay, Direction facing) {
         poseStack.pushPose();
 
