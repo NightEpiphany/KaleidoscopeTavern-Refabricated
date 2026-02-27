@@ -3,6 +3,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.util;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -47,7 +48,7 @@ public class RenderUtils {
      */
     public static void renderSurface(PoseStack poseStack, MultiBufferSource buffer, TextureAtlasSprite sprite,
                                      int color, int light, int size, float y) {
-        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.translucentNoCrumbling());
+        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.translucent());
         Matrix4f matrix = poseStack.last().pose();
 
         // 贴图的位置和大小

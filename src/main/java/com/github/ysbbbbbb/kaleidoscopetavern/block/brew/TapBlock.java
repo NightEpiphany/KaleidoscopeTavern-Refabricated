@@ -44,6 +44,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 
+import static com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.TapBlockEntity.*;
+
 @SuppressWarnings("deprecation")
 public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -73,7 +75,7 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
             // 如果龙头已经是开启的，直接无视条件关闭
             if (state.getValue(OPEN)) {
                 state = state.setValue(OPEN, false);
-                level.setBlock(pos, state, Block.UPDATE_ALL);
+                level.setBlockAndUpdate(pos, state);
 
                 level.playSound(null, pos, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.BLOCKS, 1.0F, 0.8F);
                 return InteractionResult.SUCCESS;
@@ -87,23 +89,26 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
             if (!(barrelState.getBlock() instanceof BarrelBlock)) {
                 Component message = Component.translatable("message.kaleidoscope_tavern.tap.not_connected");
                 serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(message));
+                this.emptyOpen(level, pos, state);
                 return InteractionResult.PASS;
             }
 
             if (!isValidConnection(barrelState, tapFacing)) {
                 Component message = Component.translatable("message.kaleidoscope_tavern.tap.connected_is_invalid");
                 serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(message));
+                this.emptyOpen(level, pos, state);
                 return InteractionResult.PASS;
             }
 
             BarrelBlockEntity barrelEntity = BarrelBlock.getBarrelEntity(level, relative, barrelState);
             if (barrelEntity == null) {
+                this.emptyOpen(level, pos, state);
                 return InteractionResult.PASS;
             }
 
             if (barrelEntity.canTapExtract(level, pos, player)) {
                 state = state.setValue(OPEN, true);
-                level.setBlock(pos, state, Block.UPDATE_ALL);
+                level.setBlockAndUpdate(pos, state);
                 level.playSound(null, pos, SoundEvents.IRON_TRAPDOOR_OPEN, SoundSource.BLOCKS, 1.0F, 0.8F);
 
                 // 播放滴水粒子效果
@@ -115,14 +120,31 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
                         particle = ParticleTypes.DRIPPING_DRIPSTONE_LAVA;
                     }
                     tapEntity.setParticle(particle);
+                    tapEntity.setState(TAKE_DRINK_STATE);
                 }
 
                 // 一定时间后关闭龙头
-                level.scheduleTick(pos, this, 80);
+                level.scheduleTick(pos, this, TAKE_DRINK_TICKS);
                 return InteractionResult.SUCCESS;
             }
+
+            this.emptyOpen(level, pos, state);
         }
         return InteractionResult.PASS;
+    }
+
+    /**
+     * 龙头空拧，此时会有一些特殊的粒子效果，并且持续一小段时间，最后自动关闭
+     */
+    private void emptyOpen(Level level, BlockPos pos, BlockState blockState) {
+        // 将龙头设置为关闭状态
+        level.setBlockAndUpdate(pos, blockState.setValue(OPEN, true));
+        level.playSound(null, pos, SoundEvents.IRON_TRAPDOOR_OPEN, SoundSource.BLOCKS, 1.0F, 0.8F);
+
+        // 将 BE 设置为此状态
+        if (level.getBlockEntity(pos) instanceof TapBlockEntity tapEntity) {
+            tapEntity.setState(EMPTY_OPEN_STATE);
+        }
     }
 
     @Override
@@ -146,6 +168,7 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
 
         if (level.getBlockEntity(pos) instanceof TapBlockEntity tapEntity) {
             tapEntity.setParticle(null);
+            tapEntity.setState(DEFAULT_STATE);
         }
 
         // 播放酒瓶转化效果
@@ -155,7 +178,7 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
                 pos.getX() + 0.5,
                 pos.getY() - 0.5,
                 pos.getZ() + 0.5,
-                10, 0.1, 0.1, 0.1, 0.05
+                10, 0.25, 0.25, 0.25, 0.1
         );
 
         // 关闭音效
