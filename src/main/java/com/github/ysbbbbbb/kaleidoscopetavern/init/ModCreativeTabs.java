@@ -58,6 +58,8 @@ public class ModCreativeTabs {
                 .title(Component.translatable("item_group.kaleidoscope_tavern.tavern_deco.name"))
                 .icon(() -> BuiltInRegistries.ITEM.get(DECO_ICON_ID).getDefaultInstance())
                 .displayItems((par, output) -> {
+                    output.accept(ModItems.BAR_CABINET);
+                    output.accept(ModItems.GLASS_BAR_CABINET);
                     output.accept(ModItems.BAR_COUNTER);
                     output.accept(ModItems.STEPLADDER);
 

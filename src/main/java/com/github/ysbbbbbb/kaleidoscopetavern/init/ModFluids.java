@@ -23,8 +23,14 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @SuppressWarnings("UnstableApiUsage")
 public class ModFluids {
+
+    public static final Map<Fluid, Item> SELECT_BUCKETS = new HashMap<>();
+
     public static final FlowingFluid GRAPE_JUICE = new JuiceFluid.Still(
             () -> ModFluids.FLOWING_GRAPE_JUICE,
             () -> ModFluids.GRAPE_JUICE,
@@ -68,9 +74,9 @@ public class ModFluids {
     public static final LiquidBlock GLOW_BERRIES_JUICE_BLOCK = new LiquidBlock(GLOW_BERRIES_JUICE, BlockBehaviour.Properties.copy(Blocks.WATER));
 
     public static void registerFluids() {
-        register("grape_juice", GRAPE_JUICE, FLOWING_GRAPE_JUICE, GRAPE_JUICE_BLOCK, "grape_bucket", ModItems.GRAPE_BUCKET);
-        register("sweet_berries_juice", SWEET_BERRIES_JUICE, FLOWING_SWEET_BERRIES_JUICE, SWEET_BERRIES_JUICE_BLOCK, "sweet_berries_bucket", ModItems.SWEET_BERRIES_BUCKET);
-        register("glow_berries_juice", GLOW_BERRIES_JUICE, FLOWING_GLOW_BERRIES_JUICE, GLOW_BERRIES_JUICE_BLOCK, "glow_berries_bucket", ModItems.GLOW_BERRIES_BUCKET);
+        register("grape_juice", GRAPE_JUICE, FLOWING_GRAPE_JUICE, GRAPE_JUICE_BLOCK, ModItems.GRAPE_BUCKET);
+        register("sweet_berries_juice", SWEET_BERRIES_JUICE, FLOWING_SWEET_BERRIES_JUICE, SWEET_BERRIES_JUICE_BLOCK, ModItems.SWEET_BERRIES_BUCKET);
+        register("glow_berries_juice", GLOW_BERRIES_JUICE, FLOWING_GLOW_BERRIES_JUICE, GLOW_BERRIES_JUICE_BLOCK, ModItems.GLOW_BERRIES_BUCKET);
     }
 
     @Environment(EnvType.CLIENT)
@@ -84,11 +90,12 @@ public class ModFluids {
                                  FlowingFluid still,
                                  FlowingFluid flowing,
                                  Block block,
-                                 String bucketName,
                                  Item bucket) {
         Registry.register(BuiltInRegistries.FLUID, id(name), still);
         Registry.register(BuiltInRegistries.FLUID, id("flowing_" + name), flowing);
         Registry.register(BuiltInRegistries.BLOCK, id(name), block);
+        SELECT_BUCKETS.put(still, bucket);
+        SELECT_BUCKETS.put(flowing, bucket);
     }
 
     @Environment(EnvType.CLIENT)

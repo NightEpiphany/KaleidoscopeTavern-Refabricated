@@ -14,9 +14,9 @@ public class KaleidoscopeTavern implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		CommonRegistry.init();
+		ModItems.registerItems();
 		ModFluids.registerFluids();
 		ModBlocks.registerBlocks();
-		ModItems.registerItems();
 		ModRecipes.registerRecipes();
 		ModEntities.registerEntities();
 		ModCreativeTabs.registerTabs();

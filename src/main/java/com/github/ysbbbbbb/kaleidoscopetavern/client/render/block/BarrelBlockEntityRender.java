@@ -11,6 +11,8 @@ import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemStackHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -24,6 +26,7 @@ import net.minecraft.world.level.material.Fluid;
 
 import static com.github.ysbbbbbb.kaleidoscopetavern.util.RenderUtils.stableRandom;
 
+@Environment(EnvType.CLIENT)
 public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockEntity> {
     private static final ResourceLocation LARGE_TEXTURE = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/entity/brew/barrel.png");
 

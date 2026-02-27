@@ -57,7 +57,9 @@ public class ClientRegistry {
                 GRAPE_CROP,
                 GRAPEVINE_TRELLIS,
                 WILD_GRAPEVINE,
-                WILD_GRAPEVINE_PLANT
+                WILD_GRAPEVINE_PLANT,
+                BAR_CABINET,
+                GLASS_BAR_CABINET
         );
     }
 }

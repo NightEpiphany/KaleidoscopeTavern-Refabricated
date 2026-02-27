@@ -4,6 +4,8 @@ import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IPressingTub;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
+import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
+import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
@@ -31,10 +33,13 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
@@ -292,6 +297,31 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
         FluidVariant fluidVariant = this.fluid.getFluidVariant();
         if (fluidVariant.isBlank()) {
             return false;
+        }
+
+        if (carriedStack.is(Items.BUCKET)) {
+            Item bucketItem = ModFluids.SELECT_BUCKETS.get(fluidVariant.getFluid());
+            if (bucketItem != null) {
+                try (Transaction transaction = Transaction.openOuter()) {
+                    long extracted = this.fluid.extract(fluidVariant, IPressingTub.MAX_FLUID_AMOUNT_TRANSFER, transaction);
+                    if (extracted != IPressingTub.MAX_FLUID_AMOUNT_TRANSFER) {
+                        return false;
+                    }
+                    transaction.commit();
+                }
+
+                ItemStack resultStack = bucketItem.getDefaultInstance();
+                if (!(target instanceof Player player) || !player.isCreative()) {
+                    carriedStack.shrink(1);
+                }
+                ItemUtils.getItemToLivingEntity(target, resultStack);
+
+                SoundEvent sound = getBucketFillSound(fluidVariant);
+                if (sound != null) {
+                    target.playSound(sound);
+                }
+                return true;
+            }
         }
 
         ItemStack copy = carriedStack.copyWithCount(1);

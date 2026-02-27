@@ -21,6 +21,7 @@ import snownee.jade.api.fluid.JadeFluidObject;
 import snownee.jade.api.ui.BoxStyle;
 import snownee.jade.api.ui.IElementHelper;
 
+@Deprecated
 @SuppressWarnings("UnstableApiUsage")
 public class BarrelComponentProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
     public static final BarrelComponentProvider INSTANCE = new BarrelComponentProvider();

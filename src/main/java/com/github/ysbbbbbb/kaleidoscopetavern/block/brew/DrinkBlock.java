@@ -38,8 +38,8 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     protected final EnumMap<Direction, VoxelShape>[] shapes;
 
     @SuppressWarnings("unchecked")
-    public DrinkBlock(int maxCount, VoxelShape... shapes) {
-        super();
+    public DrinkBlock(boolean irregular, int maxCount, VoxelShape... shapes) {
+        super(irregular);
         this.maxCount = maxCount;
         this.countProperty = IntegerProperty.create("count", 1, maxCount);
         this.shapes = new EnumMap[shapes.length];
@@ -151,8 +151,14 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     }
 
     public static class Builder {
+        private boolean irregular = false;
         private int maxCount;
         private VoxelShape[] shapes;
+
+        public Builder irregular() {
+            this.irregular = true;
+            return this;
+        }
 
         public Builder maxCount(int maxCount) {
             this.maxCount = maxCount;
@@ -165,7 +171,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
         }
 
         public Block build() {
-            return new DrinkBlock(maxCount, shapes);
+            return new DrinkBlock(irregular, maxCount, shapes);
         }
     }
 }

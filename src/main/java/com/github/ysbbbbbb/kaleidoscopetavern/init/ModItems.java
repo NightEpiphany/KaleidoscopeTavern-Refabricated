@@ -127,6 +127,9 @@ public class ModItems {
     public static final Item BARREL = new BlockItem(ModBlocks.BARREL, new Item.Properties());
     // 燃烧瓶
     public static final Item MOLOTOV = new MolotovBlockItem(ModBlocks.MOLOTOV);
+    // 酒柜
+    public static final Item BAR_CABINET = new BlockItem(ModBlocks.BAR_CABINET, new Item.Properties());
+    public static final Item GLASS_BAR_CABINET = new BlockItem(ModBlocks.GLASS_BAR_CABINET, new Item.Properties());
     // 酒
     public static final Item WINE = new DrinkBlockItem(ModBlocks.WINE);
     public static final Item CHAMPAGNE = new DrinkBlockItem(ModBlocks.CHAMPAGNE);
@@ -246,6 +249,8 @@ public class ModItems {
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "tap"), TAP);
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "barrel"), BARREL);
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "molotov"), MOLOTOV);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "bar_cabinet"), BAR_CABINET);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "glass_bar_cabinet"), GLASS_BAR_CABINET);
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "wine"), WINE);
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "champagne"), CHAMPAGNE);
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "vodka"), VODKA);

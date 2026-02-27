@@ -1,9 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.init;
 
-import com.github.ysbbbbbb.kaleidoscopetavern.client.render.block.BarrelBlockEntityRender;
-import com.github.ysbbbbbb.kaleidoscopetavern.client.render.block.ChalkboardBlockEntityRender;
-import com.github.ysbbbbbb.kaleidoscopetavern.client.render.block.PressingTubBlockEntityRender;
-import com.github.ysbbbbbb.kaleidoscopetavern.client.render.block.SandwichBlockEntityRender;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.render.block.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -13,6 +10,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 public class ClientSetupEvent {
 
     public static void init() {
+        BlockEntityRenderers.register(ModBlocks.BAR_CABINET_BE, BarCabinetBlockEntityRender::new);
         BlockEntityRenderers.register(ModBlocks.CHALKBOARD_BE, ChalkboardBlockEntityRender::new);
         BlockEntityRenderers.register(ModBlocks.SANDWICH_BOARD_BE, SandwichBlockEntityRender::new);
         BlockEntityRenderers.register(ModBlocks.PRESSING_TUB_BE, PressingTubBlockEntityRender::new);

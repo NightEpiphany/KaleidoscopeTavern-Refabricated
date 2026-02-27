@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.util.fluids;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -85,7 +86,7 @@ public class FluidUtils {
      * @return 消耗后的 ItemStack
      */
     public static ItemStack onConsumed(ItemStack stack) {
-        if (isFluidContainer(stack)) {
+        if (isFluidContainer(stack) && !stack.is(Items.BUCKET)) {
             return Items.BUCKET.getDefaultInstance();
         }
         return stack;
@@ -138,12 +139,10 @@ public class FluidUtils {
             transaction.commit();
         }
 
-        ItemVariant resultVariant = context.getItemVariant();
-        ItemStack result = resultVariant.toStack((int) Math.min(Integer.MAX_VALUE, context.getAmount()));
         if (!(user instanceof Player player) || !player.isCreative()) {
             bucket.shrink(1);
         }
-        ItemUtils.getItemToLivingEntity(user, result);
+        ItemUtils.getItemToLivingEntity(user, ModFluids.SELECT_BUCKETS.get(resource.getFluid()).getDefaultInstance());
         SoundEvent sound = FluidVariantAttributes.getFillSound(resource);
         if (sound != null) {
             user.playSound(sound);
