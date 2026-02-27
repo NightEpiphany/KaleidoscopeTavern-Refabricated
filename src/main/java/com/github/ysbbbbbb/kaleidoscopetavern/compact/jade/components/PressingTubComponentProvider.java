@@ -5,6 +5,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.compact.jade.ModJadePlugin;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -17,6 +18,7 @@ import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.fluid.JadeFluidObject;
+import snownee.jade.api.ui.BoxStyle;
 import snownee.jade.api.ui.IElementHelper;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -37,8 +39,11 @@ public class PressingTubComponentProvider implements IBlockComponentProvider, IS
 
         String fluidId = data.getString(KEY_FLUID);
         int amount = Math.max(0, data.getInt(KEY_AMOUNT));
-        if (fluidId.isEmpty()) {
-            iTooltip.add(Component.literal("Liquid: Empty " + amount + "/" + capacity + " mB"));
+        float ratio = capacity > 0 ? Math.min(1F, amount / (float) capacity) : 0F;
+        IElementHelper helper = IElementHelper.get();
+        if (fluidId.isEmpty() || amount <= 0) {
+            iTooltip.add(helper.progress(ratio, Component.literal("Liquid: Empty " + amount + "/" + capacity + " mB").withStyle(ChatFormatting.WHITE),
+                    helper.progressStyle(), BoxStyle.DEFAULT, false));
             return;
         }
 
@@ -46,12 +51,15 @@ public class PressingTubComponentProvider implements IBlockComponentProvider, IS
         CompoundTag nbt = data.contains(KEY_NBT, Tag.TAG_COMPOUND) ? data.getCompound(KEY_NBT) : null;
         FluidVariant variant = nbt == null ? FluidVariant.of(fluid) : FluidVariant.of(fluid, nbt);
         if (!variant.isBlank()) {
-            IElementHelper helper = IElementHelper.get();
-            iTooltip.add(helper.fluid(nbt == null ? JadeFluidObject.of(fluid, amount) : JadeFluidObject.of(fluid, amount, nbt)));
             Component name = FluidVariantAttributes.getName(variant);
-            iTooltip.add(Component.literal("Liquid: ").append(name).append(Component.literal(" " + amount + "/" + capacity + " mB")));
+            iTooltip.add(helper.progress(ratio,
+                    Component.literal("Liquid: ").append(name).append(Component.literal(" " + amount + "/" + capacity + " mB")),
+                    helper.progressStyle().overlay(nbt == null ? helper.fluid(JadeFluidObject.of(fluid, amount))
+                            : helper.fluid(JadeFluidObject.of(fluid, amount, nbt))),
+                    BoxStyle.DEFAULT, false));
         } else {
-            iTooltip.add(Component.literal("Liquid: Empty " + amount + "/" + capacity + " mB"));
+            iTooltip.add(helper.progress(ratio, Component.literal("Liquid: Empty " + amount + "/" + capacity + " mB").withStyle(ChatFormatting.WHITE),
+                    helper.progressStyle(), BoxStyle.DEFAULT, false));
         }
     }
 
