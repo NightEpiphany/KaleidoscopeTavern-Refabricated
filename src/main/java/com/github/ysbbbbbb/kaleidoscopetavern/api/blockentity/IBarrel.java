@@ -2,9 +2,11 @@ package com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemStackHandler;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -122,11 +124,29 @@ public interface IBarrel {
     boolean isMaxBrewLevel();
 
     /**
+     * 检查是否可以从酒桶的水龙头提取成品
+     *
+     * @param tapPos 龙头的位置。
+     * @param user   提取成品的实体，通常是玩家，但也可能是其他生物。
+     *               主要用于发送提示信息，可以为 null。
+     * @return 失败情况：
+     * - 酒桶没有处于酿造状态（发酵等级小于 {@value BREWING_STARTED}）
+     * - 酒桶已经空了
+     * - 龙头下方容器不符合
+     */
+    boolean canTapExtract(Level level, BlockPos tapPos, LivingEntity user);
+
+    /**
+     * 实际执行从酒桶的水龙头提取成品的操作
+     */
+    void doTapExtract(Level level, BlockPos tapPos);
+
+    /**
      * 获取酒桶的物品栏
      *
      * @return 酒桶的物品栏，包含 {@value MAX_ITEM_SLOTS} 个槽位。
      */
-    ItemStackHandler getItems();
+    ItemStackHandler getIngredient();
 
     /**
      * 获取酒桶的液体槽
@@ -160,28 +180,11 @@ public interface IBarrel {
     int getBrewLevel();
 
     /**
-     * 设置酒桶的发酵等级
-     *
-     * @param brewLevel 发酵等级：<br>
-     *                  {@value BREWING_NOT_STARTED} 表示未开始酿造<br>
-     *                  {@value BREWING_STARTED} 表示正在酿造中<br>
-     *                  {@value BREWING_FINISHED} 表示酿造完成达到最高品质，其他值表示不同的发酵等级
-     */
-    void setBrewLevel(int brewLevel);
-
-    /**
      * 获取当前酒桶正在使用的酿造配方 ID，如果没有正在使用的配方则返回 null。
      *
      * @return 当前酿造配方的 ResourceLocation ID，或者 null 如果没有正在使用的配方
      */
     @Nullable ResourceLocation getRecipeId();
-
-    /**
-     * 设置当前酒桶正在使用的酿造配方 ID，可以设置为 null 来表示没有正在使用的配方。
-     *
-     * @param recipeId 当前酿造配方的 ResourceLocation ID，或者 null 如果没有正在使用的配方
-     */
-    void setRecipeId(@Nullable ResourceLocation recipeId);
 
     /**
      * 获取当前阶段的剩余时间，单位为 tick，每过一个 tick 减少 1，当达到 0 时进入下一个阶段。
@@ -191,9 +194,9 @@ public interface IBarrel {
     int getBrewTime();
 
     /**
-     * 设置当前阶段的剩余时间，单位为 tick，每过一个 tick 减少 1，当达到 0 时进入下一个阶段。
+     * 获取酒桶的输出槽
      *
-     * @param brewTime 当前阶段的剩余时间，单位为 tick
+     * @return 酒桶的输出槽，包含 1 个槽位，用于存放酿造完成后的成品。
      */
-    void setBrewTime(int brewTime);
+    ItemStackHandler getOutput();
 }

@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
 
 /**
- * 替代forge流体系统的流体槽，用于果盆方块存储流体
+ * 替代forge流体系统的流体槽，用于方块存储流体
  */
 @SuppressWarnings("UnstableApiUsage")
 public class CustomFluidTank extends SingleVariantStorage<FluidVariant> {

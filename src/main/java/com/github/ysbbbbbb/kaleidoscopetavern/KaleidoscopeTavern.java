@@ -1,8 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.init.*;
-import com.github.ysbbbbbb.kaleidoscopetavern.init.register.CommonRegistry;
-import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
+import com.github.ysbbbbbb.kaleidoscopetavern.init.registery.CommonRegistry;
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;

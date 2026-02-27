@@ -53,7 +53,11 @@ public class ClientRegistry {
                 STRING_LIGHTS_PINK,
                 EMPTY_BOTTLE,
                 MOLOTOV,
-                VODKA
+                VODKA,
+                GRAPE_CROP,
+                GRAPEVINE_TRELLIS,
+                WILD_GRAPEVINE,
+                WILD_GRAPEVINE_PLANT
         );
     }
 }

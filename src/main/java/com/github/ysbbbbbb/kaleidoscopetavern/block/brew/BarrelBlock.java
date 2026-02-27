@@ -5,9 +5,6 @@ import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.FluidUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -126,14 +123,8 @@ public class BarrelBlock extends BaseEntityBlock {
                 }
             }
         } else {
-            int brewLevel = barrelEntity.getBrewLevel();
-            ResourceLocation id = barrelEntity.getRecipeId();
-            int time = barrelEntity.getBrewTime() / 20;
-            if (id != null && !level.isClientSide) {
-                String text = "Level: %d, Recipe: %s, Time: %ds".formatted(brewLevel, id, time);
-                MutableComponent literal = Component.literal(text);
-                player.sendSystemMessage(literal);
-            }
+            barrelEntity.tipBrewInfo(player);
+            return InteractionResult.SUCCESS;
         }
         return super.use(state, level, pos, player, hand, hitResult);
     }
