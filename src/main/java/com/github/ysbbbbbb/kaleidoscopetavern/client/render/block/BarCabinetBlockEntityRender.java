@@ -32,7 +32,7 @@ public class BarCabinetBlockEntityRender implements BlockEntityRenderer<BarCabin
         ItemStack rightStack = barCabinet.getRightItem();
 
         float scale = 0.9f;
-        float angle = direction.get2DDataValue() * 90f;
+        float angle = 180 - direction.get2DDataValue() * 90f;
 
         if (barCabinet.isSingle()) {
             if (!leftStack.isEmpty() && leftStack.getItem() instanceof BlockItem blockItem) {
@@ -52,7 +52,7 @@ public class BarCabinetBlockEntityRender implements BlockEntityRenderer<BarCabin
                 BlockState state = blockItem.getBlock().defaultBlockState();
                 poseStack.translate(0.5, 0, 0.5);
                 poseStack.mulPose(Axis.YP.rotationDegrees(angle));
-                poseStack.translate(-0.25, 0.0625, 0);
+                poseStack.translate(direction.getAxis() == Direction.Axis.Z ? 0.25 : -0.25, 0.0625, 0);
                 poseStack.scale(scale, scale, scale);
                 poseStack.translate(-0.5, 0, -0.5);
                 this.blockRender.renderSingleBlock(state, poseStack, buffer, packedLight, packedOverlay);
@@ -64,7 +64,7 @@ public class BarCabinetBlockEntityRender implements BlockEntityRenderer<BarCabin
                 BlockState state = blockItem.getBlock().defaultBlockState();
                 poseStack.translate(0.5, 0, 0.5);
                 poseStack.mulPose(Axis.YP.rotationDegrees(angle));
-                poseStack.translate(0.25, 0.0625, 0);
+                poseStack.translate(direction.getAxis() == Direction.Axis.Z ? -0.25 : 0.25, 0.0625, 0);
                 poseStack.scale(scale, scale, scale);
                 poseStack.translate(-0.5, 0, -0.5);
                 this.blockRender.renderSingleBlock(state, poseStack, buffer, packedLight, packedOverlay);

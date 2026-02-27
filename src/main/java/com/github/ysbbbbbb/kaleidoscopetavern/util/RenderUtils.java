@@ -58,7 +58,7 @@ public class RenderUtils {
      */
     public static void renderSurface(PoseStack poseStack, MultiBufferSource buffer, TextureAtlasSprite sprite,
                                      int color, int light, int size, float y) {
-        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.translucentNoCrumbling());
+        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.translucent());
         Matrix4f matrix = poseStack.last().pose();
 
         // 贴图的位置和大小

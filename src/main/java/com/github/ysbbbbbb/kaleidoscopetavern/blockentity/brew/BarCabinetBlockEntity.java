@@ -19,7 +19,7 @@ public class BarCabinetBlockEntity extends BaseBlockEntity {
     /**
      * 是否是异形酒瓶，异形酒瓶只能显示单个酒瓶的酒，并且只能交互左侧酒瓶
      */
-    private boolean isSingle = true;
+    private boolean isSingle = false;
 
     public BarCabinetBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.BAR_CABINET_BE, pos, state);
