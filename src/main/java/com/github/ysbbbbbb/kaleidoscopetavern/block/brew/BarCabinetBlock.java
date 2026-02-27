@@ -79,14 +79,24 @@ public class BarCabinetBlock extends BaseEntityBlock {
     private boolean onClick(BarCabinetBlockEntity barCabinet, Player player, ItemStack stack, boolean isLeftSide) {
         // 如果是异形酒瓶，那么永远都是 isLeftSide = true，放在左边
         boolean irregular = false;
+        boolean single = barCabinet.isSingle();
 
         BottleBlock bottleBlock = this.getBottleBlock(stack);
         ItemStack leftItem = barCabinet.getLeftItem();
         ItemStack rightItem = barCabinet.getRightItem();
 
         if (bottleBlock != null) {
-            // 异形酒瓶，强制左侧取放
+            // 如果酒柜已经是 single 状态了，此时不允许放入新的酒瓶
+            if (single) {
+                return false;
+            }
+            // 异形酒瓶
             if (bottleBlock.irregular()) {
+                // 如果已经有酒了，那么不允许放入异形酒瓶
+                if (!leftItem.isEmpty() || !rightItem.isEmpty()) {
+                    return false;
+                }
+                // 否则，强制左侧取放
                 isLeftSide = true;
                 irregular = true;
             } else {
@@ -102,7 +112,7 @@ public class BarCabinetBlock extends BaseEntityBlock {
         // 如果是空手
         if (stack.isEmpty()) {
             // 异形酒瓶，强制左侧取放
-            if (barCabinet.isSingle()) {
+            if (single) {
                 isLeftSide = true;
                 irregular = true;
             } else {
@@ -134,7 +144,6 @@ public class BarCabinetBlock extends BaseEntityBlock {
                 barCabinet.refresh();
                 return true;
             }
-            return false;
         } else {
             if (stack.isEmpty()) {
                 if (!rightItem.isEmpty()) {
@@ -154,8 +163,9 @@ public class BarCabinetBlock extends BaseEntityBlock {
                 barCabinet.setSingle(irregular);
                 return true;
             }
-            return false;
         }
+
+        return false;
     }
 
     @Nullable
