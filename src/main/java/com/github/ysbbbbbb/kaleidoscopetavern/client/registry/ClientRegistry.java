@@ -1,5 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.registry;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ClientSetupEvent;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModEntitiesRender;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -13,6 +15,8 @@ public class ClientRegistry {
     public static void init() {
         NetworkHandler.Clientside.init();
         renderType();
+        ClientSetupEvent.init();
+        ModEntitiesRender.init();
     }
 
     public static void renderType() {
@@ -59,7 +63,23 @@ public class ClientRegistry {
                 WILD_GRAPEVINE,
                 WILD_GRAPEVINE_PLANT,
                 BAR_CABINET,
-                GLASS_BAR_CABINET
+                GLASS_BAR_CABINET,
+                RED_BAR_STOOL,
+                GREEN_BAR_STOOL,
+                BLUE_BAR_STOOL,
+                YELLOW_BAR_STOOL,
+                ORANGE_BAR_STOOL,
+                PINK_BAR_STOOL,
+                PURPLE_BAR_STOOL,
+                WHITE_BAR_STOOL,
+                BLACK_BAR_STOOL,
+                LIGHT_BLUE_BAR_STOOL,
+                LIME_BAR_STOOL,
+                BROWN_BAR_STOOL,
+                CYAN_BAR_STOOL,
+                MAGENTA_BAR_STOOL,
+                GRAY_BAR_STOOL,
+                LIGHT_GRAY_BAR_STOOL
         );
     }
 }
