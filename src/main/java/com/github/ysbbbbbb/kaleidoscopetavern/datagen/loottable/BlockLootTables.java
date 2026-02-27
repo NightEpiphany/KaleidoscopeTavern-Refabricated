@@ -139,6 +139,9 @@ public class BlockLootTables extends BlockLootSubProvider {
         dropSelf(ModBlocks.TAP.get());
         // 酒桶
         dropSelf(ModBlocks.BARREL.get());
+        // 酒柜
+        dropSelf(ModBlocks.BAR_CABINET.get());
+        dropSelf(ModBlocks.GLASS_BAR_CABINET.get());
     }
 
     @Override

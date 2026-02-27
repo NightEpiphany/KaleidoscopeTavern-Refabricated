@@ -24,7 +24,12 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final VoxelShape SHAPE = Block.box(5, 0, 5, 11, 14, 11);
 
-    public BottleBlock() {
+    /**
+     * 是否为异形酒瓶，这决定了酒柜中可以放入一瓶还是两瓶
+     */
+    private final boolean irregular;
+
+    public BottleBlock(boolean irregular) {
         super(Properties.of()
                 .noOcclusion()
                 .instabreak()
@@ -32,6 +37,11 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(WATERLOGGED, false));
+        this.irregular = irregular;
+    }
+
+    public BottleBlock() {
+        this(false);
     }
 
     @Override
@@ -78,5 +88,12 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
     @Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return SHAPE;
+    }
+
+    /**
+     * 是否为异形酒瓶，这决定了酒柜中可以放入一瓶还是两瓶
+     */
+    public boolean irregular() {
+        return this.irregular;
     }
 }

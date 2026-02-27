@@ -4,10 +4,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.*;
-import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.BarrelBlockEntity;
-import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.DrinkBlockEntity;
-import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PressingTubBlockEntity;
-import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.TapBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.ChalkboardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.SandwichBlockEntity;
 import net.minecraft.world.item.Items;
@@ -138,6 +135,9 @@ public interface ModBlocks {
     RegistryObject<Block> MOLOTOV = BLOCKS.register("molotov", BottleBlock::new);
     // 酒桶
     RegistryObject<Block> BARREL = BLOCKS.register("barrel", BarrelBlock::new);
+    // 酒柜
+    RegistryObject<Block> BAR_CABINET = BLOCKS.register("bar_cabinet", BarCabinetBlock::new);
+    RegistryObject<Block> GLASS_BAR_CABINET = BLOCKS.register("glass_bar_cabinet", BarCabinetBlock::new);
 
     // 酒
     RegistryObject<Block> WINE = BLOCKS.register("wine", DrinkBlock.create().maxCount(4).shapes(
@@ -170,13 +170,13 @@ public interface ModBlocks {
             Block.box(0, 0, 0, 16, 16, 16)
     ).build());
 
-    RegistryObject<Block> BRANDY = BLOCKS.register("brandy", DrinkBlock.create().maxCount(3).shapes(
+    RegistryObject<Block> BRANDY = BLOCKS.register("brandy", DrinkBlock.create().irregular().maxCount(3).shapes(
             Block.box(3, 0, 6, 13, 13, 10),
             Block.box(1, 0, 3, 15, 12, 12),
             Block.box(1, 0, 1, 16, 12, 13)
     ).build());
 
-    RegistryObject<Block> CARIGNAN = BLOCKS.register("carignan", DrinkBlock.create().maxCount(3).shapes(
+    RegistryObject<Block> CARIGNAN = BLOCKS.register("carignan", DrinkBlock.create().irregular().maxCount(3).shapes(
             Block.box(3, 0, 6, 13, 12, 10),
             Block.box(1, 0, 3, 15, 12, 12),
             Block.box(0, 0, 1, 16, 12, 13)
@@ -281,6 +281,12 @@ public interface ModBlocks {
     RegistryObject<BlockEntityType<TapBlockEntity>> TAP_BE = BLOCK_ENTITIES.register(
             "tap", () -> BlockEntityType.Builder
                     .of(TapBlockEntity::new, TAP.get())
+                    .build(null)
+    );
+
+    RegistryObject<BlockEntityType<BarCabinetBlockEntity>> BAR_CABINET_BE = BLOCK_ENTITIES.register(
+            "bar_cabinet", () -> BlockEntityType.Builder
+                    .of(BarCabinetBlockEntity::new, BAR_CABINET.get(), GLASS_BAR_CABINET.get())
                     .build(null)
     );
 }

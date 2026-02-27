@@ -123,6 +123,9 @@ public interface ModItems {
     RegistryObject<Item> TAP = ITEMS.register("tap", () -> new BlockItem(ModBlocks.TAP.get(), new Item.Properties()));
     // 酒桶
     RegistryObject<Item> BARREL = ITEMS.register("barrel", () -> new BlockItem(ModBlocks.BARREL.get(), new Item.Properties()));
+    // 酒柜
+    RegistryObject<Item> BAR_CABINET = ITEMS.register("bar_cabinet", () -> new BlockItem(ModBlocks.BAR_CABINET.get(), new Item.Properties()));
+    RegistryObject<Item> GLASS_BAR_CABINET = ITEMS.register("glass_bar_cabinet", () -> new BlockItem(ModBlocks.GLASS_BAR_CABINET.get(), new Item.Properties()));
 
     // 空瓶
     RegistryObject<Item> EMPTY_BOTTLE = ITEMS.register("empty_bottle", () -> new BottleBlockItem(ModBlocks.EMPTY_BOTTLE.get()));

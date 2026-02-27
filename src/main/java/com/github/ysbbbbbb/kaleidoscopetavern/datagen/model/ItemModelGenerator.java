@@ -70,6 +70,8 @@ public class ItemModelGenerator extends ItemModelProvider {
         basicItem(ModItems.GRAPE.get());
 
         withExistingParent("item/pressing_tub", modLoc("block/brew/pressing_tub"));
+        withExistingParent("item/bar_cabinet", modLoc("block/brew/bar_cabinet/single"));
+        withExistingParent("item/glass_bar_cabinet", modLoc("block/brew/glass_bar_cabinet/single"));
 
         basicItem(ModItems.GRAPE_BUCKET.get());
         basicItem(ModItems.SWEET_BERRIES_BUCKET.get());

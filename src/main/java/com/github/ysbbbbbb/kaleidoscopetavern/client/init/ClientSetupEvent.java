@@ -1,10 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.init;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
-import com.github.ysbbbbbb.kaleidoscopetavern.client.render.block.BarrelBlockEntityRender;
-import com.github.ysbbbbbb.kaleidoscopetavern.client.render.block.ChalkboardBlockEntityRender;
-import com.github.ysbbbbbb.kaleidoscopetavern.client.render.block.PressingTubBlockEntityRender;
-import com.github.ysbbbbbb.kaleidoscopetavern.client.render.block.SandwichBlockEntityRender;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.render.block.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
@@ -20,5 +17,6 @@ public class ClientSetupEvent {
         BlockEntityRenderers.register(ModBlocks.SANDWICH_BOARD_BE.get(), SandwichBlockEntityRender::new);
         BlockEntityRenderers.register(ModBlocks.PRESSING_TUB_BE.get(), PressingTubBlockEntityRender::new);
         BlockEntityRenderers.register(ModBlocks.BARREL_BE.get(), BarrelBlockEntityRender::new);
+        BlockEntityRenderers.register(ModBlocks.BAR_CABINET_BE.get(), BarCabinetBlockEntityRender::new);
     }
 }

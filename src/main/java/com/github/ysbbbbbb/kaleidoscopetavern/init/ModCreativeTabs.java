@@ -46,6 +46,8 @@ public interface ModCreativeTabs {
             .icon(ModItems.STEPLADDER.get()::getDefaultInstance)
             .withTabsBefore(TAVERN_MAIN_TAB.getId())
             .displayItems((par, output) -> {
+                output.accept(ModItems.BAR_CABINET.get());
+                output.accept(ModItems.GLASS_BAR_CABINET.get());
                 output.accept(ModItems.BAR_COUNTER.get());
                 output.accept(ModItems.STEPLADDER.get());
 
