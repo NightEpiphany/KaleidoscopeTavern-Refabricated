@@ -49,6 +49,8 @@ public class JuiceBucketItem extends BucketItem implements IHasContainer {
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        if (player.isShiftKeyDown())
+            return super.use(level, player, hand);
         return ItemUtils.startUsingInstantly(level, player, hand);
     }
 

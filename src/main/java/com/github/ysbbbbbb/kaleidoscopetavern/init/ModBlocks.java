@@ -117,7 +117,7 @@ public class ModBlocks {
     // 葡萄
     public static final Block GRAPE_CROP = new GrapeCropBlock();
     // 燃烧瓶
-    public static final Block MOLOTOV =new BottleBlock();
+    public static final Block MOLOTOV =new MolotovBlock();
     // 龙头
     public static final Block TAP = new TapBlock();
     // 吧台

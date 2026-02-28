@@ -1,6 +1,8 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.DrinkBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
+import com.github.ysbbbbbb.kaleidoscopetavern.item.DrinkBlockItem;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.VoxelShapeUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemHandlerHelper;
 import net.minecraft.core.BlockPos;
@@ -10,6 +12,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -29,7 +32,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.List;
-import java.util.function.Supplier;
 
 @SuppressWarnings("deprecation")
 public class DrinkBlock extends BottleBlock implements EntityBlock {
@@ -55,6 +57,10 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
                 .setValue(countProperty, 1)
                 .setValue(FACING, Direction.NORTH)
                 .setValue(WATERLOGGED, false));
+    }
+
+    public DrinkBlock(int maxCount, VoxelShape... shapes) {
+        this(false, maxCount, shapes);
     }
 
     public boolean tryIncreaseCount(Level level, BlockPos pos, BlockState state, ItemStack stack) {
@@ -102,7 +108,40 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
+    public void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
+        // 获取其中所含的效果等级最高的酒
+        if (level.isClientSide) {
+            super.onProjectileHit(level, state, hit, projectile);
+            return;
+        }
+
+        BlockPos pos = hit.getBlockPos();
+        if (!(level.getBlockEntity(pos) instanceof DrinkBlockEntity be)) {
+            super.onProjectileHit(level, state, hit, projectile);
+            return;
+        }
+
+        int maxBrewLevel = 0;
+        for (int i = 0; i < be.getItems().size(); i++) {
+            ItemStack stack = be.getItems().get(i);
+            if (!stack.isEmpty()) {
+                int brewLevel = BottleBlockItem.getBrewLevel(stack);
+                if (brewLevel > maxBrewLevel) {
+                    maxBrewLevel = brewLevel;
+                }
+            }
+        }
+
+        // 生成药水云
+        if (maxBrewLevel > 0 && this.asItem() instanceof DrinkBlockItem item) {
+            item.makeAreaOfEffectCloud(level, pos.getX(), pos.getY(), pos.getZ(), maxBrewLevel, projectile.getOwner());
+        }
+
+        super.onProjectileHit(level, state, hit, projectile);
+    }
+
+    @Override
+    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
         List<ItemStack> stacks = super.getDrops(state, params);
         BlockEntity blockEntity = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (blockEntity instanceof DrinkBlockEntity be) {

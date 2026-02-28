@@ -102,7 +102,7 @@ public class ModFluids {
     private static void registerRender(Fluid still, Fluid flowing, String stillTexture, String flowTexture, int color) {
         ResourceLocation stillId = id(stillTexture);
         ResourceLocation flowId = id(flowTexture);
-        FluidRenderHandlerRegistry.INSTANCE.register(still, flowing, new SimpleFluidRenderHandler(stillId, flowId, color));
+        FluidRenderHandlerRegistry.INSTANCE.register(still, flowing, new SimpleFluidRenderHandler(stillId, flowId, stillId, color));
         registration(still, color, stillId, flowId);
         registration(flowing, color, stillId, flowId);
     }

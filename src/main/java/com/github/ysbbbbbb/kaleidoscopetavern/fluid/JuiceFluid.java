@@ -8,6 +8,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.FlowingFluid;
@@ -94,16 +96,23 @@ public abstract class JuiceFluid extends FlowingFluid {
 
     @Override
     public @NotNull BlockState createLegacyBlock(FluidState state) {
-        return block.get().defaultBlockState();
+        return block.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
     }
 
     @Override
     protected void beforeDestroyingBlock(LevelAccessor world, BlockPos pos, BlockState state) {
+        BlockEntity blockEntity = state.hasBlockEntity() ? world.getBlockEntity(pos) : null;
+        Block.dropResources(state, world, pos, blockEntity);
     }
 
     @Override
     public boolean canBeReplacedWith(FluidState state, BlockGetter world, BlockPos pos, Fluid fluid, Direction direction) {
-        return false;
+        return direction == Direction.DOWN && !fluid.isSame(this);
+    }
+
+    @Override
+    public boolean isSame(Fluid fluid) {
+        return fluid == getFlowing() || fluid == getSource();
     }
 
     public static class Flowing extends JuiceFluid {

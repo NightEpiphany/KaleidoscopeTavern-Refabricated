@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
 
+@SuppressWarnings("all")
 @Environment(EnvType.CLIENT)
 @Mixin(EntityRenderDispatcher.class)
 public class EntityRendererDispatcherMixin {
