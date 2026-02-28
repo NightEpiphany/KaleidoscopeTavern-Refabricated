@@ -3,6 +3,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.init.registery;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.BottleBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.dispenser.BottleBlockDispenseBehavior;
 import com.github.ysbbbbbb.kaleidoscopetavern.datamap.resources.DrinkEffectDataReloadListener;
+import com.github.ysbbbbbb.kaleidoscopetavern.event.AddFeaturesEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
@@ -16,6 +17,11 @@ public class CommonRegistry {
         NetworkHandler.init();
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new DrinkEffectDataReloadListener());
         dispenseRegister();
+        events();
+    }
+
+    public static void events() {
+        AddFeaturesEvent.addFeatures();
     }
 
     public static void dispenseRegister() {

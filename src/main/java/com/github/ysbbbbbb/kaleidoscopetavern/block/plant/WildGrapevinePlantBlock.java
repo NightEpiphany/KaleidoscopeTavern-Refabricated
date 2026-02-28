@@ -4,6 +4,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import net.minecraft.BlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,6 +29,22 @@ public class WildGrapevinePlantBlock extends GrowingPlantBodyBlock implements Bo
     @Override
     protected @NotNull GrowingPlantHeadBlock getHeadBlock() {
         return (GrowingPlantHeadBlock) ModBlocks.WILD_GRAPEVINE;
+    }
+
+    @Override
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+        BlockPos relative = pos.relative(this.growthDirection.getOpposite());
+        BlockState relativeState = level.getBlockState(relative);
+        return relativeState.is(this.getHeadBlock())
+                || relativeState.is(this.getBodyBlock())
+                || this.canAttachTo(relativeState)
+                || relativeState.isFaceSturdy(level, relative, this.growthDirection);
+    }
+
+    @Override
+    protected boolean canAttachTo(BlockState state) {
+        // 树叶不属于 SupportType.FULL，故需要特殊判断一下
+        return state.is(BlockTags.LEAVES);
     }
 
     @Override
