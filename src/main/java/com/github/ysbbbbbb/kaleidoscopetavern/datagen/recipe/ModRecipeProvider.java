@@ -1,0 +1,32 @@
+package com.github.ysbbbbbb.kaleidoscopetavern.datagen.recipe;
+
+import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeBuilder;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ItemLike;
+
+import java.util.Arrays;
+import java.util.function.Consumer;
+
+public abstract class ModRecipeProvider extends RecipeProvider {
+    public ModRecipeProvider(PackOutput output) {
+        super(output);
+    }
+
+    @Override
+    public void buildRecipes(Consumer<FinishedRecipe> consumer) {
+    }
+
+    public String getRecipeIdWithCount(ItemLike itemLike, int count) {
+        return RecipeBuilder.getDefaultRecipeId(itemLike.asItem()).getPath() + "_" + count;
+    }
+
+    public ItemLike[] getItemsWithCount(ItemLike itemLike, int count) {
+        ItemLike[] items = new ItemLike[count];
+        Arrays.fill(items, itemLike);
+        return items;
+    }
+}

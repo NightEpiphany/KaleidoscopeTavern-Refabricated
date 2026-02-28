@@ -1,9 +1,11 @@
-package com.github.ysbbbbbb.kaleidoscopetavern.compact.jade;
+package com.github.ysbbbbbb.kaleidoscopetavern.compat.jade;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.BarrelBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.PressingTubBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PressingTubBlockEntity;
-import com.github.ysbbbbbb.kaleidoscopetavern.compact.jade.components.PressingTubComponentProvider;
+import com.github.ysbbbbbb.kaleidoscopetavern.compat.jade.components.BarrelComponentProvider;
+import com.github.ysbbbbbb.kaleidoscopetavern.compat.jade.components.PressingTubComponentProvider;
 import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
@@ -23,5 +25,6 @@ public class ModJadePlugin implements IWailaPlugin {
     @Override
     public void registerClient(IWailaClientRegistration registration) {
         registration.registerBlockComponent(PressingTubComponentProvider.INSTANCE, PressingTubBlock.class);
+        registration.registerBlockComponent(BarrelComponentProvider.INSTANCE, BarrelBlock.class);
     }
 }

@@ -13,7 +13,11 @@
 	"entrypoints": {
 		"main": ["com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern"],
 		"client": ["com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavernClient"],
-		"jade": ["com.github.ysbbbbbb.kaleidoscopetavern.compact.jade.ModJadePlugin"]
+		"fabric-datagen": ["com.github.ysbbbbbb.kaleidoscopetavern.init.ModDataGen"],
+		"jade": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.jade.ModJadePlugin"],
+		"jei_mod_plugin": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.jei.ModJeiPlugin"],
+		"rei_client": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.ModREIClientPlugin"],
+		"emi": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.emi.ModEmiPlugin"]
 	},
 	"mixins": [
 		"kaleidoscope_tavern.mixins.json"

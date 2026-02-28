@@ -32,16 +32,20 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
     private final boolean irregular;
 
 
-    public BottleBlock(boolean irregular) {
-        super(Properties.of()
-                .noOcclusion()
-                .instabreak()
-                .sound(SoundType.GLASS)
-                .pushReaction(PushReaction.DESTROY));
+    public BottleBlock(Properties properties, boolean irregular) {
+        super(properties);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(WATERLOGGED, false));
         this.irregular = irregular;
+    }
+
+    public BottleBlock(boolean irregular) {
+        this(Properties.of()
+                .noOcclusion()
+                .instabreak()
+                .pushReaction(PushReaction.DESTROY)
+                .sound(SoundType.GLASS), irregular);
     }
 
     public BottleBlock() {

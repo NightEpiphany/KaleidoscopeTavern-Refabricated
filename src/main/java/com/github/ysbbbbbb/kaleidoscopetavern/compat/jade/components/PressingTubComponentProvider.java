@@ -1,7 +1,7 @@
-package com.github.ysbbbbbb.kaleidoscopetavern.compact.jade.components;
+package com.github.ysbbbbbb.kaleidoscopetavern.compat.jade.components;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IPressingTub;
-import com.github.ysbbbbbb.kaleidoscopetavern.compact.jade.ModJadePlugin;
+import com.github.ysbbbbbb.kaleidoscopetavern.compat.jade.ModJadePlugin;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
