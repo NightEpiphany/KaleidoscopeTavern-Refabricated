@@ -22,21 +22,22 @@ public class AddFeaturesEvent {
         var access = event.getServer().registryAccess();
 
         access.registry(Registries.CONFIGURED_FEATURE).ifPresent(registry -> {
-            addWildGrapevineTreeDeco(registry, TreeFeatures.SUPER_BIRCH_BEES_0002, 0.002f, 3);
-            addWildGrapevineTreeDeco(registry, TreeFeatures.SUPER_BIRCH_BEES, 1f, 1);
+            addWildGrapevineTreeDeco(registry, TreeFeatures.SUPER_BIRCH_BEES_0002, 0.002f, 3, 3);
+            addWildGrapevineTreeDeco(registry, TreeFeatures.SUPER_BIRCH_BEES, 1f, 1, 3);
 
-            addWildGrapevineTreeDeco(registry, TreeFeatures.OAK_BEES_0002, 0.002f, 3);
-            addWildGrapevineTreeDeco(registry, TreeFeatures.OAK_BEES_002, 0.02f, 2);
-            addWildGrapevineTreeDeco(registry, TreeFeatures.OAK_BEES_005, 0.05f, 1);
+            addWildGrapevineTreeDeco(registry, TreeFeatures.OAK_BEES_0002, 0.002f, 3, 3);
+            addWildGrapevineTreeDeco(registry, TreeFeatures.OAK_BEES_002, 0.02f, 2, 3);
+            addWildGrapevineTreeDeco(registry, TreeFeatures.OAK_BEES_005, 0.05f, 1, 3);
 
-            addWildGrapevineTreeDeco(registry, TreeFeatures.BIRCH_BEES_0002, 0.002f, 3);
-            addWildGrapevineTreeDeco(registry, TreeFeatures.BIRCH_BEES_002, 0.02f, 2);
-            addWildGrapevineTreeDeco(registry, TreeFeatures.BIRCH_BEES_005, 0.05f, 1);
+            addWildGrapevineTreeDeco(registry, TreeFeatures.BIRCH_BEES_0002, 0.002f, 3, 3);
+            addWildGrapevineTreeDeco(registry, TreeFeatures.BIRCH_BEES_002, 0.02f, 2, 3);
+            addWildGrapevineTreeDeco(registry, TreeFeatures.BIRCH_BEES_005, 0.05f, 1, 3);
 
-            addWildGrapevineTreeDeco(registry, TreeFeatures.FANCY_OAK_BEES_0002, 0.002f, 3);
-            addWildGrapevineTreeDeco(registry, TreeFeatures.FANCY_OAK_BEES_002, 0.02f, 2);
-            addWildGrapevineTreeDeco(registry, TreeFeatures.FANCY_OAK_BEES_005, 0.05f, 1);
-            addWildGrapevineTreeDeco(registry, TreeFeatures.FANCY_OAK_BEES, 1f, 1);
+            // 高大橡树会生成较多的葡萄藤
+            addWildGrapevineTreeDeco(registry, TreeFeatures.FANCY_OAK_BEES_0002, 0.02f, 5, 7);
+            addWildGrapevineTreeDeco(registry, TreeFeatures.FANCY_OAK_BEES_002, 0.2f, 5, 7);
+            addWildGrapevineTreeDeco(registry, TreeFeatures.FANCY_OAK_BEES_005, 0.5f, 5, 7);
+            addWildGrapevineTreeDeco(registry, TreeFeatures.FANCY_OAK_BEES, 1f, 5, 7);
 
             // 樱花树下不生成葡萄藤了，毕竟它们的树叶颜色不太搭
         });
@@ -46,7 +47,8 @@ public class AddFeaturesEvent {
             Registry<ConfiguredFeature<?, ?>> registry,
             ResourceKey<ConfiguredFeature<?, ?>> id,
             float probability,
-            int maxVines
+            int maxVineCount,
+            int vineChainLength
     ) {
         ConfiguredFeature<?, ?> configuredFeature = registry.get(id);
         if (configuredFeature == null) {
@@ -57,7 +59,7 @@ public class AddFeaturesEvent {
             // 因为原 list 是 ImmutableList，所以只能复制一份新的 list 出来添加装饰器
             treeConfiguration.decorators = ImmutableList.<TreeDecorator>builder()
                     .addAll(treeConfiguration.decorators)
-                    .add(new WildGrapevineDecorator(probability, maxVines))
+                    .add(new WildGrapevineDecorator(probability, maxVineCount, vineChainLength))
                     .build();
         }
     }
