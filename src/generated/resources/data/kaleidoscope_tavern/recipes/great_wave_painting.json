@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:item_frame"
+    },
+    {
+      "item": "minecraft:bamboo_raft"
+    }
+  ],
+  "result": {
+    "item": "kaleidoscope_tavern:great_wave_painting"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "tag": "forge:dyes/blue"
+    },
+    "F": {
+      "item": "minecraft:item_frame"
+    },
+    "R": {
+      "tag": "forge:dyes/red"
+    },
+    "W": {
+      "tag": "forge:dyes/white"
+    },
+    "Y": {
+      "tag": "forge:dyes/yellow"
+    }
+  },
+  "pattern": [
+    " B ",
+    "WFY",
+    " R "
+  ],
+  "result": {
+    "item": "kaleidoscope_tavern:mondrian_painting"
+  },
+  "show_notification": true
+}

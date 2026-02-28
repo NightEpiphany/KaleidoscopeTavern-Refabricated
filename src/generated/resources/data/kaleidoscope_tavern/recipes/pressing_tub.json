@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:barrel"
+    }
+  ],
+  "result": {
+    "item": "kaleidoscope_tavern:pressing_tub"
+  }
+}

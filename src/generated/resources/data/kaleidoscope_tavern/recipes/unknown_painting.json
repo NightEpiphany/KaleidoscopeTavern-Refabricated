@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:item_frame"
+    },
+    {
+      "tag": "forge:dyes/yellow"
+    }
+  ],
+  "result": {
+    "item": "kaleidoscope_tavern:unknown_painting"
+  }
+}
