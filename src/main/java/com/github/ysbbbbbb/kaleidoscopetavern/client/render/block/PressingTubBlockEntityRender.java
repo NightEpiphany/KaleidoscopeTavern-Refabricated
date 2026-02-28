@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.render.block;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IPressingTub;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.PressingTubBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PressingTubBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.RenderUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -11,6 +12,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -35,11 +37,28 @@ public class PressingTubBlockEntityRender implements BlockEntityRenderer<Pressin
         }
 
         // 渲染四个位置的物品，多余的朝上堆叠
+        Direction direction = pressingTub.getBlockState().getValue(PressingTubBlock.FACING);
+        boolean tilt = pressingTub.getBlockState().getValue(PressingTubBlock.TILT);
         ItemStack stack = pressingTub.getItems().getStackInSlot(0);
         int count = stack.getCount();
 
         if (count > 0) {
             long seed = pressingTub.getBlockPos().asLong();
+
+            if (tilt) {
+                poseStack.pushPose();
+                poseStack.translate(0.5, 0, 0.5);
+                poseStack.mulPose(Axis.YN.rotationDegrees(180 - direction.get2DDataValue() * 90));
+                poseStack.translate(-0.5, 0, -0.5);
+
+                if (direction.getAxis() == Direction.Axis.X) {
+                    poseStack.mulPose(Axis.XP.rotationDegrees(45));
+                    poseStack.translate(0, 0.5f, -0.5);
+                } else {
+                    poseStack.mulPose(Axis.XN.rotationDegrees(45));
+                    poseStack.translate(0, -0.25f, 0.25);
+                }
+            }
 
             for (int i = 0; i < count; i++) {
                 poseStack.pushPose();
@@ -62,6 +81,10 @@ public class PressingTubBlockEntityRender implements BlockEntityRenderer<Pressin
                         packedOverlay, poseStack, buffer, pressingTub.getLevel(), 0);
                 poseStack.popPose();
             }
+
+            if (tilt) {
+                poseStack.popPose();
+            }
         }
 
         // 如果有流体，渲染流体
@@ -70,7 +93,7 @@ public class PressingTubBlockEntityRender implements BlockEntityRenderer<Pressin
             float percent = fluidAmount / (float) IPressingTub.MAX_FLUID_AMOUNT;
             float y = 0.125f + percent * 0.25f;
             Fluid fluid = pressingTub.getFluid().getFluid();
-            RenderUtils.renderFluid(level, pressingTub.getBlockPos(), fluid, poseStack, buffer, packedLight, 12, y);
+            RenderUtils.renderFluid(fluid, poseStack, buffer, packedLight, 12, y);
         }
     }
 }

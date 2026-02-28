@@ -20,6 +20,7 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -85,8 +86,8 @@ public class StepladderBlock extends HorizontalDirectionalBlock implements Simpl
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                  LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
+                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -144,7 +145,7 @@ public class StepladderBlock extends HorizontalDirectionalBlock implements Simpl
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder lootParamsBuilder) {
+    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder lootParamsBuilder) {
         if (state.getValue(HALF) == Half.BOTTOM) {
             return super.getDrops(state, lootParamsBuilder);
         }
@@ -152,12 +153,12 @@ public class StepladderBlock extends HorizontalDirectionalBlock implements Simpl
     }
 
     @Override
-    public FluidState getFluidState(BlockState state) {
+    public @NotNull FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction facing = state.getValue(FACING);
         Half half = state.getValue(HALF);
         return switch (half) {

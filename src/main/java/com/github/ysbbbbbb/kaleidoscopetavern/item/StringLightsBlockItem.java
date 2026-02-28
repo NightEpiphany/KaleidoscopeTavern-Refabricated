@@ -11,7 +11,7 @@ public class StringLightsBlockItem extends BlockItem {
         super(block, new Properties());
     }
 
-
+    @Deprecated
     public @Nullable EquipmentSlot getEquipmentSlot(ItemStack stack) {
         return EquipmentSlot.CHEST;
     }

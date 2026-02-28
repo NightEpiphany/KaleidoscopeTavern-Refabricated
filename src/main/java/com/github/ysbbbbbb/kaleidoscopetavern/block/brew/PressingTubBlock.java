@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluid;
@@ -43,11 +45,35 @@ import java.util.List;
 
 @SuppressWarnings({"deprecation", "UnstableApiUsage"})
 public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final BooleanProperty TILT = BooleanProperty.create("tilt");
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+
     public static final VoxelShape SHAPE = Shapes.join(
             Block.box(0, 0, 0, 16, 8, 16),
             Block.box(2, 4, 2, 14, 8, 14),
             BooleanOp.ONLY_FIRST
+    );
+
+    public static final VoxelShape TILTED_SHAPE_NORTH = Shapes.or(
+            Block.box(0, 0, 0, 16, 8, 8),
+            Block.box(0, 4, 4, 16, 12, 12),
+            Block.box(0, 8, 8, 16, 16, 16)
+    );
+    public static final VoxelShape TILTED_SHAPE_SOUTH = Shapes.or(
+            Block.box(0, 0, 8, 16, 8, 16),
+            Block.box(0, 4, 4, 16, 12, 12),
+            Block.box(0, 8, 0, 16, 16, 8)
+    );
+    public static final VoxelShape TILTED_SHAPE_WEST = Shapes.or(
+            Block.box(0, 0, 0, 8, 8, 16),
+            Block.box(4, 4, 0, 12, 12, 16),
+            Block.box(8, 8, 0, 16, 16, 16)
+    );
+    public static final VoxelShape TILTED_SHAPE_EAST = Shapes.or(
+            Block.box(8, 0, 0, 16, 8, 16),
+            Block.box(4, 4, 0, 12, 12, 16),
+            Block.box(0, 8, 0, 8, 16, 16)
     );
 
     public PressingTubBlock() {
@@ -58,7 +84,9 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
                 .sound(SoundType.WOOD)
                 .ignitedByLava());
         this.registerDefaultState(this.stateDefinition.any()
-                .setValue(WATERLOGGED, false));
+                .setValue(WATERLOGGED, false)
+                .setValue(FACING, Direction.NORTH)
+                .setValue(TILT, false));
     }
 
     @Override
@@ -93,6 +121,12 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
 
     @Override
     public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+        // 倾斜的果盘不能踩
+        if (state.getValue(TILT)) {
+            super.fallOn(level, state, pos, entity, fallDistance);
+            return;
+        }
+
         if (entity instanceof LivingEntity livingEntity) {
             if (!(level.getBlockEntity(pos) instanceof IPressingTub pressingTub)) {
                 return;
@@ -101,6 +135,7 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
                 return;
             }
         }
+
         // 如果压榨不成功，则正常掉落伤害
         super.fallOn(level, state, pos, entity, fallDistance);
     }
@@ -129,11 +164,43 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(WATERLOGGED);
+        builder.add(WATERLOGGED, FACING, TILT);
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    @Nullable
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        // 倾斜的朝向，默认为点击的面的朝向
+        Direction clickedFace;
+        // 依据点击的位置，决定是否倾斜
+        boolean isTilting;
+
+        // 如果点击的是上方或下方，那么依据玩家朝向，放置普通的
+        if (context.getClickedFace().getAxis().isVertical()) {
+            clickedFace = context.getHorizontalDirection().getOpposite();
+            isTilting = false;
+        } else {
+            clickedFace = context.getClickedFace();
+            isTilting = true;
+        }
+
+        return this.defaultBlockState()
+                .setValue(FACING, clickedFace)
+                .setValue(TILT, isTilting)
+                .setValue(WATERLOGGED, context.getLevel().isWaterAt(context.getClickedPos()));
+    }
+
+    @Override
+    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        if (state.getValue(TILT)) {
+            return switch (state.getValue(FACING)) {
+                case NORTH -> TILTED_SHAPE_NORTH;
+                case SOUTH -> TILTED_SHAPE_SOUTH;
+                case WEST -> TILTED_SHAPE_WEST;
+                case EAST -> TILTED_SHAPE_EAST;
+                default -> SHAPE;
+            };
+        }
         return SHAPE;
     }
 
@@ -165,6 +232,16 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
             return pressingTub.getFluidAmount();
         }
         return 0;
+    }
+
+    @Override
+    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
+        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
+        return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
     @Override

@@ -23,6 +23,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -55,8 +56,8 @@ public class PaintingBlock extends HorizontalDirectionalBlock implements SimpleW
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                  LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
+                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -86,12 +87,12 @@ public class PaintingBlock extends HorizontalDirectionalBlock implements SimpleW
     }
 
     @Override
-    public FluidState getFluidState(BlockState state) {
+    public @NotNull FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    public @NotNull VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         AttachFace attachFace = pState.getValue(ATTACH_FACE);
         if (attachFace == AttachFace.FLOOR) {
             return FLOOR_SHAPE;
@@ -107,7 +108,7 @@ public class PaintingBlock extends HorizontalDirectionalBlock implements SimpleW
     }
 
     @Override
-    public String getDescriptionId() {
+    public @NotNull String getDescriptionId() {
         return "block.kaleidoscope_tavern.painting";
     }
 

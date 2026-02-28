@@ -32,6 +32,7 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -72,8 +73,8 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                 InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
+                                          InteractionHand hand, BlockHitResult hitResult) {
         Half half = state.getValue(HALF);
         BlockPos clickedPos = half == Half.BOTTOM ? pos : pos.below();
         if (level.getBlockEntity(clickedPos) instanceof SandwichBoardBlockEntity sandwichBlock) {
@@ -116,8 +117,8 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                  LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
+                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -185,7 +186,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder lootParamsBuilder) {
+    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder lootParamsBuilder) {
         if (state.getValue(HALF) == Half.BOTTOM) {
             return super.getDrops(state, lootParamsBuilder);
         }
@@ -193,27 +194,27 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public FluidState getFluidState(BlockState state) {
+    public @NotNull FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return state.getValue(HALF) == Half.TOP ? TOP_SHAPE : BOTTOM_SHAPE;
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState state) {
+    public @NotNull RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot) {
+    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror) {
+    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
@@ -222,7 +223,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public String getDescriptionId() {
+    public @NotNull String getDescriptionId() {
         return "block.kaleidoscope_tavern.sandwich_board";
     }
 

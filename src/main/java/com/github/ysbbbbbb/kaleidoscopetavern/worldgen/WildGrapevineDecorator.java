@@ -15,16 +15,28 @@ public class WildGrapevineDecorator extends TreeDecorator {
     public static final Codec<WildGrapevineDecorator> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                     Codec.floatRange(0.0F, 1.0F).fieldOf("probability").forGetter(d -> d.probability),
-                    Codec.intRange(1, 16).fieldOf("max_vines").forGetter(d -> d.maxVines)
+                    Codec.intRange(1, 16).fieldOf("max_vine_count").forGetter(d -> d.maxVineCount),
+                    Codec.intRange(1, 16).fieldOf("vine_chain_length").forGetter(d -> d.vineChainLength)
             ).apply(instance, WildGrapevineDecorator::new)
     );
 
+    /**
+     * 生成概率
+     */
     private final float probability;
-    private final int maxVines;
+    /**
+     * 每棵树最多生成的葡萄藤数量
+     */
+    private final int maxVineCount;
+    /**
+     * 每条葡萄藤的长度
+     */
+    private final int vineChainLength;
 
-    public WildGrapevineDecorator(float probability, int maxVines) {
+    public WildGrapevineDecorator(float probability, int maxVineCount, int vineChainLength) {
         this.probability = probability;
-        this.maxVines = maxVines;
+        this.maxVineCount = maxVineCount;
+        this.vineChainLength = vineChainLength;
     }
 
     @Override
@@ -36,8 +48,8 @@ public class WildGrapevineDecorator extends TreeDecorator {
     public void place(Context context) {
         RandomSource random = context.random();
 
-        // 尝试生成葡萄藤的数量，至少 1 条，最多 maxVines 条
-        int vineCount = random.nextInt(this.maxVines) + 1;
+        // 尝试生成葡萄藤的数量，至少 1 条，最多 maxVineCount 条
+        int vineCount = random.nextInt(this.maxVineCount) + 1;
         // 记录实际成功生成的藤链数量，超过 vineCount 就停止
         int[] recordCount = new int[]{0};
 
@@ -49,9 +61,9 @@ public class WildGrapevineDecorator extends TreeDecorator {
                 // 筛选下方两格都为空气的位置，作为藤链的候选位置
                 boolean belowIsAir = context.isAir(pos.below());
                 boolean belowTwoIsAir = context.isAir(pos.below(2));
-                // 尝试生成长度为 1-3 的葡萄藤
+                // 尝试生成长度为 1 ~ vineChainLength 的葡萄藤
                 if (belowIsAir && belowTwoIsAir) {
-                    placeVineChain(context, pos.below(), random.nextInt(3) + 1);
+                    placeVineChain(context, pos.below(), random.nextInt(vineChainLength) + 1);
                     recordCount[0]++;
                 }
             }

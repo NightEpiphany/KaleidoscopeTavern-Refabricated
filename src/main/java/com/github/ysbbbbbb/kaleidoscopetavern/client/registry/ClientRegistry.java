@@ -2,6 +2,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.client.registry;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ClientSetupEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModEntitiesRender;
+import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -17,6 +18,7 @@ public class ClientRegistry {
         renderType();
         ClientSetupEvent.init();
         ModEntitiesRender.init();
+        ModFluids.registerFluidRenderers();
     }
 
     public static void renderType() {

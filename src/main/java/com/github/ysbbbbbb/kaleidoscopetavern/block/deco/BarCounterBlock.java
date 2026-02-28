@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation")
@@ -34,8 +35,8 @@ public class BarCounterBlock extends HorizontalDirectionalBlock implements IConn
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                  LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
+                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         state = this.updateShape(level, pos, state, direction);
         return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
     }

@@ -29,6 +29,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -88,8 +89,8 @@ public class SofaBlock extends HorizontalDirectionalBlock implements SimpleWater
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                  LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
+                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -118,7 +119,7 @@ public class SofaBlock extends HorizontalDirectionalBlock implements SimpleWater
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         List<SitEntity> entities = level.getEntitiesOfClass(SitEntity.class, new AABB(pos));
         if (entities.isEmpty()) {
             SitEntity entitySit = new SitEntity(level, pos, 0.5125);
@@ -136,12 +137,12 @@ public class SofaBlock extends HorizontalDirectionalBlock implements SimpleWater
     }
 
     @Override
-    public FluidState getFluidState(BlockState state) {
+    public @NotNull FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    public @NotNull VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         ConnectionType type = pState.getValue(CONNECTION);
         Direction direction = pState.getValue(FACING);
 
