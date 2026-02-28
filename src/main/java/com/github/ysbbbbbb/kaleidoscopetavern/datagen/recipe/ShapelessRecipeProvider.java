@@ -1,10 +1,17 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.datagen.recipe;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.SandwichBoardBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
+import com.github.ysbbbbbb.kaleidoscopetavern.item.SandwichBoardBlockItem;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 
 import java.util.function.Consumer;
 
@@ -15,9 +22,115 @@ public class ShapelessRecipeProvider extends ModRecipeProvider {
 
     @Override
     public void buildRecipes(Consumer<FinishedRecipe> consumer) {
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.BARREL, 9)
-                .requires(ModItems.BARREL)
-                .unlockedBy("has_rice_panicle", has(ModItems.BARREL))
+        // 挂画
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.YSBB_PAINTING)
+                .requires(Items.ITEM_FRAME)
+                .requires(Items.LIME_DYE)
+                .unlockedBy("has_item_frame", has(Items.ITEM_FRAME))
                 .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.TARTARIC_ACID_PAINTING)
+                .requires(Items.ITEM_FRAME)
+                .requires(Items.LIGHT_BLUE_DYE)
+                .unlockedBy("has_item_frame", has(Items.ITEM_FRAME))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.CR019_PAINTING)
+                .requires(Items.ITEM_FRAME)
+                .requires(Items.RED_DYE)
+                .unlockedBy("has_item_frame", has(Items.ITEM_FRAME))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.UNKNOWN_PAINTING)
+                .requires(Items.ITEM_FRAME)
+                .requires(Items.YELLOW_DYE)
+                .unlockedBy("has_item_frame", has(Items.ITEM_FRAME))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.MASTER_MARISA_PAINTING)
+                .requires(Items.ITEM_FRAME)
+                .requires(Items.PURPLE_DYE)
+                .unlockedBy("has_item_frame", has(Items.ITEM_FRAME))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.SON_OF_MAN_PAINTING)
+                .requires(Items.ITEM_FRAME)
+                .requires(Items.APPLE)
+                .unlockedBy("has_item_frame", has(Items.ITEM_FRAME))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.DAVID_PAINTING)
+                .requires(Items.ITEM_FRAME)
+                .requires(Items.WHITE_DYE)
+                .unlockedBy("has_item_frame", has(Items.ITEM_FRAME))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.GIRL_WITH_PEARL_EARRING_PAINTING)
+                .requires(Items.ITEM_FRAME)
+                .requires(Items.ENDER_PEARL)
+                .unlockedBy("has_item_frame", has(Items.ITEM_FRAME))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.STARRY_NIGHT_PAINTING)
+                .requires(Items.ITEM_FRAME)
+                .requires(Items.ECHO_SHARD)
+                .unlockedBy("has_item_frame", has(Items.ITEM_FRAME))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.VAN_GOGH_SELF_PORTRAIT_PAINTING)
+                .requires(Items.ITEM_FRAME)
+                .requires(Items.PAINTING)
+                .unlockedBy("has_item_frame", has(Items.ITEM_FRAME))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.FATHER_PAINTING)
+                .requires(Items.ITEM_FRAME)
+                .requires(Items.IRON_HOE)
+                .unlockedBy("has_item_frame", has(Items.ITEM_FRAME))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.GREAT_WAVE_PAINTING)
+                .requires(Items.ITEM_FRAME)
+                .requires(Items.BAMBOO_RAFT)
+                .unlockedBy("has_item_frame", has(Items.ITEM_FRAME))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.MONA_LISA_PAINTING)
+                .requires(Items.ITEM_FRAME)
+                .requires(Items.DIAMOND)
+                .unlockedBy("has_item_frame", has(Items.ITEM_FRAME))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.PRESSING_TUB)
+                .requires(Items.BARREL)
+                .unlockedBy("has_barrel", has(Items.BARREL))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModItems.EMPTY_BOTTLE)
+                .requires(Items.GLASS_BOTTLE)
+                .unlockedBy("has_glass_bottle", has(Items.GLASS_BOTTLE))
+                .save(consumer);
+
+        // 展板添加直接合成的变种
+        BuiltInRegistries.ITEM.forEach(item -> {
+            // 遍历所有的展板
+            if (item instanceof SandwichBoardBlockItem blockItem && blockItem.getBlock() instanceof SandwichBoardBlock result) {
+                String resultName = getId(result).getPath();
+                result.getTransformItems().forEach(transform -> {
+                    String transformName = getId(transform).getPath();
+                    ResourceLocation recipeId = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "%s_from_%s".formatted(resultName, transformName));
+                    ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, result)
+                            .requires(ModItems.BASE_SANDWICH_BOARD)
+                            .requires(transform)
+                            .unlockedBy("has_base_sandwich_board", has(ModItems.BASE_SANDWICH_BOARD))
+                            .save(consumer, recipeId);
+                });
+            }
+        });
+    }
+
+    @SuppressWarnings("all")
+    static ResourceLocation getId(ItemLike itemLike) {
+        return BuiltInRegistries.ITEM.getKey(itemLike.asItem());
     }
 }

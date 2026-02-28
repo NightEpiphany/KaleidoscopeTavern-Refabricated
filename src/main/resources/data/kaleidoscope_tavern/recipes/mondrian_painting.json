@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:blue_dye"
+    },
+    "F": {
+      "item": "minecraft:item_frame"
+    },
+    "R": {
+      "item": "minecraft:red_dye"
+    },
+    "W": {
+      "item": "minecraft:white_dye"
+    },
+    "Y": {
+      "item": "minecraft:yellow_dye"
+    }
+  },
+  "pattern": [
+    " B ",
+    "WFY",
+    " R "
+  ],
+  "result": {
+    "item": "kaleidoscope_tavern:mondrian_painting"
+  },
+  "show_notification": true
+}

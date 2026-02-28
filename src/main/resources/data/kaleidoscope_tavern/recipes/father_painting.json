@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:item_frame"
+    },
+    {
+      "item": "minecraft:iron_hoe"
+    }
+  ],
+  "result": {
+    "item": "kaleidoscope_tavern:father_painting"
+  }
+}
