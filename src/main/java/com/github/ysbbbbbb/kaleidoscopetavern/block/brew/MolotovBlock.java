@@ -4,10 +4,21 @@ import com.github.ysbbbbbb.kaleidoscopetavern.entity.ThrownMolotovEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class MolotovBlock extends BottleBlock {
+    public MolotovBlock() {
+        super(Properties.of()
+                .noOcclusion()
+                .instabreak()
+                .lightLevel(s -> 14)
+                .pushReaction(PushReaction.DESTROY)
+                .sound(SoundType.GLASS), false);
+    }
+
     @Override
     public void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
         if (!level.isClientSide) {

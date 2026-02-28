@@ -128,6 +128,11 @@
   "message.kaleidoscope_tavern.barrel.not_brewing": "酿造尚未开始！",
   "message.kaleidoscope_tavern.tap.not_connected": "龙头没有连接到酒桶！",
   "message.kaleidoscope_tavern.tap.connected_is_invalid": "龙头连接的位置不正确！",
+  "config.jade.plugin_kaleidoscope_tavern.barrel": "酒桶",
+  "jade.plugin_kaleidoscope_tavern.item_and_count": "%s x%d",
+  "jade.plugin_kaleidoscope_tavern.barrel.level": "品质：%s",
+  "jade.plugin_kaleidoscope_tavern.barrel.next_level": "下一阶段：%s",
+  "jade.plugin_kaleidoscope_tavern.barrel.max_level": "最大品质",
   "emi.category.kaleidoscope_tavern.barrel": "酒桶",
   "emi.category.kaleidoscope_tavern.pressing_tub": "果盆"
 }

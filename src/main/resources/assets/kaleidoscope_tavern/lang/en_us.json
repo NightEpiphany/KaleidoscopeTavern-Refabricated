@@ -128,6 +128,11 @@
   "message.kaleidoscope_tavern.barrel.not_brewing": "Brewing has not started yet!",
   "message.kaleidoscope_tavern.tap.not_connected": "The tap is not connected to barrel!",
   "message.kaleidoscope_tavern.tap.connected_is_invalid": "The tap is not connected to a valid position!",
+  "config.jade.plugin_kaleidoscope_tavern.barrel": "Barrel",
+  "jade.plugin_kaleidoscope_tavern.item_and_count": "%s x%d",
+  "jade.plugin_kaleidoscope_tavern.barrel.level": "Level: %s",
+  "jade.plugin_kaleidoscope_tavern.barrel.next_level": "Next Level: %s",
+  "jade.plugin_kaleidoscope_tavern.barrel.max_level": "Max Level",
   "emi.category.kaleidoscope_tavern.barrel": "Barrel",
   "emi.category.kaleidoscope_tavern.pressing_tub": "Pressing Tub"
 }
