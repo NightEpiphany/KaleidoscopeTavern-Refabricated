@@ -15,7 +15,7 @@ public class ModItems {
     // 葡萄
     public static final Item GRAPE = new Item(new Item.Properties().food(ModFoods.GRAPE));
     // 野生葡萄藤
-    public static final Item GRAPEVINE = new ItemNameBlockItem(ModBlocks.WILD_GRAPEVINE, new Item.Properties());
+    public static final Item GRAPEVINE = new GrapevineItem();
     // 果汁桶
     public static final Item GRAPE_BUCKET = new JuiceBucketItem(GRAPE_JUICE);
     public static final Item SWEET_BERRIES_BUCKET = new JuiceBucketItem(SWEET_BERRIES_JUICE);

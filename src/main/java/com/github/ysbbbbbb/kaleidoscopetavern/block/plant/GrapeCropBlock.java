@@ -54,7 +54,7 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
                 .pushReaction(PushReaction.DESTROY));
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(AGE, 0));
-        this.growPerTickProbability = 0.1F;
+        this.growPerTickProbability = 0.25F;
     }
 
     @Override

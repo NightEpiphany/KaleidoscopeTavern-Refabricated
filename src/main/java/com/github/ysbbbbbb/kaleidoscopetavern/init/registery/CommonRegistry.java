@@ -4,9 +4,10 @@ import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.BottleBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.dispenser.BottleBlockDispenseBehavior;
 import com.github.ysbbbbbb.kaleidoscopetavern.datamap.resources.DrinkEffectDataReloadListener;
 import com.github.ysbbbbbb.kaleidoscopetavern.event.AddFeaturesEvent;
-import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
+import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.packs.PackType;
@@ -18,10 +19,15 @@ public class CommonRegistry {
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new DrinkEffectDataReloadListener());
         dispenseRegister();
         events();
+        fuelRegistry();
     }
 
     public static void events() {
         AddFeaturesEvent.addFeatures();
+    }
+
+    public static void fuelRegistry() {
+        FuelRegistry.INSTANCE.add(ModItems.GRAPEVINE, 200);
     }
 
     public static void dispenseRegister() {

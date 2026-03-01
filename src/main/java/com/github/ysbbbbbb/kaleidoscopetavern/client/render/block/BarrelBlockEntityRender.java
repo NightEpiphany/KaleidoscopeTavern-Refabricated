@@ -49,7 +49,7 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
             // 如果有流体，渲染流体
             this.renderFluid(barrel, poseStack, buffer, packedLight);
             // 渲染物品
-            this.renderItems(barrel, poseStack, buffer, packedLight, partialTick);
+            this.renderItems(barrel, poseStack, buffer, packedLight, packedOverlay, partialTick);
         }
     }
 
@@ -88,7 +88,8 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
         }
     }
 
-    private void renderItems(BarrelBlockEntity barrel, PoseStack poseStack, MultiBufferSource buffer, int packedLight, float partialTick) {
+    private void renderItems(BarrelBlockEntity barrel, PoseStack poseStack, MultiBufferSource buffer,
+                             int packedLight, int packedOverlay, float partialTick) {
         if (barrel.getLevel() == null) {
             return;
         }
@@ -98,33 +99,34 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
 
         ItemStackHandler items = barrel.getIngredient();
 
+        int globalIndex = 0;
         for (int index = 0; index < items.getSlots(); index++) {
             ItemStack stack = items.getStackInSlot(index);
-            int count = stack.getCount() / 8 + 1;
+            int count = stack.getCount() / 2 + 1;
             if (!stack.isEmpty()) {
                 for (int i = 0; i < count; i++) {
                     poseStack.pushPose();
 
-                    float x = ((index % 4) % 2 == 0) ? -0.2f : 0.2f + stableRandom(seed, i, index + 1) * 0.1f;
-                    float z = ((index % 4) / 2 == 0) ? -0.2f : 0.2f + stableRandom(seed, i, index + 2) * 0.1f;
-                    float y = (float) (i / 4) * 0.0625f + stableRandom(seed, i, index + 3) * 0.05f;
+                    float x = stableRandom(seed, globalIndex, index + 1) * 0.4f;
+                    float z = stableRandom(seed, globalIndex, index + 2) * 0.4f;
+                    float y = (float) (globalIndex / 4) * 0.025f + stableRandom(seed, globalIndex, index + 3) * 0.05f;
 
                     // 添加一些上下浮动效果
-                    y += (float) (Math.sin(time / 10f + i) * 0.02f);
+                    y += (float) (Math.sin(time / 10f + globalIndex) * 0.02f);
 
-                    float yRot = stableRandom(seed, i, index + 4) * 5f;
-                    float zRot = stableRandom(seed, i, index + 5) * 360f;
+                    float yRot = stableRandom(seed, globalIndex, index + 4) * 5f;
+                    float zRot = stableRandom(seed, globalIndex, index + 5) * 360f;
 
                     poseStack.translate(0.5f + x, 2.7f + y, 0.5f + z);
                     poseStack.scale(0.5f, 0.5f, 0.5f);
                     poseStack.mulPose(Axis.XN.rotationDegrees(90));
-
                     poseStack.mulPose(Axis.YN.rotationDegrees(yRot));
                     poseStack.mulPose(Axis.ZN.rotationDegrees(zRot));
 
                     itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, packedLight,
-                            packedLight, poseStack, buffer, barrel.getLevel(), 0);
+                            packedOverlay, poseStack, buffer, barrel.getLevel(), 0);
                     poseStack.popPose();
+                    globalIndex++;
                 }
             }
         }
