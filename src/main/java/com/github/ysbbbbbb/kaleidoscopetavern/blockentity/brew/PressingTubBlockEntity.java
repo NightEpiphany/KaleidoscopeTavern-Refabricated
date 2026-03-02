@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IPressingTub;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.PressingTubBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
@@ -14,10 +15,13 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -38,6 +42,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,7 +50,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Supplier;
 
 @SuppressWarnings("UnstableApiUsage")
-public class PressingTubBlockEntity extends BaseBlockEntity implements IPressingTub, Container {
+public class PressingTubBlockEntity extends BaseBlockEntity implements IPressingTub, Container, SidedStorageBlockEntity {
     private final RecipeManager.CachedCheck<Container, PressingTubRecipe> quickCheck = RecipeManager.createCheck(ModRecipes.PRESSING_TUB_RECIPE);
 
     /**
@@ -482,6 +487,10 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     @Override
     public void setChanged() {
         super.setChanged();
+        if (level != null) {
+            BlockState state = level.getBlockState(worldPosition);
+            level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_ALL);
+        }
     }
 
     @Override
@@ -504,5 +513,17 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
         return items.isItemValid(slot, stack);
+    }
+
+    @Override
+    public @Nullable Storage<ItemVariant> getItemStorage(@Nullable Direction side) {
+        if (side == null || side.getAxis().isVertical()) {
+            return Storage.empty();
+        }
+        Direction facing = getBlockState().getValue(PressingTubBlock.FACING);
+        if (side == facing) {
+            return Storage.empty();
+        }
+        return InventoryStorage.of(this, side);
     }
 }
