@@ -5,7 +5,6 @@ import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
-import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
@@ -39,14 +38,14 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
 @SuppressWarnings("UnstableApiUsage")
-public class PressingTubBlockEntity extends BaseBlockEntity implements IPressingTub {
+public class PressingTubBlockEntity extends BaseBlockEntity implements IPressingTub, Container {
     private final RecipeManager.CachedCheck<Container, PressingTubRecipe> quickCheck = RecipeManager.createCheck(ModRecipes.PRESSING_TUB_RECIPE);
 
     /**
@@ -444,5 +443,66 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
             return null;
         }
         return FluidVariantAttributes.getFillSound(variant);
+    }
+
+    @Override
+    public int getContainerSize() {
+        return items.getSlots();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return items.getStackInSlot(0).isEmpty();
+    }
+
+    @Override
+    public @NotNull ItemStack getItem(int slot) {
+        return items.getStackInSlot(slot);
+    }
+
+    @Override
+    public @NotNull ItemStack removeItem(int slot, int amount) {
+        return items.extractItem(slot, amount, false);
+    }
+
+    @Override
+    public @NotNull ItemStack removeItemNoUpdate(int slot) {
+        ItemStack current = items.getStackInSlot(slot);
+        if (current.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+        return items.extractItem(slot, current.getCount(), false);
+    }
+
+    @Override
+    public void setItem(int slot, ItemStack stack) {
+        items.setStackInSlot(slot, stack);
+    }
+
+    @Override
+    public void setChanged() {
+        super.setChanged();
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        if (level == null || level.getBlockEntity(worldPosition) != this) {
+            return false;
+        }
+        return player.distanceToSqr(
+                worldPosition.getX() + 0.5,
+                worldPosition.getY() + 0.5,
+                worldPosition.getZ() + 0.5
+        ) <= 64.0;
+    }
+
+    @Override
+    public void clearContent() {
+        items.setStackInSlot(0, ItemStack.EMPTY);
+    }
+
+    @Override
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        return items.isItemValid(slot, stack);
     }
 }

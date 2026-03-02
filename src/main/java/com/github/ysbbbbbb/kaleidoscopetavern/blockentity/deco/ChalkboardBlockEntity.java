@@ -3,7 +3,6 @@ package com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 
 public class ChalkboardBlockEntity extends TextBlockEntity {
     /**
