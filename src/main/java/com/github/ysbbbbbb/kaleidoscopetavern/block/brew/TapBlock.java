@@ -5,6 +5,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.TapBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.VoxelShapeUtils;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -17,8 +18,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -47,8 +49,9 @@ import java.util.EnumMap;
 
 import static com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.TapBlockEntity.*;
 
-@SuppressWarnings("deprecation")
 public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<TapBlock> CODEC = simpleCodec(p -> new TapBlock());
+
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
@@ -70,8 +73,8 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                                    Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (hand == InteractionHand.MAIN_HAND) {
             // 如果龙头已经是开启的，直接无视条件关闭
             if (state.getValue(OPEN)) {
@@ -79,7 +82,7 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
                 level.setBlockAndUpdate(pos, state);
 
                 level.playSound(null, pos, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.BLOCKS, 1.0F, 0.8F);
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
 
             Direction tapFacing = state.getValue(FACING);
@@ -93,7 +96,7 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
                     serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(message));
                 }
                 this.emptyOpen(level, pos, state);
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
 
             if (!isValidConnection(barrelState, tapFacing)) {
@@ -102,13 +105,13 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
                     serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(message));
                 }
                 this.emptyOpen(level, pos, state);
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
 
             BarrelBlockEntity barrelEntity = BarrelBlock.getBarrelEntity(level, relative, barrelState);
             if (barrelEntity == null) {
                 this.emptyOpen(level, pos, state);
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
 
             if (barrelEntity.canTapExtract(level, pos, player)) {
@@ -130,13 +133,13 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
 
                 // 一定时间后关闭龙头
                 level.scheduleTick(pos, this, TAKE_DRINK_TICKS);
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
 
             this.emptyOpen(level, pos, state);
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     /**
@@ -216,6 +219,7 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
         Direction barrelFacing = barrelState.getValue(BarrelBlock.FACING);
         AttachFace layer = barrelState.getValue(BarrelBlock.LAYER);
         int index = barrelState.getValue(BarrelBlock.INDEX);
+        // 必须紧贴桶第二层正面
         if (layer == AttachFace.WALL) {
             if (barrelFacing == Direction.NORTH && index == 1) {
                 return tapFacing == Direction.NORTH;
@@ -276,5 +280,10 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
     @Override
     public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 }

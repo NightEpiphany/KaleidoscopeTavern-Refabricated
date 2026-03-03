@@ -1,21 +1,16 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.item;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.entity.ThrownMolotovEntity;
-import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 public class MolotovBlockItem extends BottleBlockItem {
@@ -30,20 +25,8 @@ public class MolotovBlockItem extends BottleBlockItem {
     }
 
     @Override
-    public @NotNull InteractionResult useOn(UseOnContext context) {
-        Player player = context.getPlayer();
-
-        // 只有潜行时才放置
-        if (player == null || player.isShiftKeyDown()) {
-            return this.place(new BlockPlaceContext(context));
-        }
-
-        return InteractionResult.PASS;
-    }
-
-    @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
-        int time = this.getUseDuration(stack) - timeLeft;
+        int time = this.getUseDuration(stack, entity) - timeLeft;
         if (time < 10) {
             return;
         }
@@ -68,7 +51,7 @@ public class MolotovBlockItem extends BottleBlockItem {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
     }
 }

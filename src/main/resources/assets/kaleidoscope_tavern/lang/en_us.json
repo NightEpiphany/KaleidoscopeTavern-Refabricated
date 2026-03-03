@@ -129,6 +129,7 @@
   "message.kaleidoscope_tavern.tap.not_connected": "The tap is not connected to barrel!",
   "message.kaleidoscope_tavern.tap.connected_is_invalid": "The tap is not connected to a valid position!",
   "config.jade.plugin_kaleidoscope_tavern.barrel": "Barrel",
+  "config.jade.plugin_kaleidoscope_tavern.pressing_tub": "Pressing Tub",
   "jade.plugin_kaleidoscope_tavern.item_and_count": "%s x%d",
   "jade.plugin_kaleidoscope_tavern.barrel.level": "Level: %s",
   "jade.plugin_kaleidoscope_tavern.barrel.next_level": "Next Level: %s",

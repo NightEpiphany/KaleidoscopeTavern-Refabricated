@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 @JeiPlugin
 public class ModJeiPlugin implements IModPlugin {
-    private static final ResourceLocation UID = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "jei");
+    private static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "jei");
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {

@@ -9,7 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -35,7 +35,6 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.github.ysbbbbbb.kaleidoscopetavern.block.plant.ITrellis.*;
 
-@SuppressWarnings("deprecation")
 public class TrellisBlock extends Block implements SimpleWaterloggedBlock, ITrellis {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -53,17 +52,17 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock, ITrel
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                                    Player player, InteractionHand hand, BlockHitResult hitResult) {
         // 玩家手持的是葡萄藤
         ItemStack itemInHand = player.getItemInHand(hand);
         if (!itemInHand.is(ModItems.GRAPEVINE)) {
-            return super.use(state, level, pos, player, hand, hitResult);
+            return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
         }
         // 如果藤架是单个的
         TrellisType type = state.getValue(TYPE);
         if (type != TrellisType.SINGLE) {
-            return super.use(state, level, pos, player, hand, hitResult);
+            return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
         }
         // 并且下方是泥土，那么可以种植
         BlockState belowState = level.getBlockState(pos.below());
@@ -76,9 +75,9 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock, ITrel
             if (!player.isCreative()) {
                 itemInHand.shrink(1);
             }
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
-        return super.use(state, level, pos, player, hand, hitResult);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Override

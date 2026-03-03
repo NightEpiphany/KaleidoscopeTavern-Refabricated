@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.plant;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -8,7 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -27,8 +28,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings("deprecation")
+import static net.minecraft.world.entity.LivingEntity.getSlotForHand;
+
 public class WildGrapevineBlock extends GrowingPlantHeadBlock implements BonemealableBlock {
+    public static final MapCodec<WildGrapevineBlock> CODEC = simpleCodec(p -> new WildGrapevineBlock());
     /**
      * 被剪刀修剪过后，无法再随机生长了，直到被重新种植
      */
@@ -51,20 +54,19 @@ public class WildGrapevineBlock extends GrowingPlantHeadBlock implements Bonemea
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
-        ItemStack item = player.getItemInHand(hand);
-        if (item.is(Items.SHEARS)) {
+    public @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                                    Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (stack.is(Items.SHEARS)) {
             if (state.getValue(SHEARED)) {
-                return InteractionResult.CONSUME;
+                return ItemInteractionResult.CONSUME;
             } else {
                 level.setBlockAndUpdate(pos, state.setValue(SHEARED, true));
-                item.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+                stack.hurtAndBreak(1, player, getSlotForHand(hand));
                 player.playSound(SoundEvents.SHEEP_SHEAR);
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         }
-        return super.use(state, level, pos, player, hand, hitResult);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Override
@@ -78,15 +80,20 @@ public class WildGrapevineBlock extends GrowingPlantHeadBlock implements Bonemea
         BlockPos relative = pos.relative(this.growthDirection.getOpposite());
         BlockState relativeState = level.getBlockState(relative);
         return relativeState.is(this.getHeadBlock())
-                || relativeState.is(this.getBodyBlock())
-                || this.canAttachTo(relativeState)
-                || relativeState.isFaceSturdy(level, relative, this.growthDirection);
+               || relativeState.is(this.getBodyBlock())
+               || this.canAttachTo(relativeState)
+               || relativeState.isFaceSturdy(level, relative, this.growthDirection);
     }
 
     @Override
     protected boolean canAttachTo(BlockState state) {
         // 树叶不属于 SupportType.FULL，故需要特殊判断一下
         return state.is(BlockTags.LEAVES);
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends GrowingPlantHeadBlock> codec() {
+        return CODEC;
     }
 
     @Override
@@ -99,9 +106,9 @@ public class WildGrapevineBlock extends GrowingPlantHeadBlock implements Bonemea
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
         // 只有当没有被剪刀修剪过，才可以使用骨粉生长
-        return !state.getValue(SHEARED) && super.isValidBonemealTarget(level, pos, state, isClient);
+        return !state.getValue(SHEARED) && super.isValidBonemealTarget(level, pos, state);
     }
 
     @Override

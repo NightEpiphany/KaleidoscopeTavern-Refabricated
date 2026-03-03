@@ -7,7 +7,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.BarrelBlockEntity
 import com.github.ysbbbbbb.kaleidoscopetavern.client.model.brew.BarrelModel;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.RenderUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
-import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemStackHandler;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.neo.ItemStackHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -28,7 +28,7 @@ import static com.github.ysbbbbbb.kaleidoscopetavern.util.RenderUtils.stableRand
 
 @Environment(EnvType.CLIENT)
 public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockEntity> {
-    private static final ResourceLocation LARGE_TEXTURE = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/entity/brew/barrel.png");
+    private static final ResourceLocation LARGE_TEXTURE = KaleidoscopeTavern.modLoc("textures/entity/brew/barrel.png");
 
     private final ItemRenderer itemRenderer;
     private final BarrelModel model;
@@ -68,7 +68,7 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
         this.model.getClose().visible = !open;
 
         VertexConsumer consumer = buffer.getBuffer(RenderType.entityCutoutNoCull(LARGE_TEXTURE));
-        model.renderToBuffer(poseStack, consumer, packedLight, packedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+        model.renderToBuffer(poseStack, consumer, packedLight, packedOverlay, -1);
         poseStack.popPose();
     }
 
@@ -80,7 +80,7 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
             poseStack.translate(0, 2, 0);
 
             float percent = fluidAmount / (float) IBarrel.MAX_FLUID_AMOUNT;
-            float y = percent * 0.75f;
+            float y = percent * 0.65f;
             Fluid fluid = fluidTank.getFluid();
             RenderUtils.renderFluid(fluid, poseStack, buffer, packedLight, 16, y);
 

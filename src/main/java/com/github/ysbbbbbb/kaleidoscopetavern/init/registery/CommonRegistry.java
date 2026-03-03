@@ -43,7 +43,7 @@ public class CommonRegistry {
         }});
     }
 
-    @SuppressWarnings("UnstableApiUsage")
+
     public static void storageRegister() {
         ItemStorage.SIDED.registerForBlockEntity(
                 PressingTubBlockEntity::getItemStorage,

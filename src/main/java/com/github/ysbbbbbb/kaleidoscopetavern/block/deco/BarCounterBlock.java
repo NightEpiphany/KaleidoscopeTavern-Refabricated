@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.ConnectionType;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -15,8 +16,9 @@ import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@SuppressWarnings("deprecation")
 public class BarCounterBlock extends HorizontalDirectionalBlock implements IConnectionBlock {
+    public static final MapCodec<BarCounterBlock> CODEC = simpleCodec(p -> new BarCounterBlock());
+
     public BarCounterBlock() {
         super(Properties.of()
                 .mapColor(MapColor.COLOR_BLACK)
@@ -54,5 +56,10 @@ public class BarCounterBlock extends HorizontalDirectionalBlock implements IConn
         return this.defaultBlockState()
                 .setValue(FACING, direction)
                 .setValue(CONNECTION, connectionType);
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
+        return CODEC;
     }
 }

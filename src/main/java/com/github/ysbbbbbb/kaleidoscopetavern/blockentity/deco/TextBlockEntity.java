@@ -5,6 +5,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.network.message.TextOpenS2CMessage
 import com.github.ysbbbbbb.kaleidoscopetavern.util.TextAlignment;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -12,7 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
@@ -60,18 +61,18 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
         }
     }
 
-    public static InteractionResult onItemUse(Level level, TextBlockEntity textBlock, Player player, InteractionHand hand) {
+    public static ItemInteractionResult onItemUse(Level level, TextBlockEntity textBlock, Player player, InteractionHand hand) {
         BlockPos pos = textBlock.getBlockPos();
 
         // 如果玩家距离太远了，就不允许编辑
         if (textBlock.playerIsTooFarAwayToEdit(player.getUUID())) {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
         // 如果打蜡了，就不允许编辑
         if (textBlock.isWaxed()) {
             level.playSound(null, pos, SoundEvents.WAXED_SIGN_INTERACT_FAIL, SoundSource.BLOCKS);
-            return InteractionResult.PASS;
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
         ItemStack itemInHand = player.getItemInHand(hand);
@@ -86,7 +87,7 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
                 if (!player.isCreative()) {
                     itemInHand.shrink(1);
                 }
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         }
 
@@ -99,7 +100,7 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
                 if (!player.isCreative()) {
                     itemInHand.shrink(1);
                 }
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         }
 
@@ -112,7 +113,7 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
                 if (!player.isCreative()) {
                     itemInHand.shrink(1);
                 }
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         }
 
@@ -132,13 +133,13 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
             if (!player.isCreative()) {
                 itemInHand.shrink(1);
             }
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
 
         if (player instanceof ServerPlayer serverPlayer) {
             ServerPlayNetworking.send(serverPlayer, new TextOpenS2CMessage(pos));
         }
-        return InteractionResult.SUCCESS;
+        return ItemInteractionResult.SUCCESS;
     }
 
     /**
@@ -149,8 +150,8 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
     public abstract int getMaxTextLength();
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         this.text = tag.getString("text");
         this.color = DyeColor.byId(tag.getInt("color"));
         this.textAlignment = TextAlignment.byId(tag.getInt("text_alignment"));
@@ -159,8 +160,8 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
         tag.putString("text", this.text);
         tag.putInt("color", this.color.getId());
         tag.putInt("text_alignment", this.textAlignment.getId());

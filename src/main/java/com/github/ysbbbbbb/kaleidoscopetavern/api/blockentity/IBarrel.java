@@ -1,7 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
-import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemStackHandler;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.neo.ItemStackHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;

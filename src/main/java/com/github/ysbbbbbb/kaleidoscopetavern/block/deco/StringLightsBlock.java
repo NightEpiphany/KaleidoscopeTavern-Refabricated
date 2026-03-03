@@ -1,16 +1,15 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 
 import com.google.common.collect.Maps;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.DyeItem;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -31,8 +30,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-@SuppressWarnings("deprecation")
 public class StringLightsBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<StringLightsBlock> CODEC = simpleCodec(p -> new StringLightsBlock(Items.WHITE_DYE));
     public static final Map<Item, StringLightsBlock> TRANSFORM_MAP = Maps.newHashMap();
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -73,9 +72,9 @@ public class StringLightsBlock extends HorizontalDirectionalBlock implements Sim
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
-        Item item = player.getItemInHand(hand).getItem();
+    public @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                                    Player player, InteractionHand hand, BlockHitResult hitResult) {
+        Item item = stack.getItem();
         if (TRANSFORM_MAP.containsKey(item) && item != this.dyeItem) {
             BlockState transform = TRANSFORM_MAP.get(item)
                     .defaultBlockState()
@@ -83,13 +82,13 @@ public class StringLightsBlock extends HorizontalDirectionalBlock implements Sim
                     .setValue(WATERLOGGED, state.getValue(WATERLOGGED));
             level.setBlockAndUpdate(pos, transform);
             level.playSound(null, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS);
-            level.levelEvent(player, LevelEvent.PARTICLES_PLANT_GROWTH, pos, 0);
+            level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
             if (!player.isCreative()) {
-                player.getItemInHand(hand).shrink(1);
+                stack.shrink(1);
             }
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
-        return super.use(state, level, pos, player, hand, hitResult);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Override
@@ -123,5 +122,10 @@ public class StringLightsBlock extends HorizontalDirectionalBlock implements Sim
             case WEST -> WEST_SHAPE;
             default -> NORTH_SHAPE;
         };
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
+        return CODEC;
     }
 }

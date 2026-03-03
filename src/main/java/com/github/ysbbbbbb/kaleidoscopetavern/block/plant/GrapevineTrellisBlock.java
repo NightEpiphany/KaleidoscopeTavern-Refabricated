@@ -11,7 +11,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -40,8 +40,8 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.github.ysbbbbbb.kaleidoscopetavern.block.plant.ITrellis.axisHasTrellis;
 import static com.github.ysbbbbbb.kaleidoscopetavern.block.plant.ITrellis.updateType;
+import static net.minecraft.world.entity.LivingEntity.getSlotForHand;
 
-@SuppressWarnings("deprecation")
 public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlock, ITrellis, BonemealableBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
@@ -71,12 +71,11 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         // 如果玩家拿的是剪刀，可以剪下葡萄藤
         ItemStack itemInHand = player.getItemInHand(hand);
         if (!itemInHand.is(Items.SHEARS)) {
-            return super.use(state, level, pos, player, hand, hitResult);
+            return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
         }
         BlockState newState = ModBlocks.TRELLIS
                 .defaultBlockState()
@@ -85,9 +84,9 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
         level.setBlockAndUpdate(pos, newState);
         // 掉落一个葡萄藤物品
         Block.popResource(level, pos, ModItems.GRAPEVINE.getDefaultInstance());
-        itemInHand.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+        itemInHand.hurtAndBreak(1, player, getSlotForHand(hand));
         player.playSound(SoundEvents.BEEHIVE_SHEAR);
-        return InteractionResult.SUCCESS;
+        return ItemInteractionResult.SUCCESS;
     }
 
     @Override
@@ -244,7 +243,7 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
         return this.canGrow(level, pos, state);
     }
 
@@ -274,8 +273,8 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public @NotNull ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
-        return ModItems.GRAPEVINE.getDefaultInstance();
+    public @NotNull ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
+        return  ModItems.GRAPEVINE.getDefaultInstance();
     }
 
     @Override

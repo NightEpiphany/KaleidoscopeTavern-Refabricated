@@ -1,15 +1,5 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.util;
 
-import com.google.gson.*;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.TagParser;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -19,7 +9,6 @@ import java.util.function.Predicate;
  * Form NeoForge
  */
 public class RecipeMatcher {
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     /**
      * Attempts to match inputs to the specified tests. In the best way that all inputs are used by one test.
      * Will return null in any of these cases:
@@ -73,57 +62,6 @@ public class RecipeMatcher {
             return ret;
 
         return null; //Backtrack failed, no matches, we cry and go home now :(
-    }
-
-    public static Item getItem(String itemName, boolean disallowsAirInRecipe)
-    {
-        ResourceLocation itemKey = new ResourceLocation(itemName);
-        if (!BuiltInRegistries.ITEM.containsKey(itemKey))
-            throw new JsonSyntaxException("Unknown item '" + itemName + "'");
-
-        Item item = BuiltInRegistries.ITEM.get(itemKey);
-        if (disallowsAirInRecipe && item == Items.AIR)
-            throw new JsonSyntaxException("Invalid item: " + itemName);
-        return Objects.requireNonNull(item);
-    }
-
-    public static CompoundTag getNBT(JsonElement element)
-    {
-        try
-        {
-            if (element.isJsonObject())
-                return TagParser.parseTag(GSON.toJson(element));
-            else
-                return TagParser.parseTag(GsonHelper.convertToString(element, "nbt"));
-        }
-        catch (CommandSyntaxException e)
-        {
-            throw new JsonSyntaxException("Invalid NBT Entry: " + e);
-        }
-    }
-
-    public static ItemStack getItemStack(JsonObject json, boolean readNBT, boolean disallowsAirInRecipe)
-    {
-        String itemName = GsonHelper.getAsString(json, "item");
-        Item item = getItem(itemName, disallowsAirInRecipe);
-        if (readNBT && json.has("nbt"))
-        {
-            CompoundTag nbt = getNBT(json.get("nbt"));
-            CompoundTag tmp = new CompoundTag();
-            if (nbt.contains("ForgeCaps"))
-            {
-                tmp.put("ForgeCaps", nbt.get("ForgeCaps"));
-                nbt.remove("ForgeCaps");
-            }
-
-            tmp.put("tag", nbt);
-            tmp.putString("id", itemName);
-            tmp.putInt("Count", GsonHelper.getAsInt(json, "count", 1));
-
-            return ItemStack.of(tmp);
-        }
-
-        return new ItemStack(item, GsonHelper.getAsInt(json, "count", 1));
     }
 
     // This is bad... need to think of a better cascade, recursion instead of stack?

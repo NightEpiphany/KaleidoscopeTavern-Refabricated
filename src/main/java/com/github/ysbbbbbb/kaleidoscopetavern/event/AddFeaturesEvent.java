@@ -11,11 +11,8 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
-import org.jetbrains.annotations.Contract;
-
 
 public class AddFeaturesEvent {
-    @Contract
     public static void addFeatures() {
         ServerLifecycleEvents.SERVER_STARTED.register(serverLevel -> {
             var access = serverLevel.registryAccess();

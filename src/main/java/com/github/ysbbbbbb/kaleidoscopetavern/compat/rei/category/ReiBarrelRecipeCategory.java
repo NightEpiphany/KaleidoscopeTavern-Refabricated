@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.category;
 
+
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.ReiUtil;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.BarrelRecipe;
@@ -30,7 +31,7 @@ public class ReiBarrelRecipeCategory implements DisplayCategory<DefaultCustomDis
     public static final CategoryIdentifier<DefaultCustomDisplay> ID = CategoryIdentifier.of(KaleidoscopeTavern.MOD_ID, "plugin/barrel");
 
     private static final MutableComponent TITLE = Component.translatable("block.kaleidoscope_tavern.barrel");
-    private static final ResourceLocation BG = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/gui/jei/barrel.png");
+    private static final ResourceLocation BG = KaleidoscopeTavern.modLoc("textures/gui/jei/barrel.png");
 
     public static final int WIDTH = 180;
     public static final int HEIGHT = 150;
@@ -65,7 +66,8 @@ public class ReiBarrelRecipeCategory implements DisplayCategory<DefaultCustomDis
             }
         }
 
-        display.getOptionalRecipe().ifPresent(recipe -> {
+        display.getOptionalRecipe().ifPresent(holder -> {
+            var recipe = holder.value();
             if (recipe instanceof BarrelRecipe barrelRecipe && !barrelRecipe.carrier().isEmpty()) {
                 widgets.add(Widgets.createSlot(new Point(startX + 84, startY + 117))
                         .entries(ReiUtil.ofIngredient(barrelRecipe.carrier()))
@@ -108,14 +110,15 @@ public class ReiBarrelRecipeCategory implements DisplayCategory<DefaultCustomDis
     }
 
     public static void registerDisplays(DisplayRegistry registry) {
-        registry.getRecipeManager().getAllRecipesFor(ModRecipes.BARREL_RECIPE).forEach(recipe -> {
+        registry.getRecipeManager().getAllRecipesFor(ModRecipes.BARREL_RECIPE).forEach(holder -> {
+            var recipe = holder.value();
             List<EntryIngredient> inputs = Lists.newArrayList();
-            inputs.add(0, ReiUtil.ofItemStack(new ItemStack(recipe.fluid().getBucket(), 4)));
+            inputs.addFirst(ReiUtil.ofItemStack(new ItemStack(recipe.fluid().getBucket(), 4)));
             recipe.getIngredients().stream().map(i -> ReiUtil.ofIngredient(i, 16)).forEach(inputs::add);
 
             List<EntryIngredient> outputs = List.of(ReiUtil.ofItemStack(recipe.result().copyWithCount(16)));
 
-            registry.add(new DefaultCustomDisplay(recipe, inputs, outputs) {
+            registry.add(new DefaultCustomDisplay(holder, inputs, outputs) {
                 @Override
                 public CategoryIdentifier<?> getCategoryIdentifier() {
                     return ReiBarrelRecipeCategory.ID;

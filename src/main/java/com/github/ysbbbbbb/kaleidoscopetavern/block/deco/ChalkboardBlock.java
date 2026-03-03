@@ -4,10 +4,11 @@ import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.PositionType;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.ChalkboardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -37,8 +38,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<ChalkboardBlock> CODEC = simpleCodec(p -> new ChalkboardBlock());
+
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
     public static final EnumProperty<PositionType> POSITION = EnumProperty.create("position", PositionType.class);
@@ -72,8 +74,8 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                                    Player player, InteractionHand hand, BlockHitResult hitResult) {
         Half half = state.getValue(HALF);
         PositionType position = state.getValue(POSITION);
         Direction facing = state.getValue(FACING);
@@ -98,7 +100,7 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
             return TextBlockEntity.onItemUse(level, chalkboard, player, hand);
         }
 
-        return super.use(state, level, pos, player, hand, hitResult);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Override
@@ -130,9 +132,9 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public @NotNull BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         handleRemove(level, pos, state, player);
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
@@ -376,5 +378,10 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
     @Override
     public @NotNull BlockState mirror(BlockState pState, Mirror pMirror) {
         return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 }

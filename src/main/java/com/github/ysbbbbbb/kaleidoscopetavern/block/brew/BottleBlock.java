@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -21,8 +22,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@SuppressWarnings("deprecation")
 public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<BottleBlock> CODEC = simpleCodec(p -> new BottleBlock());
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final VoxelShape SHAPE = Block.box(5, 0, 5, 11, 14, 11);
 
@@ -30,7 +31,6 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
      * 是否为异形酒瓶，这决定了酒柜中可以放入一瓶还是两瓶
      */
     private final boolean irregular;
-
 
     public BottleBlock(Properties properties, boolean irregular) {
         super(properties);
@@ -103,5 +103,10 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
      */
     public boolean irregular() {
         return this.irregular;
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
+        return CODEC;
     }
 }

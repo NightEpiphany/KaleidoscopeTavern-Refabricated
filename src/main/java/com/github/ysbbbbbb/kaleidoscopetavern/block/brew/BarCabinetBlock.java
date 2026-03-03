@@ -3,12 +3,13 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.PositionType;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.BarCabinetBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -30,8 +31,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class BarCabinetBlock extends BaseEntityBlock {
+    public static final MapCodec<BarCabinetBlock> CODEC = simpleCodec(p -> new BarCabinetBlock());
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<PositionType> POSITION = EnumProperty.create("position", PositionType.class);
 
@@ -48,14 +49,13 @@ public class BarCabinetBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                                    Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (level.isClientSide || hand != InteractionHand.MAIN_HAND) {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
         Direction direction = state.getValue(FACING);
-        ItemStack stack = player.getItemInHand(hand);
 
         // 判断点击的是左侧还是右侧
         boolean isLeftSide = switch (direction) {
@@ -71,10 +71,10 @@ public class BarCabinetBlock extends BaseEntityBlock {
             float pitch = stack.isEmpty() ? level.random.nextFloat() * 0.2F + 0.8F : level.random.nextFloat() * 0.2F + 0.2F;
             level.playSound(null, pos, SoundEvents.GLASS_PLACE, SoundSource.BLOCKS,
                     level.random.nextFloat() * 0.2F + 0.8F, pitch);
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
 
-        return super.use(state, level, pos, player, hand, hitResult);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     private boolean onClick(BarCabinetBlockEntity barCabinet, Player player, ItemStack stack, boolean isLeftSide) {
@@ -256,7 +256,7 @@ public class BarCabinetBlock extends BaseEntityBlock {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         List<ItemStack> stacks = super.getDrops(state, builder);
         BlockEntity blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (blockEntity instanceof BarCabinetBlockEntity barCabinet) {
@@ -279,17 +279,22 @@ public class BarCabinetBlock extends BaseEntityBlock {
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState state) {
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public @NotNull RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot) {
+    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror) {
+    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 }

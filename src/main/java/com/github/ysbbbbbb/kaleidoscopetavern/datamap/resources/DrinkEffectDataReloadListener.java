@@ -33,7 +33,7 @@ public class DrinkEffectDataReloadListener extends SimpleJsonResourceReloadListe
             var result = DrinkEffectData.CODEC.parse(JsonOps.INSTANCE, entry.getValue());
             if (result.result().isPresent()) {
                 DrinkEffectData data = result.result().get();
-                INSTANCE.put(data.item(), data);
+                INSTANCE.put(data.item().value(), data);
             } else if (result.error().isPresent()) {
                 KaleidoscopeTavern.LOGGER.error("Failed to parse drink effect data from '{}': {}", entry.getKey(), result.error().get().message());
             }
@@ -43,6 +43,6 @@ public class DrinkEffectDataReloadListener extends SimpleJsonResourceReloadListe
 
     @Override
     public ResourceLocation getFabricId() {
-        return new ResourceLocation(KaleidoscopeTavern.MOD_ID, "drink_effect");
+        return ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "drink_effect");
     }
 }

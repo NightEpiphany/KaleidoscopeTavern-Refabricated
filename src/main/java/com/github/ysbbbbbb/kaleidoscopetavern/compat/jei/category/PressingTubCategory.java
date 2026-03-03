@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.compat.jei.category;
 
+
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IPressingTub;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
@@ -25,16 +26,17 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class PressingTubCategory implements IRecipeCategory<PressingTubRecipe> {
-    public static final RecipeType<PressingTubRecipe> TYPE = RecipeType.create(KaleidoscopeTavern.MOD_ID, "pressing_tub", PressingTubRecipe.class);
+public class PressingTubCategory implements IRecipeCategory<RecipeHolder<PressingTubRecipe>> {
+    public static final RecipeType<RecipeHolder<PressingTubRecipe>> TYPE = RecipeType.createRecipeHolderType(KaleidoscopeTavern.modLoc("pressing_tub"));
 
-    private static final ResourceLocation BG = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/gui/jei/pressing_tub.png");
+    private static final ResourceLocation BG = KaleidoscopeTavern.modLoc("textures/gui/jei/pressing_tub.png");
     private static final MutableComponent TITLE = Component.translatable("block.kaleidoscope_tavern.pressing_tub");
 
     public static final int WIDTH = 155;
@@ -48,20 +50,21 @@ public class PressingTubCategory implements IRecipeCategory<PressingTubRecipe> {
         this.iconDraw = guiHelper.createDrawableItemLike(ModItems.PRESSING_TUB);
     }
 
-    public static List<PressingTubRecipe> getRecipes() {
+    public static List<RecipeHolder<PressingTubRecipe>> getRecipes() {
         ClientLevel level = Minecraft.getInstance().level;
         if (level == null) {
             return List.of();
         }
-        List<PressingTubRecipe> recipes = Lists.newArrayList();
+        List<RecipeHolder<PressingTubRecipe>> recipes = Lists.newArrayList();
         recipes.addAll(level.getRecipeManager().getAllRecipesFor(ModRecipes.PRESSING_TUB_RECIPE));
         return recipes;
     }
 
     @Override
-    public void draw(PressingTubRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(RecipeHolder<PressingTubRecipe> holder, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         this.bgDraw.draw(guiGraphics);
 
+        PressingTubRecipe recipe = holder.value();
         int needPressCount = IPressingTub.MAX_FLUID_AMOUNT / recipe.getFluidAmount();
         if (needPressCount * recipe.getFluidAmount() < IPressingTub.MAX_FLUID_AMOUNT) {
             needPressCount++;
@@ -77,7 +80,8 @@ public class PressingTubCategory implements IRecipeCategory<PressingTubRecipe> {
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, PressingTubRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<PressingTubRecipe> holder, IFocusGroup focuses) {
+        PressingTubRecipe recipe = holder.value();
         int needPressCount = IPressingTub.MAX_FLUID_AMOUNT / recipe.getFluidAmount();
         if (needPressCount * recipe.getFluidAmount() < IPressingTub.MAX_FLUID_AMOUNT) {
             needPressCount++;
@@ -96,8 +100,9 @@ public class PressingTubCategory implements IRecipeCategory<PressingTubRecipe> {
                 .addItemLike(recipe.getFluid().getBucket());
     }
 
+
     @Override
-    public @NotNull RecipeType<PressingTubRecipe> getRecipeType() {
+    public @NotNull RecipeType<RecipeHolder<PressingTubRecipe>> getRecipeType() {
         return TYPE;
     }
 

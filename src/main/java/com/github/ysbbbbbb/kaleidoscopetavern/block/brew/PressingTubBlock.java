@@ -3,12 +3,13 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IPressingTub;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PressingTubBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
+import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -27,8 +28,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -43,8 +44,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-@SuppressWarnings({"deprecation", "UnstableApiUsage"})
+
 public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<PressingTubBlock> CODEC = simpleCodec(p -> new PressingTubBlock());
+
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty TILT = BooleanProperty.create("tilt");
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -84,16 +87,16 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
                 .sound(SoundType.WOOD)
                 .ignitedByLava());
         this.registerDefaultState(this.stateDefinition.any()
-                .setValue(WATERLOGGED, false)
                 .setValue(FACING, Direction.NORTH)
-                .setValue(TILT, false));
+                .setValue(TILT, false)
+                .setValue(WATERLOGGED, false));
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                                    Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!(level.getBlockEntity(pos) instanceof IPressingTub pressingTub)) {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
         // 如果是空手，尝试取出
@@ -102,21 +105,21 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
             // 潜行时一次取出一组（64 个），否则一次取出一个
             int removeCount = player.isSecondaryUseActive() ? 64 : 1;
             if (pressingTub.removeIngredient(player, removeCount)) {
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
-            return InteractionResult.PASS;
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
         // 然后尝试能否取出
         if (pressingTub.getResult(player, itemInHand)) {
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
 
         // 最后尝试放入
         if (pressingTub.addIngredient(itemInHand)) {
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override
@@ -164,7 +167,7 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(WATERLOGGED, FACING, TILT);
+        builder.add(FACING, TILT, WATERLOGGED);
     }
 
     @Override
@@ -234,19 +237,10 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
         return 0;
     }
 
-    @Override
-    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
-        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
-    }
 
     @Override
-    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
-        return state.rotate(mirror.getRotation(state.getValue(FACING)));
-    }
-
-    @Override
-    public @NotNull ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState state) {
-        ItemStack stack = SimpleWaterloggedBlock.super.pickupBlock(level, pos, state);
+    public @NotNull ItemStack pickupBlock(@Nullable Player player, LevelAccessor level, BlockPos pos, BlockState state) {
+        ItemStack stack = SimpleWaterloggedBlock.super.pickupBlock(player, level, pos, state);
         if (!stack.isEmpty()) {
             return stack;
         }
@@ -276,5 +270,20 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
             }
         }
         return stack;
+    }
+
+    @Override
+    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
+        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
+        return state.rotate(mirror.getRotation(state.getValue(FACING)));
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 }

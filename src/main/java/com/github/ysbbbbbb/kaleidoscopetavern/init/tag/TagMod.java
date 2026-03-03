@@ -36,18 +36,18 @@ public interface TagMod {
     TagKey<Block> SITTABLE = blockTag("sittable");
 
     static TagKey<Item> itemTag(String name) {
-        return TagKey.create(Registries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, name));
+        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, name));
     }
 
     static TagKey<Block> blockTag(String name) {
-        return TagKey.create(Registries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, name));
+        return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, name));
     }
 
     static TagKey<EntityType<?>> entityTag(String name) {
-        return TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, name));
+        return TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, name));
     }
 
     static TagKey<DamageType> damageTypeTag(String name) {
-        return TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, name));
+        return TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, name));
     }
 }

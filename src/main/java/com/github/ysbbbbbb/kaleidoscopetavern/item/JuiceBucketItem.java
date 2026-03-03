@@ -36,9 +36,8 @@ public class JuiceBucketItem extends BucketItem implements IHasContainer {
         return returnContainerToEntity(stack, level, entity);
     }
 
-
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 32;
     }
 

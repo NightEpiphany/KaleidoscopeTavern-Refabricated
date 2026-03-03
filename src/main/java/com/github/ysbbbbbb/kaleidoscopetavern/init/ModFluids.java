@@ -11,10 +11,10 @@ import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -26,7 +26,7 @@ import net.minecraft.world.level.material.Fluid;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings("UnstableApiUsage")
+
 public class ModFluids {
 
     public static final Map<Fluid, Item> SELECT_BUCKETS = new HashMap<>();
@@ -43,7 +43,7 @@ public class ModFluids {
             () -> ModItems.GRAPE_BUCKET,
             () -> ModFluids.GRAPE_JUICE_BLOCK
     );
-    public static final LiquidBlock GRAPE_JUICE_BLOCK = new LiquidBlock(GRAPE_JUICE, BlockBehaviour.Properties.copy(Blocks.WATER));
+    public static final LiquidBlock GRAPE_JUICE_BLOCK = new LiquidBlock(GRAPE_JUICE, BlockBehaviour.Properties.ofFullCopy(Blocks.WATER));
 
     public static final FlowingFluid SWEET_BERRIES_JUICE = new JuiceFluid.Still(
             () -> ModFluids.FLOWING_SWEET_BERRIES_JUICE,
@@ -57,7 +57,7 @@ public class ModFluids {
             () -> ModItems.SWEET_BERRIES_BUCKET,
             () -> ModFluids.SWEET_BERRIES_JUICE_BLOCK
     );
-    public static final LiquidBlock SWEET_BERRIES_JUICE_BLOCK = new LiquidBlock(SWEET_BERRIES_JUICE, BlockBehaviour.Properties.copy(Blocks.WATER));
+    public static final LiquidBlock SWEET_BERRIES_JUICE_BLOCK = new LiquidBlock(SWEET_BERRIES_JUICE, BlockBehaviour.Properties.ofFullCopy(Blocks.WATER));
 
     public static final FlowingFluid GLOW_BERRIES_JUICE = new JuiceFluid.Still(
             () -> ModFluids.FLOWING_GLOW_BERRIES_JUICE,
@@ -71,7 +71,7 @@ public class ModFluids {
             () -> ModItems.GLOW_BERRIES_BUCKET,
             () -> ModFluids.GLOW_BERRIES_JUICE_BLOCK
     );
-    public static final LiquidBlock GLOW_BERRIES_JUICE_BLOCK = new LiquidBlock(GLOW_BERRIES_JUICE, BlockBehaviour.Properties.copy(Blocks.WATER));
+    public static final LiquidBlock GLOW_BERRIES_JUICE_BLOCK = new LiquidBlock(GLOW_BERRIES_JUICE, BlockBehaviour.Properties.ofFullCopy(Blocks.WATER));
 
     public static void registerFluids() {
         register("grape_juice", GRAPE_JUICE, FLOWING_GRAPE_JUICE, GRAPE_JUICE_BLOCK, ModItems.GRAPE_BUCKET);
@@ -124,6 +124,6 @@ public class ModFluids {
     }
 
     private static ResourceLocation id(String path) {
-        return new ResourceLocation(KaleidoscopeTavern.MOD_ID, path);
+        return ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, path);
     }
 }

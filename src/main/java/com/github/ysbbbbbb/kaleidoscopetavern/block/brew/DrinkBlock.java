@@ -3,14 +3,14 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.DrinkBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.DrinkBlockItem;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.VoxelShapeUtils;
-import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemHandlerHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
@@ -33,7 +33,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumMap;
 import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class DrinkBlock extends BottleBlock implements EntityBlock {
     protected final IntegerProperty countProperty;
     protected final int maxCount;
@@ -78,19 +77,18 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         // 如果是空手，那么可以尝试取回
         if (!player.getItemInHand(hand).isEmpty()) {
-            return super.use(state, level, pos, player, hand, hitResult);
+            return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
         }
 
         // 尝试给玩家物品
         if (level.getBlockEntity(pos) instanceof DrinkBlockEntity be) {
-            ItemStack stack = be.removeItem();
-            if (!stack.isEmpty()) {
+            ItemStack removeItem = be.removeItem();
+            if (!removeItem.isEmpty()) {
                 be.refresh();
-                ItemHandlerHelper.giveItemToPlayer(player, stack);
+                ItemUtils.giveItemToPlayer(player, removeItem);
                 // 播放放置的音效
                 level.playSound(null, pos, SoundEvents.GLASS_PLACE, SoundSource.BLOCKS);
             }
@@ -104,7 +102,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
             // 否则就直接破坏
             level.removeBlock(pos, false);
         }
-        return InteractionResult.SUCCESS;
+        return ItemInteractionResult.SUCCESS;
     }
 
     @Override

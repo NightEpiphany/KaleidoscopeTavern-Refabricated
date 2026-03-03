@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.render.entity;
 
+
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.entity.SitEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public class SitRenderer extends EntityRenderer<SitEntity> {
-    private static final ResourceLocation EMPTY = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/entity/empty.png");
+    private static final ResourceLocation EMPTY = KaleidoscopeTavern.modLoc("textures/entity/empty.png");
 
     public SitRenderer(EntityRendererProvider.Context context) {
         super(context);

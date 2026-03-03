@@ -3,6 +3,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.entity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -36,7 +37,7 @@ public class ThrownMolotovEntity extends ThrowableProjectile {
     }
 
     @Override
-    protected void defineSynchedData() {
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }
 
     public ItemStack getItem() {

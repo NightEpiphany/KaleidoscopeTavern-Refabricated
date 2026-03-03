@@ -17,11 +17,11 @@ import java.util.List;
 
 public class EmiBarrelRecipe extends BasicEmiRecipe {
     public static final EmiRecipeCategory CATEGORY = new EmiRecipeCategory(
-            new ResourceLocation(ModRecipes.BARREL_RECIPE.toString()),
+            ResourceLocation.parse(ModRecipes.BARREL_RECIPE.toString()),
             EmiIngredient.of(Ingredient.of(ModItems.BARREL))
     );
 
-    private static final ResourceLocation BG = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/gui/jei/barrel.png");
+    private static final ResourceLocation BG = KaleidoscopeTavern.modLoc("textures/gui/jei/barrel.png");
 
     public static final int WIDTH = 180;
     public static final int HEIGHT = 150;
@@ -37,15 +37,16 @@ public class EmiBarrelRecipe extends BasicEmiRecipe {
         registry.addCategory(CATEGORY);
         registry.addWorkstation(CATEGORY, EmiStack.of(ModItems.BARREL));
 
-        registry.getRecipeManager().getAllRecipesFor(ModRecipes.BARREL_RECIPE).forEach(recipe -> {
+        registry.getRecipeManager().getAllRecipesFor(ModRecipes.BARREL_RECIPE).forEach(holder -> {
+            var recipe = holder.value();
             List<EmiIngredient> inputs = Lists.newArrayList();
-            inputs.add(0, EmiStack.of(recipe.fluid().getBucket(), 4));
+            inputs.addFirst(EmiStack.of(recipe.fluid().getBucket(), 4));
             recipe.getIngredients().stream().map(i -> EmiIngredient.of(i, 16)).forEach(inputs::add);
 
             List<EmiStack> outputs = List.of(EmiStack.of(recipe.result(), 16));
             List<EmiIngredient> catalysts = List.of(EmiIngredient.of(recipe.carrier()));
 
-            registry.addRecipe(new EmiBarrelRecipe(recipe.getId(), inputs, outputs, catalysts));
+            registry.addRecipe(new EmiBarrelRecipe(holder.id(), inputs, outputs, catalysts));
         });
     }
 
@@ -64,11 +65,11 @@ public class EmiBarrelRecipe extends BasicEmiRecipe {
         }
 
         if (!catalysts.isEmpty()) {
-            widgets.addSlot(catalysts.get(0), 84, 117)
+            widgets.addSlot(catalysts.getFirst(), 84, 117)
                     .drawBack(false);
         }
 
-        widgets.addSlot(outputs.get(0), 148, 82)
+        widgets.addSlot(outputs.getFirst(), 148, 82)
                 .recipeContext(this)
                 .large(true);
     }

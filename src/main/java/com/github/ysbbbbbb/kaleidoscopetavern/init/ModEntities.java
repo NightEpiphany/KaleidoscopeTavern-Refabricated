@@ -13,7 +13,7 @@ public class ModEntities {
     public static final EntityType<ThrownMolotovEntity> THROWN_MOLOTOV = ThrownMolotovEntity.TYPE;
 
     public static void registerEntities() {
-        Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "sit"), SIT);
-        Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "thrown_molotov"), THROWN_MOLOTOV);
+        Registry.register(BuiltInRegistries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "sit"), SIT);
+        Registry.register(BuiltInRegistries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "thrown_molotov"), THROWN_MOLOTOV);
     }
 }

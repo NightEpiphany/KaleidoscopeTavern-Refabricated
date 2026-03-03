@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.category;
 
+
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IPressingTub;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.ReiUtil;
@@ -33,7 +34,7 @@ public class ReiPressingTubRecipeCategory implements DisplayCategory<DefaultCust
     public static final CategoryIdentifier<DefaultCustomDisplay> ID = CategoryIdentifier.of(KaleidoscopeTavern.MOD_ID, "plugin/pressing_tub");
 
     private static final MutableComponent TITLE = Component.translatable("block.kaleidoscope_tavern.pressing_tub");
-    private static final ResourceLocation BG = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/gui/jei/pressing_tub.png");
+    private static final ResourceLocation BG = KaleidoscopeTavern.modLoc("textures/gui/jei/pressing_tub.png");
 
     public static final int WIDTH = 155;
     public static final int HEIGHT = 54;
@@ -53,16 +54,17 @@ public class ReiPressingTubRecipeCategory implements DisplayCategory<DefaultCust
         widgets.add(Widgets.createTexturedWidget(BG, startX, startY, 0, 0, WIDTH, HEIGHT));
 
         widgets.add(Widgets.createSlot(new Point(startX + 32, startY + 13))
-                .entries(display.getInputEntries().get(0))
+                .entries(display.getInputEntries().getFirst())
                 .disableBackground()
                 .markInput());
 
         widgets.add(Widgets.createSlot(new Point(startX + 128, startY + 18))
-                .entries(display.getOutputEntries().get(0))
+                .entries(display.getOutputEntries().getFirst())
                 .disableBackground()
                 .markOutput());
 
-        display.getOptionalRecipe().ifPresent(recipe -> {
+        display.getOptionalRecipe().ifPresent(holder -> {
+            var recipe = holder.value();
             if (recipe instanceof PressingTubRecipe pressingTubRecipe) {
                 int needPressCount = IPressingTub.MAX_FLUID_AMOUNT / pressingTubRecipe.getFluidAmount();
                 if (needPressCount * pressingTubRecipe.getFluidAmount() < IPressingTub.MAX_FLUID_AMOUNT) {
@@ -110,7 +112,8 @@ public class ReiPressingTubRecipeCategory implements DisplayCategory<DefaultCust
     }
 
     public static void registerDisplays(DisplayRegistry registry) {
-        registry.getRecipeManager().getAllRecipesFor(ModRecipes.PRESSING_TUB_RECIPE).forEach(recipe -> {
+        registry.getRecipeManager().getAllRecipesFor(ModRecipes.PRESSING_TUB_RECIPE).forEach(holder -> {
+            PressingTubRecipe recipe = holder.value();
             int needPressCount = IPressingTub.MAX_FLUID_AMOUNT / recipe.getFluidAmount();
             if (needPressCount * recipe.getFluidAmount() < IPressingTub.MAX_FLUID_AMOUNT) {
                 needPressCount++;
@@ -123,7 +126,7 @@ public class ReiPressingTubRecipeCategory implements DisplayCategory<DefaultCust
 
             List<EntryIngredient> outputs = List.of(ReiUtil.ofItem(recipe.getFluid().getBucket()));
 
-            registry.add(new DefaultCustomDisplay(recipe, inputs, outputs) {
+            registry.add(new DefaultCustomDisplay(holder, inputs, outputs) {
                 @Override
                 public CategoryIdentifier<?> getCategoryIdentifier() {
                     return ReiPressingTubRecipeCategory.ID;

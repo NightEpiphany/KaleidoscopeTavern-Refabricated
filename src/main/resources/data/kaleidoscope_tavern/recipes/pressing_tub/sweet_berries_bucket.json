@@ -1,8 +1,0 @@
-{
-  "type": "kaleidoscope_tavern:pressing_tub",
-  "fluid": "kaleidoscope_tavern:sweet_berries_juice",
-  "fluid_amount": 125,
-  "ingredient": {
-    "item": "minecraft:sweet_berries"
-  }
-}

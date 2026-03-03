@@ -18,6 +18,7 @@ public class MolotovBlock extends BottleBlock {
                 .pushReaction(PushReaction.DESTROY)
                 .sound(SoundType.GLASS), false);
     }
+
     @Override
     public void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
         if (!level.isClientSide) {

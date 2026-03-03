@@ -3,9 +3,8 @@ package com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.container.BarrelRecipeContainer;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.RecipeMatcher;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -18,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 酒桶的配方类
  *
- * @param id          配方 ID
  * @param ingredients 酒桶输入的原料，没有数量参数，最大只允许 4 种物品输入。可以有 0 种物品输入，此时表示只使用流体酿造
  * @param fluid       酒桶输入的流体，只能有一个流体输入
  * @param carrier     酒桶的容器，必须是 ItemBlock 及其子类，且只能有一个输入
@@ -28,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
  *                    n 为当前阶段数（从 1 开始）。例如，unitTime 为 100，则第一阶段持续 100 tick，第二阶段持续 200 tick，以此类推
  */
 public record BarrelRecipe(
-        ResourceLocation id,
         NonNullList<Ingredient> ingredients,
         Fluid fluid,
         Ingredient carrier,
@@ -44,12 +41,20 @@ public record BarrelRecipe(
         }
         // 否则匹配输入的流体和物品
         return container.getFluid().isSame(this.fluid)
-               && RecipeMatcher.findMatches(container.items, ingredients) != null;
+               && RecipeMatcher.findMatches(container.getItems(), ingredients) != null;
     }
 
     @Override
-    public @NotNull ItemStack assemble(BarrelRecipeContainer container, RegistryAccess registryAccess) {
-        return getResultItem(registryAccess).copy();
+    public @NotNull ItemStack assemble(BarrelRecipeContainer container, HolderLookup.Provider registries) {
+        // 遍历容器，找出数量最少的输入物品数量，作为酿造结果的数量
+        // 默认数量为 16，超过这个数量的输入物品不会增加输出物品的数量
+        int count = 16;
+        for (ItemStack itemStack : container.getItems()) {
+            if (!itemStack.isEmpty()) {
+                count = Math.min(count, itemStack.getCount());
+            }
+        }
+        return getResultItem(registries).copyWithCount(count);
     }
 
     @Override
@@ -58,13 +63,8 @@ public record BarrelRecipe(
     }
 
     @Override
-    public @NotNull ItemStack getResultItem(RegistryAccess registryAccess) {
+    public @NotNull ItemStack getResultItem(HolderLookup.Provider registries) {
         return this.result;
-    }
-
-    @Override
-    public @NotNull ResourceLocation getId() {
-        return this.id;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,8 +27,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class StepladderBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<StepladderBlock> CODEC = simpleCodec(p -> new StepladderBlock());
+
     public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -104,7 +106,7 @@ public class StepladderBlock extends HorizontalDirectionalBlock implements Simpl
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public @NotNull BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide && player.isCreative() && state.getValue(HALF) == Half.TOP) {
             BlockPos below = pos.below();
             BlockState belowState = level.getBlockState(below);
@@ -114,7 +116,7 @@ public class StepladderBlock extends HorizontalDirectionalBlock implements Simpl
                 level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, below, Block.getId(belowState));
             }
         }
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
@@ -175,5 +177,10 @@ public class StepladderBlock extends HorizontalDirectionalBlock implements Simpl
                 default -> DOWN_NORTH;
             };
         };
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
+        return CODEC;
     }
 }

@@ -1,7 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IPressingTub;
-import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.PressingTubBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
@@ -9,7 +8,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
-import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemStackHandler;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.neo.ItemStackHandler;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -22,6 +21,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -32,7 +32,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -40,6 +39,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -49,9 +49,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-@SuppressWarnings("UnstableApiUsage")
 public class PressingTubBlockEntity extends BaseBlockEntity implements IPressingTub, Container, SidedStorageBlockEntity {
-    private final RecipeManager.CachedCheck<Container, PressingTubRecipe> quickCheck = RecipeManager.createCheck(ModRecipes.PRESSING_TUB_RECIPE);
+    private final RecipeManager.CachedCheck<SingleRecipeInput, PressingTubRecipe> quickCheck = RecipeManager.createCheck(ModRecipes.PRESSING_TUB_RECIPE);
 
     /**
      * 压榨桶的物品槽，目前只有一个槽位，用于放置被压榨的物品，最大可放入一组件（64个）物品
@@ -73,17 +72,17 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-        this.items.deserializeNBT(tag.getCompound("items"));
-        this.fluid.readFromNBT(tag.getCompound("fluid"));
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        this.items.deserializeNBT(registries, tag.getCompound("items"));
+        this.fluid.readFromNBT(registries, tag.getCompound("fluid"));
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.put("items", this.items.serializeNBT());
-        tag.put("fluid", this.fluid.writeToNBT(new CompoundTag()));
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        tag.put("items", this.items.serializeNBT(registries));
+        tag.put("fluid", this.fluid.writeToNBT(registries, new CompoundTag()));
     }
 
     @Override
@@ -148,8 +147,9 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
             return false;
         }
 
-        SimpleContainer container = new SimpleContainer(stack);
-        return this.quickCheck.getRecipeFor(container, level).map(recipe -> {
+        SingleRecipeInput container = new SingleRecipeInput(stack);
+        return this.quickCheck.getRecipeFor(container, level).map(holder -> {
+            PressingTubRecipe recipe = holder.value();
             FluidVariant fluidVariant = FluidVariant.of(recipe.getFluid());
             FluidVariant fluidInTub = this.fluid.getFluidVariant();
 
@@ -200,6 +200,13 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
             }
             return false;
         });
+    }
+
+    private static long toTransferAmount(int milliBuckets) {
+        if (milliBuckets <= 0) {
+            return 0;
+        }
+        return (long) milliBuckets * FluidConstants.BUCKET / (long) CustomFluidTank.MB_PER_BUCKET;
     }
 
     /**
@@ -362,6 +369,13 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
         return true;
     }
 
+    private static SoundEvent getBucketFillSound(FluidVariant variant) {
+        if (variant.isBlank()) {
+            return null;
+        }
+        return FluidVariantAttributes.getFillSound(variant);
+    }
+
     public boolean dropContents() {
         if (level == null) {
             return false;
@@ -436,20 +450,6 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
         return this.fluid.getFluidAmountMb();
     }
 
-    private static long toTransferAmount(int milliBuckets) {
-        if (milliBuckets <= 0) {
-            return 0;
-        }
-        return (long) milliBuckets * FluidConstants.BUCKET / (long) CustomFluidTank.MB_PER_BUCKET;
-    }
-
-    private static SoundEvent getBucketFillSound(FluidVariant variant) {
-        if (variant.isBlank()) {
-            return null;
-        }
-        return FluidVariantAttributes.getFillSound(variant);
-    }
-
     @Override
     public int getContainerSize() {
         return items.getSlots();
@@ -461,27 +461,22 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     }
 
     @Override
-    public @NotNull ItemStack getItem(int slot) {
-        return items.getStackInSlot(slot);
+    public @NotNull ItemStack getItem(int i) {
+        return items.getStackInSlot(i);
     }
 
     @Override
-    public @NotNull ItemStack removeItem(int slot, int amount) {
-        return items.extractItem(slot, amount, false);
+    public @NotNull ItemStack removeItem(int i, int j) {
+        return items.extractItem(i, j, false);
     }
 
     @Override
-    public @NotNull ItemStack removeItemNoUpdate(int slot) {
-        ItemStack current = items.getStackInSlot(slot);
+    public @NotNull ItemStack removeItemNoUpdate(int i) {
+        ItemStack current = items.getStackInSlot(i);
         if (current.isEmpty()) {
             return ItemStack.EMPTY;
         }
-        return items.extractItem(slot, current.getCount(), false);
-    }
-
-    @Override
-    public void setItem(int slot, ItemStack stack) {
-        items.setStackInSlot(slot, stack);
+        return items.extractItem(i, current.getCount(), false);
     }
 
     @Override
@@ -491,6 +486,11 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
             BlockState state = level.getBlockState(worldPosition);
             level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_ALL);
         }
+    }
+
+    @Override
+    public void setItem(int i, ItemStack itemStack) {
+        items.setStackInSlot(i, itemStack);
     }
 
     @Override
@@ -517,11 +517,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
 
     @Override
     public @Nullable Storage<ItemVariant> getItemStorage(@Nullable Direction side) {
-        if (side == null || side.getAxis().isVertical()) {
-            return Storage.empty();
-        }
-        Direction facing = getBlockState().getValue(PressingTubBlock.FACING);
-        if (side == facing) {
+        if (side == Direction.DOWN) {
             return Storage.empty();
         }
         return InventoryStorage.of(this, side);

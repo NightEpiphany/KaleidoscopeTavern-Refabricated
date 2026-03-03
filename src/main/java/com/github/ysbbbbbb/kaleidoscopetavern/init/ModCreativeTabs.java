@@ -11,15 +11,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 
 public class ModCreativeTabs {
-    private static final ResourceLocation MAIN_ICON_ID = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "wine");
+    private static final ResourceLocation MAIN_ICON_ID = ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "wine");
 
-    private static final ResourceLocation DECO_ICON_ID = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "stepladder");
+    private static final ResourceLocation DECO_ICON_ID = ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "stepladder");
 
     private static final ResourceKey<CreativeModeTab> TAVERN_MAIN_TAB = ResourceKey.create(Registries.CREATIVE_MODE_TAB,
-            new ResourceLocation(KaleidoscopeTavern.MOD_ID, "tavern_main"));
+            ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "tavern_main"));
 
     private static final ResourceKey<CreativeModeTab> TAVERN_DECO_TAB = ResourceKey.create(Registries.CREATIVE_MODE_TAB,
-            new ResourceLocation(KaleidoscopeTavern.MOD_ID, "tavern_deco"));
+            ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "tavern_deco"));
 
 
     public static void registerTabs() {

@@ -3,10 +3,10 @@ package com.github.ysbbbbbb.kaleidoscopetavern.mixin.client;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.render.entity.StringLightsLayer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -18,29 +18,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
 
-@SuppressWarnings("all")
+@SuppressWarnings({"unchecked", "rawtypes"})
 @Environment(EnvType.CLIENT)
 @Mixin(EntityRenderDispatcher.class)
 public class EntityRendererDispatcherMixin {
 
     @Shadow
-    private Map<String, EntityRenderer<? extends Player>> playerRenderers;
+    private Map<PlayerSkin.Model, EntityRenderer<? extends Player>> playerRenderers;
 
     @Shadow
     private Map<EntityType<?>, EntityRenderer<?>> renderers;
 
     @Inject(method = "onResourceManagerReload", at = @At("TAIL"))
-    private <R extends LivingEntityRenderer<? extends Player, ? extends EntityModel<? extends Player>>> void onResourceManagerReload(ResourceManager resourceManager, CallbackInfo ci) {
-        for (var skin : this.playerRenderers.keySet()) {
-            LivingEntityRenderer renderer = (R) this.playerRenderers.get(skin);
-            if (renderer != null) {
-                renderer.addLayer(new StringLightsLayer<>(renderer));
+    private void onResourceManagerReload(ResourceManager resourceManager, CallbackInfo ci) {
+        for (EntityRenderer<? extends Player> renderer : this.playerRenderers.values()) {
+            if (renderer instanceof LivingEntityRenderer<?, ?> livingRenderer) {
+                livingRenderer.addLayer(new StringLightsLayer(livingRenderer));
             }
         }
 
-        LivingEntityRenderer renderer = (LivingEntityRenderer) renderers.get(EntityType.ARMOR_STAND);
-        if (renderer != null) {
-            renderer.addLayer(new StringLightsLayer<>(renderer));
+        EntityRenderer<?> armorStandRenderer = renderers.get(EntityType.ARMOR_STAND);
+        if (armorStandRenderer instanceof LivingEntityRenderer<?, ?> livingRenderer) {
+            livingRenderer.addLayer(new StringLightsLayer(livingRenderer));
         }
     }
 }

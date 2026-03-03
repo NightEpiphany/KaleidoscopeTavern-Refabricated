@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -35,6 +35,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
+import static net.minecraft.world.entity.LivingEntity.getSlotForHand;
+
 @SuppressWarnings("deprecation")
 public class GrapeCropBlock extends Block implements BonemealableBlock {
     public static final IntegerProperty AGE = BlockStateProperties.AGE_5;
@@ -58,19 +60,18 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         // 只有成熟的葡萄才可以被剪刀收获
         ItemStack heldItem = player.getItemInHand(hand);
         if (heldItem.is(Items.SHEARS) && isMaxAge(state)) {
             level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
             // FIXME: 这里应该走 LootTable？
             Block.popResource(level, pos, new ItemStack(ModItems.GRAPE, 3));
-            heldItem.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+            heldItem.hurtAndBreak(1, player, getSlotForHand(hand));
             player.playSound(SoundEvents.BEEHIVE_SHEAR);
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
-        return super.use(state, level, pos, player, hand, hitResult);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Override
@@ -80,7 +81,7 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
 
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (EventHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.growPerTickProbability)) {
+            if (EventHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.growPerTickProbability)) {
             level.setBlockAndUpdate(pos, state.cycle(AGE));
             EventHooks.onCropsGrowPost(level, pos, state);
         }
@@ -110,7 +111,7 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
         return !this.isMaxAge(state);
     }
 
@@ -145,7 +146,7 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public @NotNull ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
+    public @NotNull ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
         return ModItems.GRAPE.getDefaultInstance();
     }
 }

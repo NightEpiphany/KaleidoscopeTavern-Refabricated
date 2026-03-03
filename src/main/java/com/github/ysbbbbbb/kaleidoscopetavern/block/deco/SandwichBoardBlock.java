@@ -3,6 +3,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.SandwichBoardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
 import com.google.common.collect.Maps;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -10,7 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -39,8 +40,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("deprecation")
 public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<SandwichBoardBlock> CODEC = simpleCodec(p -> new SandwichBoardBlock());
     public static final Map<Item, SandwichBoardBlock> TRANSFORM_MAP = Maps.newHashMap();
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -73,8 +74,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         Half half = state.getValue(HALF);
         BlockPos clickedPos = half == Half.BOTTOM ? pos : pos.below();
         if (level.getBlockEntity(clickedPos) instanceof SandwichBoardBlockEntity sandwichBlock) {
@@ -89,7 +89,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
                         .setValue(WATERLOGGED, state.getValue(WATERLOGGED));
 
                 // 复制 BlockEntity 数据
-                CompoundTag tag = sandwichBlock.saveWithoutMetadata();
+                CompoundTag tag = sandwichBlock.saveWithoutMetadata(level.registryAccess());
 
                 // 设置上下两个部分
                 level.setBlockAndUpdate(clickedPos, transform);
@@ -98,7 +98,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
                 // 粘贴 BlockEntity 数据
                 BlockEntity blockEntity = level.getBlockEntity(clickedPos);
                 if (blockEntity instanceof SandwichBoardBlockEntity be) {
-                    be.load(tag);
+                    be.loadAdditional(tag, level.registryAccess());
                     be.refresh();
                 }
 
@@ -107,13 +107,13 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
                     player.getItemInHand(hand).shrink(1);
                 }
 
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             } else {
                 // 否则打开界面
                 return TextBlockEntity.onItemUse(level, sandwichBlock, player, hand);
             }
         }
-        return super.use(state, level, pos, player, hand, hitResult);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public @NotNull BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide && player.isCreative() && state.getValue(HALF) == Half.TOP) {
             BlockPos below = pos.below();
             BlockState belowState = level.getBlockState(below);
@@ -146,7 +146,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
                 level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, below, Block.getId(belowState));
             }
         }
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
@@ -178,7 +178,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         BlockPos above = pos.above();
         BlockState blockState = state.setValue(HALF, Half.TOP)
                 .setValue(WATERLOGGED, level.isWaterAt(above));
@@ -228,7 +228,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
         if (this.transformItemNames == null && !this.transformItems.isEmpty()) {
             this.transformItemNames = this.transformItems.stream()
                     .map(Item::getDescriptionId)
@@ -237,5 +237,10 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
         if (this.transformItemNames != null) {
             this.transformItemNames.forEach(name -> tooltip.add(Component.translatable(name).withStyle(ChatFormatting.GRAY)));
         }
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 }

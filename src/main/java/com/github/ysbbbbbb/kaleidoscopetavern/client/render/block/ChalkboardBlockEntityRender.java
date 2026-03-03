@@ -17,8 +17,8 @@ import net.minecraft.resources.ResourceLocation;
 
 @Environment(EnvType.CLIENT)
 public class ChalkboardBlockEntityRender extends TextBlockEntityRender<ChalkboardBlockEntity> {
-    private static final ResourceLocation SMALL_TEXTURE = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/entity/deco/small_chalkboard.png");
-    private static final ResourceLocation LARGE_TEXTURE = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/entity/deco/large_chalkboard.png");
+    private static final ResourceLocation SMALL_TEXTURE = KaleidoscopeTavern.modLoc("textures/entity/deco/small_chalkboard.png");
+    private static final ResourceLocation LARGE_TEXTURE = KaleidoscopeTavern.modLoc("textures/entity/deco/large_chalkboard.png");
 
     private static final float TEXT_SCALE = 0.012f;
     private static final int LINE_HEIGHT = 12;
@@ -44,10 +44,10 @@ public class ChalkboardBlockEntityRender extends TextBlockEntityRender<Chalkboar
 
         if (textBlock.isLarge()) {
             VertexConsumer consumer = buffer.getBuffer(RenderType.entityCutoutNoCull(LARGE_TEXTURE));
-            large.renderToBuffer(poseStack, consumer, packedLight, packedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+            large.renderToBuffer(poseStack, consumer, packedLight, packedOverlay, -1);
         } else {
             VertexConsumer consumer = buffer.getBuffer(RenderType.entityCutoutNoCull(SMALL_TEXTURE));
-            small.renderToBuffer(poseStack, consumer, packedLight, packedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+            small.renderToBuffer(poseStack, consumer, packedLight, packedOverlay, -1);
         }
 
         poseStack.popPose();

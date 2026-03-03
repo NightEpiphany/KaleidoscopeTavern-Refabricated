@@ -3,10 +3,11 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.BarrelBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.FluidUtils;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -33,8 +34,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class BarrelBlock extends BaseEntityBlock {
+    public static final MapCodec<BarrelBlock> CODEC = simpleCodec(p -> new BarrelBlock());
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     /**
      * 对应酒桶的上中下三层
@@ -73,28 +74,27 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (hand != InteractionHand.MAIN_HAND) {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
         BarrelBlockEntity barrelEntity = getBarrelEntity(level, pos, state);
         if (barrelEntity == null) {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
         // 只有顶层可以交互
         if (isCeiling(state)) {
             if (!barrelEntity.isOpen()) {
                 // 如果是关着的，此时点击顶层会尝试开盖
-                return barrelEntity.openLid(player) ? InteractionResult.SUCCESS : InteractionResult.PASS;
+                return barrelEntity.openLid(player) ? ItemInteractionResult.SUCCESS : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             }
 
             boolean clickedLid = isLid(state);
             ItemStack itemInHand = player.getItemInHand(hand);
 
-            // 如果是空手，且没有点击中心，则尝试关盖
+            // 如果的空手，且没有点击中心，则尝试关盖
             if (itemInHand.isEmpty() && !clickedLid) {
-                return barrelEntity.closeLid(player) ? InteractionResult.SUCCESS : InteractionResult.PASS;
+                return barrelEntity.closeLid(player) ? ItemInteractionResult.SUCCESS : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             }
 
             // 只有点击中心，才能进行添加物品或流体的交互
@@ -102,31 +102,31 @@ public class BarrelBlock extends BaseEntityBlock {
                 // 如果拿的是流体容器
                 if (FluidUtils.isFluidContainer(itemInHand)) {
                     if (barrelEntity.addFluid(player, itemInHand)) {
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     }
                     // 如果倒出失败了，再尝试从酒桶里装流体到容器里
                     if (barrelEntity.removeFluid(player, itemInHand)) {
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     }
                     // 流体容器不可作为原料输入
-                    return InteractionResult.PASS;
+                    return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
                 }
 
                 // 其他情况，有物品，则尝试添加
                 if (!itemInHand.isEmpty() && barrelEntity.addIngredient(player, itemInHand)) {
-                    return InteractionResult.SUCCESS;
+                    return ItemInteractionResult.SUCCESS;
                 }
 
                 // 没有物品，则尝试取出
                 if (itemInHand.isEmpty() && barrelEntity.removeIngredient(player)) {
-                    return InteractionResult.SUCCESS;
+                    return ItemInteractionResult.SUCCESS;
                 }
             }
         } else {
             barrelEntity.tipBrewInfo(player);
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
-        return super.use(state, level, pos, player, hand, hitResult);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     /**
@@ -213,9 +213,9 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public @NotNull BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         handleRemove(level, pos, state, player);
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
@@ -326,5 +326,10 @@ public class BarrelBlock extends BaseEntityBlock {
     @Override
     public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 }

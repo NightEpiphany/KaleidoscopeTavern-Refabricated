@@ -8,4 +8,3 @@ public class PaintingBlockItem extends BlockItem {
         super(block, new Properties());
     }
 }
-
