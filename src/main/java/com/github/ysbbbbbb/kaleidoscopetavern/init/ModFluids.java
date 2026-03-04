@@ -26,7 +26,6 @@ import net.minecraft.world.level.material.Fluid;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class ModFluids {
 
     public static final Map<Fluid, Item> SELECT_BUCKETS = new HashMap<>();
@@ -107,6 +106,7 @@ public class ModFluids {
         registration(flowing, color, stillId, flowId);
     }
 
+    @Environment(EnvType.CLIENT)
     private static void registration(Fluid fluid, int color, ResourceLocation stillId, ResourceLocation flowId) {
         FluidVariantRendering.register(fluid, new FluidVariantRenderHandler() {
             @Override
