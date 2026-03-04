@@ -98,6 +98,7 @@ public class ModBlocks {
     public static final Block GREAT_WAVE_PAINTING = new PaintingBlock();
     public static final Block MONA_LISA_PAINTING = new PaintingBlock();
     public static final Block MONDRIAN_PAINTING = new PaintingBlock();
+    public static final Block NIGHT_EPIPHANY_PAINTING = new PaintingBlock();
     // 果盆
     public static final Block PRESSING_TUB = new PressingTubBlock();
     // 空瓶
@@ -326,6 +327,7 @@ public class ModBlocks {
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "great_wave_painting"), GREAT_WAVE_PAINTING);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "mona_lisa_painting"), MONA_LISA_PAINTING);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "mondrian_painting"), MONDRIAN_PAINTING);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "night_epiphany_painting"), NIGHT_EPIPHANY_PAINTING);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "pressing_tub"), PRESSING_TUB);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "empty_bottle"), EMPTY_BOTTLE);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "barrel"), BARREL);
