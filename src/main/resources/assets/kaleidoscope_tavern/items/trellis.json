@@ -1,3 +1,6 @@
 {
-  "parent": "kaleidoscope_tavern:block/plant/trellis/single"
+  "model": {
+  "type": "minecraft:model",
+    "model": "kaleidoscope_tavern:item/trellis"
+  }
 }

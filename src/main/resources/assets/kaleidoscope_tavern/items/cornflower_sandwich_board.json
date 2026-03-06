@@ -1,6 +1,6 @@
 {
-  "parent": "kaleidoscope_tavern:item/deco_sandwich_board",
-  "textures": {
-    "layer1": "kaleidoscope_tavern:block/deco/sandwich_board/cornflower"
+  "model": {
+  "type": "minecraft:model",
+    "model": "kaleidoscope_tavern:item/cornflower_sandwich_board"
   }
 }

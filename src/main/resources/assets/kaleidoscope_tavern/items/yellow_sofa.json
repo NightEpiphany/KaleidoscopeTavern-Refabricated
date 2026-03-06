@@ -1,3 +1,6 @@
 {
-  "parent": "kaleidoscope_tavern:block/deco/sofa/yellow/single"
+  "model": {
+  "type": "minecraft:model",
+    "model": "kaleidoscope_tavern:item/yellow_sofa"
+  }
 }

@@ -1,6 +1,6 @@
 {
-  "parent": "kaleidoscope_tavern:item/deco_sandwich_board",
-  "textures": {
-    "layer1": "kaleidoscope_tavern:block/deco/sandwich_board/pink_petals"
+  "model": {
+  "type": "minecraft:model",
+    "model": "kaleidoscope_tavern:item/pink_petals_sandwich_board"
   }
 }

@@ -7,6 +7,6 @@ import java.util.function.Supplier;
 
 public class BarStoolBlockItem extends BlockItem {
     public BarStoolBlockItem(Block block, Properties properties) {
-        super(block, properties);
+        super(block, properties.useBlockDescriptionPrefix());
     }
 }

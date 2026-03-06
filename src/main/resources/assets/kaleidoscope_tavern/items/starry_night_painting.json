@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "kaleidoscope_tavern:block/deco/painting/starry_night"
+  "model": {
+  "type": "minecraft:model",
+    "model": "kaleidoscope_tavern:item/starry_night_painting"
   }
 }

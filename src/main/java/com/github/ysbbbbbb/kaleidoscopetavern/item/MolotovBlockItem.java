@@ -18,7 +18,7 @@ import org.jspecify.annotations.NonNull;
 
 public class MolotovBlockItem extends BottleBlockItem {
     public MolotovBlockItem(Block block, Properties properties) {
-        super(block, properties.stacksTo(16));
+        super(block, properties.stacksTo(16).useBlockDescriptionPrefix());
     }
 
     @Override

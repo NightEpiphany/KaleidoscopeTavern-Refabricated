@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "kaleidoscope_tavern:block/deco/painting/cr019"
+  "model": {
+  "type": "minecraft:model",
+    "model": "kaleidoscope_tavern:item/cr019_painting"
   }
 }

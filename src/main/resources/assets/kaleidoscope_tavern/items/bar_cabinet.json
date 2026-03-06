@@ -1,3 +1,6 @@
 {
-  "parent": "kaleidoscope_tavern:block/brew/bar_cabinet/single"
+  "model": {
+  "type": "minecraft:model",
+    "model": "kaleidoscope_tavern:item/bar_cabinet"
+  }
 }

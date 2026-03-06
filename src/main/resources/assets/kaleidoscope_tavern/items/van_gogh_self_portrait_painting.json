@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "kaleidoscope_tavern:block/deco/painting/van_gogh_self_portrait"
+  "model": {
+  "type": "minecraft:model",
+    "model": "kaleidoscope_tavern:item/van_gogh_self_portrait_painting"
   }
 }

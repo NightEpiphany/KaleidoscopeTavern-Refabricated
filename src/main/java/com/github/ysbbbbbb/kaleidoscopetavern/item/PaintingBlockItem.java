@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 
 public class PaintingBlockItem extends BlockItem {
     public PaintingBlockItem(Block block, Properties properties) {
-        super(block, properties);
+        super(block, properties.overrideDescription("block.kaleidoscope_tavern.painting"));
     }
 
     @Override

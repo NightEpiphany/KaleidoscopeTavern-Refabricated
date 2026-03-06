@@ -43,6 +43,9 @@ public abstract class TextBlockEntityRender<T extends TextBlockEntity, M extends
     }
 
     @Override
+    public abstract M createRenderState();
+
+    @Override
     public void extractRenderState(T blockEntity, M blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay);
         blockEntityRenderState.facing = blockEntity.getBlockState().getValue(ChalkboardBlock.FACING);

@@ -5,6 +5,6 @@ import net.minecraft.world.level.block.Block;
 
 public class SofaBlockItem extends BlockItem {
     public SofaBlockItem(Block block, Properties properties) {
-        super(block, properties);
+        super(block, properties.useBlockDescriptionPrefix());
     }
 }

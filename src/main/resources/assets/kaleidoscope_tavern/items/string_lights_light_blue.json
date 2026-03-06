@@ -1,3 +1,6 @@
 {
-  "parent": "kaleidoscope_tavern:block/deco/string_lights/light_blue"
+  "model": {
+  "type": "minecraft:model",
+    "model": "kaleidoscope_tavern:item/string_lights_light_blue"
+  }
 }

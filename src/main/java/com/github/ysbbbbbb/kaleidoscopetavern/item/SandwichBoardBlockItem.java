@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 
 public class SandwichBoardBlockItem extends BlockItem {
     public SandwichBoardBlockItem(Block block, Properties properties) {
-        super(block, properties);
+        super(block, properties.overrideDescription("block.kaleidoscopetavern.sandwich_board"));
     }
 
     @Override

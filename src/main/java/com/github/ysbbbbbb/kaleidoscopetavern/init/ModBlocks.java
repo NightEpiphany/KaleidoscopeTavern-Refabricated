@@ -104,7 +104,7 @@ public class ModBlocks {
     public static final Block DAVID_PAINTING = paintingReg("david_painting");
     public static final Block GIRL_WITH_PEARL_EARRING_PAINTING = paintingReg("girl_with_pearl_earring_painting");
     public static final Block STARRY_NIGHT_PAINTING = paintingReg("starry_night_painting");
-    public static final Block VAN_GOGH_SELF_PORTRAIT_PAINTING = paintingReg("vangogh_self_portrait_painting");
+    public static final Block VAN_GOGH_SELF_PORTRAIT_PAINTING = paintingReg("van_gogh_self_portrait_painting");
     public static final Block FATHER_PAINTING = paintingReg("father_painting");
     public static final Block GREAT_WAVE_PAINTING = paintingReg("great_wave_painting");
     public static final Block MONA_LISA_PAINTING = paintingReg("mona_lisa_painting");

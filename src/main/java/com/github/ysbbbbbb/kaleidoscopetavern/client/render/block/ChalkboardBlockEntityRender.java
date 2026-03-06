@@ -47,7 +47,7 @@ public class ChalkboardBlockEntityRender extends TextBlockEntityRender<Chalkboar
 
     @Override
     public ChalkboardBlockEntityRenderState createRenderState() {
-        return null;
+        return new ChalkboardBlockEntityRenderState();
     }
 
     @Override

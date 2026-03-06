@@ -1,3 +1,6 @@
 {
-  "parent": "kaleidoscope_tavern:block/deco/bar_stool/lime"
+  "model": {
+  "type": "minecraft:model",
+    "model": "kaleidoscope_tavern:item/lime_bar_stool"
+  }
 }

@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "kaleidoscope_tavern:block/deco/painting/mondrian"
+  "model": {
+  "type": "minecraft:model",
+    "model": "kaleidoscope_tavern:item/mondrian_painting"
   }
 }

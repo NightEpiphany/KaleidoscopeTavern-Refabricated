@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "kaleidoscope_tavern:block/deco/painting/son_of_man"
+  "model": {
+  "type": "minecraft:model",
+    "model": "kaleidoscope_tavern:item/son_of_man_painting"
   }
 }

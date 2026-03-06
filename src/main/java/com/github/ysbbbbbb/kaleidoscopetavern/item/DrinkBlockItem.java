@@ -43,6 +43,7 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
     public DrinkBlockItem(Block block, Properties properties) {
         super(block, properties
                 .stacksTo(16)
+                .useBlockDescriptionPrefix()
                 .craftRemainder(ModItems.EMPTY_BOTTLE));
     }
 
