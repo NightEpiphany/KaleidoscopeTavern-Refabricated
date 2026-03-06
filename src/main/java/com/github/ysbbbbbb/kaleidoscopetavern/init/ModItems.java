@@ -1,265 +1,190 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.init;
 
-import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.*;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.PortHelper;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemNameBlockItem;
+import net.minecraft.world.level.block.Block;
 
-import static com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class ModItems {
-    // 葡萄
-    public static final Item GRAPE = new Item(new Item.Properties().food(ModFoods.GRAPE));
-    // 野生葡萄藤
-    public static final Item GRAPEVINE = new GrapevineItem();
-    // 果汁桶
-    public static final Item GRAPE_BUCKET = new JuiceBucketItem(GRAPE_JUICE);
-    public static final Item SWEET_BERRIES_BUCKET = new JuiceBucketItem(SWEET_BERRIES_JUICE);
-    public static final Item GLOW_BERRIES_BUCKET = new JuiceBucketItem(GLOW_BERRIES_JUICE);
-    // 空瓶
-    public static final Item EMPTY_BOTTLE = new BottleBlockItem(ModBlocks.EMPTY_BOTTLE);
-
     // 沙发
-    public static final Item WHITE_SOFA = new SofaBlockItem(ModBlocks.WHITE_SOFA);
-    public static final Item LIGHT_GRAY_SOFA = new SofaBlockItem(ModBlocks.LIGHT_GRAY_SOFA);
-    public static final Item GRAY_SOFA = new SofaBlockItem(ModBlocks.GRAY_SOFA);
-    public static final Item BLACK_SOFA = new SofaBlockItem(ModBlocks.BLACK_SOFA);
-    public static final Item BROWN_SOFA = new SofaBlockItem(ModBlocks.BROWN_SOFA);
-    public static final Item RED_SOFA = new SofaBlockItem(ModBlocks.RED_SOFA);
-    public static final Item ORANGE_SOFA = new SofaBlockItem(ModBlocks.ORANGE_SOFA);
-    public static final Item YELLOW_SOFA = new SofaBlockItem(ModBlocks.YELLOW_SOFA);
-    public static final Item LIME_SOFA = new SofaBlockItem(ModBlocks.LIME_SOFA);
-    public static final Item GREEN_SOFA = new SofaBlockItem(ModBlocks.GREEN_SOFA);
-    public static final Item CYAN_SOFA = new SofaBlockItem(ModBlocks.CYAN_SOFA);
-    public static final Item LIGHT_BLUE_SOFA = new SofaBlockItem(ModBlocks.LIGHT_BLUE_SOFA);
-    public static final Item BLUE_SOFA = new SofaBlockItem(ModBlocks.BLUE_SOFA);
-    public static final Item PURPLE_SOFA = new SofaBlockItem(ModBlocks.PURPLE_SOFA);
-    public static final Item MAGENTA_SOFA = new SofaBlockItem(ModBlocks.MAGENTA_SOFA);
-    public static final Item PINK_SOFA = new SofaBlockItem(ModBlocks.PINK_SOFA);
+    public static final Item WHITE_SOFA = registerItem("white_sofa", p -> new SofaBlockItem(ModBlocks.WHITE_SOFA, p));
+    public static final Item LIGHT_GRAY_SOFA = registerItem("light_gray_sofa", p -> new SofaBlockItem(ModBlocks.LIGHT_GRAY_SOFA, p));
+    public static final Item GRAY_SOFA = registerItem("gray_sofa", p -> new SofaBlockItem(ModBlocks.GRAY_SOFA, p));
+    public static final Item BLACK_SOFA = registerItem("black_sofa", p -> new SofaBlockItem(ModBlocks.BLACK_SOFA, p));
+    public static final Item BROWN_SOFA = registerItem("brown_sofa", p -> new SofaBlockItem(ModBlocks.BROWN_SOFA, p));
+    public static final Item RED_SOFA = registerItem("red_sofa", p -> new SofaBlockItem(ModBlocks.RED_SOFA, p));
+    public static final Item ORANGE_SOFA = registerItem("orange_sofa", p -> new SofaBlockItem(ModBlocks.ORANGE_SOFA, p));
+    public static final Item YELLOW_SOFA = registerItem("yellow_sofa", p -> new SofaBlockItem(ModBlocks.YELLOW_SOFA, p));
+    public static final Item LIME_SOFA = registerItem("lime_sofa", p -> new SofaBlockItem(ModBlocks.LIME_SOFA, p));
+    public static final Item GREEN_SOFA = registerItem("green_sofa", p -> new SofaBlockItem(ModBlocks.GREEN_SOFA, p));
+    public static final Item CYAN_SOFA = registerItem("cyan_sofa", p -> new SofaBlockItem(ModBlocks.CYAN_SOFA, p));
+    public static final Item LIGHT_BLUE_SOFA = registerItem("light_blue_sofa", p -> new SofaBlockItem(ModBlocks.LIGHT_BLUE_SOFA, p));
+    public static final Item BLUE_SOFA = registerItem("blue_sofa", p -> new SofaBlockItem(ModBlocks.BLUE_SOFA, p));
+    public static final Item PURPLE_SOFA = registerItem("purple_sofa", p -> new SofaBlockItem(ModBlocks.PURPLE_SOFA, p));
+    public static final Item MAGENTA_SOFA = registerItem("magenta_sofa", p -> new SofaBlockItem(ModBlocks.MAGENTA_SOFA, p));
+    public static final Item PINK_SOFA = registerItem("pink_sofa", p -> new SofaBlockItem(ModBlocks.PINK_SOFA, p));
 
     // 高脚凳
-    public static final Item WHITE_BAR_STOOL = new BarStoolBlockItem(ModBlocks.WHITE_BAR_STOOL);
-    public static final Item LIGHT_GRAY_BAR_STOOL = new BarStoolBlockItem(ModBlocks.LIGHT_GRAY_BAR_STOOL);
-    public static final Item GRAY_BAR_STOOL = new BarStoolBlockItem(ModBlocks.GRAY_BAR_STOOL);
-    public static final Item BLACK_BAR_STOOL = new BarStoolBlockItem(ModBlocks.BLACK_BAR_STOOL);
-    public static final Item BROWN_BAR_STOOL = new BarStoolBlockItem(ModBlocks.BROWN_BAR_STOOL);
-    public static final Item RED_BAR_STOOL = new BarStoolBlockItem(ModBlocks.RED_BAR_STOOL);
-    public static final Item ORANGE_BAR_STOOL = new BarStoolBlockItem(ModBlocks.ORANGE_BAR_STOOL);
-    public static final Item YELLOW_BAR_STOOL = new BarStoolBlockItem(ModBlocks.YELLOW_BAR_STOOL);
-    public static final Item LIME_BAR_STOOL = new BarStoolBlockItem(ModBlocks.LIME_BAR_STOOL);
-    public static final Item GREEN_BAR_STOOL = new BarStoolBlockItem(ModBlocks.GREEN_BAR_STOOL);
-    public static final Item CYAN_BAR_STOOL = new BarStoolBlockItem(ModBlocks.CYAN_BAR_STOOL);
-    public static final Item LIGHT_BLUE_BAR_STOOL = new BarStoolBlockItem(ModBlocks.LIGHT_BLUE_BAR_STOOL);
-    public static final Item BLUE_BAR_STOOL = new BarStoolBlockItem(ModBlocks.BLUE_BAR_STOOL);
-    public static final Item PURPLE_BAR_STOOL = new BarStoolBlockItem(ModBlocks.PURPLE_BAR_STOOL);
-    public static final Item MAGENTA_BAR_STOOL = new BarStoolBlockItem(ModBlocks.MAGENTA_BAR_STOOL);
-    public static final Item PINK_BAR_STOOL = new BarStoolBlockItem(ModBlocks.PINK_BAR_STOOL);
-
-    // 黑板
-    public static final Item CHALKBOARD = new BlockItem(ModBlocks.CHALKBOARD, new Item.Properties());
-
+    public static final Item WHITE_BAR_STOOL = registerItem("white_bar_stool", p -> new BarStoolBlockItem(ModBlocks.WHITE_BAR_STOOL, p));
+    public static final Item LIGHT_GRAY_BAR_STOOL = registerItem("light_gray_bar_stool", p -> new BarStoolBlockItem(ModBlocks.LIGHT_GRAY_BAR_STOOL, p));
+    public static final Item GRAY_BAR_STOOL = registerItem("gray_bar_stool", p -> new BarStoolBlockItem(ModBlocks.GRAY_BAR_STOOL, p));
+    public static final Item BLACK_BAR_STOOL = registerItem("black_bar_stool", p -> new BarStoolBlockItem(ModBlocks.BLACK_BAR_STOOL, p));
+    public static final Item BROWN_BAR_STOOL = registerItem("brown_bar_stool", p -> new BarStoolBlockItem(ModBlocks.BROWN_BAR_STOOL, p));
+    public static final Item RED_BAR_STOOL = registerItem("red_bar_stool", p -> new BarStoolBlockItem(ModBlocks.RED_BAR_STOOL, p));
+    public static final Item ORANGE_BAR_STOOL = registerItem("orange_bar_stool", p -> new BarStoolBlockItem(ModBlocks.ORANGE_BAR_STOOL, p));
+    public static final Item YELLOW_BAR_STOOL = registerItem("yellow_bar_stool", p -> new BarStoolBlockItem(ModBlocks.YELLOW_BAR_STOOL, p));
+    public static final Item LIME_BAR_STOOL = registerItem("lime_bar_stool", p -> new BarStoolBlockItem(ModBlocks.LIME_BAR_STOOL, p));
+    public static final Item GREEN_BAR_STOOL = registerItem("green_bar_stool", p -> new BarStoolBlockItem(ModBlocks.GREEN_BAR_STOOL, p));
+    public static final Item CYAN_BAR_STOOL = registerItem("cyan_bar_stool", p -> new BarStoolBlockItem(ModBlocks.CYAN_BAR_STOOL, p));
+    public static final Item LIGHT_BLUE_BAR_STOOL = registerItem("light_blue_bar_stool", p -> new BarStoolBlockItem(ModBlocks.LIGHT_BLUE_BAR_STOOL, p));
+    public static final Item BLUE_BAR_STOOL = registerItem("blue_bar_stool", p -> new BarStoolBlockItem(ModBlocks.BLUE_BAR_STOOL, p));
+    public static final Item PURPLE_BAR_STOOL = registerItem("purple_bar_stool", p -> new BarStoolBlockItem(ModBlocks.PURPLE_BAR_STOOL, p));
+    public static final Item MAGENTA_BAR_STOOL = registerItem("magenta_bar_stool", p -> new BarStoolBlockItem(ModBlocks.MAGENTA_BAR_STOOL, p));
+    public static final Item PINK_BAR_STOOL = registerItem("pink_bar_stool", p -> new BarStoolBlockItem(ModBlocks.PINK_BAR_STOOL, p));
     // 展板
-    public static final Item BASE_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.BASE_SANDWICH_BOARD);
-    public static final Item GRASS_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.GRASS_SANDWICH_BOARD);
-    public static final Item ALLIUM_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.ALLIUM_SANDWICH_BOARD);
-    public static final Item AZURE_BLUET_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.AZURE_BLUET_SANDWICH_BOARD);
-    public static final Item CORNFLOWER_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.CORNFLOWER_SANDWICH_BOARD);
-    public static final Item ORCHID_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.ORCHID_SANDWICH_BOARD);
-    public static final Item PEONY_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.PEONY_SANDWICH_BOARD);
-    public static final Item PINK_PETALS_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.PINK_PETALS_SANDWICH_BOARD);
-    public static final Item PITCHER_PLANT_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.PITCHER_PLANT_SANDWICH_BOARD);
-    public static final Item POPPY_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.POPPY_SANDWICH_BOARD);
-    public static final Item SUNFLOWER_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.SUNFLOWER_SANDWICH_BOARD);
-    public static final Item TORCHFLOWER_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.TORCHFLOWER_SANDWICH_BOARD);
-    public static final Item TULIP_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.TULIP_SANDWICH_BOARD);
-    public static final Item WITHER_ROSE_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.WITHER_ROSE_SANDWICH_BOARD);
+    public static final Item BASE_SANDWICH_BOARD = registerItem("base_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.BASE_SANDWICH_BOARD, p));
+    public static final Item GRASS_SANDWICH_BOARD = registerItem("grass_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.GRASS_SANDWICH_BOARD, p));
+    public static final Item ALLIUM_SANDWICH_BOARD = registerItem("allium_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.ALLIUM_SANDWICH_BOARD, p));
+    public static final Item AZURE_BLUET_SANDWICH_BOARD = registerItem("azure_bluet_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.AZURE_BLUET_SANDWICH_BOARD, p));
+    public static final Item CORNFLOWER_SANDWICH_BOARD = registerItem("cornflower_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.CORNFLOWER_SANDWICH_BOARD, p));
+    public static final Item ORCHID_SANDWICH_BOARD = registerItem("orchid_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.ORCHID_SANDWICH_BOARD, p));
+    public static final Item PEONY_SANDWICH_BOARD = registerItem("peony_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.PEONY_SANDWICH_BOARD, p));
+    public static final Item PINK_PETALS_SANDWICH_BOARD = registerItem("pink_petals_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.PINK_PETALS_SANDWICH_BOARD, p));
+    public static final Item PITCHER_PLANT_SANDWICH_BOARD = registerItem("pitcher_plant_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.PITCHER_PLANT_SANDWICH_BOARD, p));
+    public static final Item POPPY_SANDWICH_BOARD = registerItem("poppy_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.POPPY_SANDWICH_BOARD, p));
+    public static final Item SUNFLOWER_SANDWICH_BOARD = registerItem("sunflower_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.SUNFLOWER_SANDWICH_BOARD, p));
+    public static final Item TORCHFLOWER_SANDWICH_BOARD = registerItem("torchflower_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.TORCHFLOWER_SANDWICH_BOARD, p));
+    public static final Item TULIP_SANDWICH_BOARD = registerItem("tulip_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.TULIP_SANDWICH_BOARD, p));
+    public static final Item WITHER_ROSE_SANDWICH_BOARD = registerItem("wither_rose_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.WITHER_ROSE_SANDWICH_BOARD, p));
 
     // 彩灯
-    public static final Item STRING_LIGHTS_COLORLESS = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_COLORLESS);
-    public static final Item STRING_LIGHTS_WHITE = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_WHITE);
-    public static final Item STRING_LIGHTS_LIGHT_GRAY = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_LIGHT_GRAY);
-    public static final Item STRING_LIGHTS_GRAY = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_GRAY);
-    public static final Item STRING_LIGHTS_BLACK = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_BLACK);
-    public static final Item STRING_LIGHTS_BROWN = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_BROWN);
-    public static final Item STRING_LIGHTS_RED = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_RED);
-    public static final Item STRING_LIGHTS_ORANGE = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_ORANGE);
-    public static final Item STRING_LIGHTS_YELLOW = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_YELLOW);
-    public static final Item STRING_LIGHTS_LIME = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_LIME);
-    public static final Item STRING_LIGHTS_GREEN = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_GREEN);
-    public static final Item STRING_LIGHTS_CYAN = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_CYAN);
-    public static final Item STRING_LIGHTS_LIGHT_BLUE = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_LIGHT_BLUE);
-    public static final Item STRING_LIGHTS_BLUE = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_BLUE);
-    public static final Item STRING_LIGHTS_PURPLE = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_PURPLE);
-    public static final Item STRING_LIGHTS_MAGENTA = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_MAGENTA);
-    public static final Item STRING_LIGHTS_PINK = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_PINK);
+    public static final Item STRING_LIGHTS_COLORLESS = registerItem("string_lights_colorless", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_COLORLESS, p));
+    public static final Item STRING_LIGHTS_WHITE = registerItem("string_lights_white", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_WHITE, p));
+    public static final Item STRING_LIGHTS_LIGHT_GRAY = registerItem("string_lights_light_gray", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_LIGHT_GRAY, p));
+    public static final Item STRING_LIGHTS_GRAY = registerItem("string_lights_gray", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_GRAY, p));
+    public static final Item STRING_LIGHTS_BLACK = registerItem("string_lights_black", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_BLACK, p));
+    public static final Item STRING_LIGHTS_BROWN = registerItem("string_lights_brown", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_BROWN, p));
+    public static final Item STRING_LIGHTS_RED = registerItem("string_lights_red", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_RED, p));
+    public static final Item STRING_LIGHTS_ORANGE = registerItem("string_lights_orange", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_ORANGE, p));
+    public static final Item STRING_LIGHTS_YELLOW = registerItem("string_lights_yellow", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_YELLOW, p));
+    public static final Item STRING_LIGHTS_LIME = registerItem("string_lights_lime", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_LIME, p));
+    public static final Item STRING_LIGHTS_GREEN = registerItem("string_lights_green", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_GREEN, p));
+    public static final Item STRING_LIGHTS_CYAN = registerItem("string_lights_cyan", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_CYAN, p));
+    public static final Item STRING_LIGHTS_LIGHT_BLUE = registerItem("string_lights_light_blue", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_LIGHT_BLUE, p));
+    public static final Item STRING_LIGHTS_BLUE = registerItem("string_lights_blue", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_BLUE, p));
+    public static final Item STRING_LIGHTS_PURPLE = registerItem("string_lights_purple", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_PURPLE, p));
+    public static final Item STRING_LIGHTS_MAGENTA = registerItem("string_lights_magenta", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_MAGENTA, p));
+    public static final Item STRING_LIGHTS_PINK = registerItem("string_lights_pink", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_PINK, p));
 
     // 挂画
-    public static final Item YSBB_PAINTING = new PaintingBlockItem(ModBlocks.YSBB_PAINTING);
-    public static final Item TARTARIC_ACID_PAINTING = new PaintingBlockItem(ModBlocks.TARTARIC_ACID_PAINTING);
-    public static final Item CR019_PAINTING = new PaintingBlockItem(ModBlocks.CR019_PAINTING);
-    public static final Item UNKNOWN_PAINTING = new PaintingBlockItem(ModBlocks.UNKNOWN_PAINTING);
-    public static final Item MASTER_MARISA_PAINTING = new PaintingBlockItem(ModBlocks.MASTER_MARISA_PAINTING);
-    public static final Item SON_OF_MAN_PAINTING = new PaintingBlockItem(ModBlocks.SON_OF_MAN_PAINTING);
-    public static final Item DAVID_PAINTING = new PaintingBlockItem(ModBlocks.DAVID_PAINTING);
-    public static final Item GIRL_WITH_PEARL_EARRING_PAINTING = new PaintingBlockItem(ModBlocks.GIRL_WITH_PEARL_EARRING_PAINTING);
-    public static final Item STARRY_NIGHT_PAINTING = new PaintingBlockItem(ModBlocks.STARRY_NIGHT_PAINTING);
-    public static final Item VAN_GOGH_SELF_PORTRAIT_PAINTING = new PaintingBlockItem(ModBlocks.VAN_GOGH_SELF_PORTRAIT_PAINTING);
-    public static final Item FATHER_PAINTING = new PaintingBlockItem(ModBlocks.FATHER_PAINTING);
-    public static final Item GREAT_WAVE_PAINTING = new PaintingBlockItem(ModBlocks.GREAT_WAVE_PAINTING);
-    public static final Item MONA_LISA_PAINTING = new PaintingBlockItem(ModBlocks.MONA_LISA_PAINTING);
-    public static final Item MONDRIAN_PAINTING = new PaintingBlockItem(ModBlocks.MONDRIAN_PAINTING);
-
-    // 吧台
-    public static final Item BAR_COUNTER = new BlockItem(ModBlocks.BAR_COUNTER, new Item.Properties());
-    // 人字梯
-    public static final Item STEPLADDER = new BlockItem(ModBlocks.STEPLADDER, new Item.Properties());
-    // 藤架
-    public static final Item TRELLIS = new BlockItem(ModBlocks.TRELLIS, new Item.Properties());
-    // 果盆
-    public static final Item PRESSING_TUB = new BlockItem(ModBlocks.PRESSING_TUB, new Item.Properties());
-    // 龙头
-    public static final Item TAP = new BlockItem(ModBlocks.TAP, new Item.Properties());
-    // 酒桶
-    public static final Item BARREL = new BlockItem(ModBlocks.BARREL, new Item.Properties());
+    public static final Item YSBB_PAINTING = registerItem("ysbb_painting", p -> new PaintingBlockItem(ModBlocks.YSBB_PAINTING, p));
+    public static final Item TARTARIC_ACID_PAINTING = registerItem("tartaric_acid_painting", p -> new PaintingBlockItem(ModBlocks.TARTARIC_ACID_PAINTING, p));
+    public static final Item CR019_PAINTING = registerItem("cr019_painting", p -> new PaintingBlockItem(ModBlocks.CR019_PAINTING, p));
+    public static final Item UNKNOWN_PAINTING = registerItem("unknown_painting", p -> new PaintingBlockItem(ModBlocks.UNKNOWN_PAINTING, p));
+    public static final Item MASTER_MARISA_PAINTING = registerItem("master_marisa_painting", p -> new PaintingBlockItem(ModBlocks.MASTER_MARISA_PAINTING, p));
+    public static final Item SON_OF_MAN_PAINTING = registerItem("son_of_man_painting", p -> new PaintingBlockItem(ModBlocks.SON_OF_MAN_PAINTING, p));
+    public static final Item DAVID_PAINTING = registerItem("david_painting", p -> new PaintingBlockItem(ModBlocks.DAVID_PAINTING, p));
+    public static final Item GIRL_WITH_PEARL_EARRING_PAINTING = registerItem("girl_with_pearl_earring_painting", p -> new PaintingBlockItem(ModBlocks.GIRL_WITH_PEARL_EARRING_PAINTING, p));
+    public static final Item STARRY_NIGHT_PAINTING = registerItem("starry_night_painting", p -> new PaintingBlockItem(ModBlocks.STARRY_NIGHT_PAINTING, p));
+    public static final Item VAN_GOGH_SELF_PORTRAIT_PAINTING = registerItem("vangogh_self_portrait_painting", p -> new PaintingBlockItem(ModBlocks.VAN_GOGH_SELF_PORTRAIT_PAINTING, p));
+    public static final Item FATHER_PAINTING = registerItem("father_painting", p -> new PaintingBlockItem(ModBlocks.FATHER_PAINTING, p));
+    public static final Item GREAT_WAVE_PAINTING = registerItem("great_wave_painting", p -> new PaintingBlockItem(ModBlocks.GREAT_WAVE_PAINTING, p));
+    public static final Item MONA_LISA_PAINTING = registerItem("mona_lisa_painting", p -> new PaintingBlockItem(ModBlocks.MONA_LISA_PAINTING, p));
+    public static final Item MONDRIAN_PAINTING = registerItem("mondrian_painting", p -> new PaintingBlockItem(ModBlocks.MONDRIAN_PAINTING, p));
+    // 空瓶
+    public static final Item EMPTY_BOTTLE = registerItemViaBlock(ModBlocks.EMPTY_BOTTLE);
+    // 葡萄
+    public static final Item GRAPE = registerItem("grape", p -> new Item(p.food(ModFoods.GRAPE)));
+    // 野生葡萄藤
+    public static final Item GRAPEVINE = registerItem("grapevine", createBlockItemWithCustomItemName(ModBlocks.WILD_GRAPEVINE));
+    // 黑板
+    public static final Item CHALKBOARD = registerItem("chalkboard", p -> new BlockItem(ModBlocks.CHALKBOARD, p));
     // 燃烧瓶
-    public static final Item MOLOTOV = new MolotovBlockItem(ModBlocks.MOLOTOV);
+    public static final Item MOLOTOV = registerItem("molotov", p -> new MolotovBlockItem(ModBlocks.MOLOTOV, p));
+    // 吧台
+    public static final Item BAR_COUNTER = registerItem("bar_counter", p -> new BlockItem(ModBlocks.BAR_COUNTER, p));
+    // 人字梯
+    public static final Item STEPLADDER = registerItem("stepladder", p -> new BlockItem(ModBlocks.STEPLADDER, p));
+    // 藤架
+    public static final Item TRELLIS = registerItem("trellis", p -> new BlockItem(ModBlocks.TRELLIS, p));
+    // 果盆
+    public static final Item PRESSING_TUB = registerItem("pressing_tub", p -> new BlockItem(ModBlocks.PRESSING_TUB, p));
+    // 龙头
+    public static final Item TAP = registerItem("tap", p -> new BlockItem(ModBlocks.TAP, p));
+    // 酒桶
+    public static final Item BARREL = registerItem("barrel", p -> new BottleBlockItem(ModBlocks.BARREL, p));
     // 酒柜
-    public static final Item BAR_CABINET = new BlockItem(ModBlocks.BAR_CABINET, new Item.Properties());
-    public static final Item GLASS_BAR_CABINET = new BlockItem(ModBlocks.GLASS_BAR_CABINET, new Item.Properties());
+    public static final Item BAR_CABINET =registerItem("bar_cabinet", p -> new BlockItem(ModBlocks.BAR_CABINET, p));
+    public static final Item GLASS_BAR_CABINET = registerItem("glass_bar_cabinet", p -> new BlockItem(ModBlocks.GLASS_BAR_CABINET, p));
     // 酒
-    public static final Item WINE = new DrinkBlockItem(ModBlocks.WINE);
-    public static final Item CHAMPAGNE = new DrinkBlockItem(ModBlocks.CHAMPAGNE);
-    public static final Item VODKA = new DrinkBlockItem(ModBlocks.VODKA);
-    public static final Item BRANDY = new DrinkBlockItem(ModBlocks.BRANDY);
-    public static final Item CARIGNAN = new DrinkBlockItem(ModBlocks.CARIGNAN);
-    public static final Item SAKURA_WINE = new DrinkBlockItem(ModBlocks.SAKURA_WINE);
-    public static final Item PLUM_WINE = new DrinkBlockItem(ModBlocks.PLUM_WINE);
-    public static final Item WHISKEY = new DrinkBlockItem(ModBlocks.WHISKEY);
-    public static final Item ICE_WINE = new DrinkBlockItem(ModBlocks.ICE_WINE);
-    public static final Item VINEGAR = new DrinkBlockItem(ModBlocks.VINEGAR);
+    public static final Item WINE = registerItem("wine", p -> new DrinkBlockItem(ModBlocks.WINE, p));
+    public static final Item CHAMPAGNE = registerItem("champagne", p -> new DrinkBlockItem(ModBlocks.CHAMPAGNE, p));
+    public static final Item VODKA = registerItem("vodka", p -> new DrinkBlockItem(ModBlocks.VODKA, p));
+    public static final Item BRANDY = registerItem("brandy", p -> new DrinkBlockItem(ModBlocks.BRANDY, p));
+    public static final Item CARIGNAN = registerItem("carignan", p -> new DrinkBlockItem(ModBlocks.CARIGNAN, p));
+    public static final Item SAKURA_WINE = registerItem("sakura_wine", p -> new DrinkBlockItem(ModBlocks.SAKURA_WINE, p));
+    public static final Item PLUM_WINE = registerItem("plum_wine", p -> new DrinkBlockItem(ModBlocks.PLUM_WINE, p));
+    public static final Item WHISKEY = registerItem("whiskey", p -> new DrinkBlockItem(ModBlocks.WHISKEY, p));
+    public static final Item ICE_WINE = registerItem("ice_wine", p -> new DrinkBlockItem(ModBlocks.ICE_WINE, p));
+    public static final Item VINEGAR = registerItem("vinegar", p -> new DrinkBlockItem(ModBlocks.VINEGAR, p));
 
-    public static void registerItems() {
-        // 已存在的物品（确保全部注册）
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "grape"), GRAPE);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "grapevine"), GRAPEVINE);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "grape_bucket"), GRAPE_BUCKET);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "sweet_berries_bucket"), SWEET_BERRIES_BUCKET);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "glow_berries_bucket"), GLOW_BERRIES_BUCKET);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "empty_bottle"), EMPTY_BOTTLE);
+    // 果汁桶
+    public static final Item GRAPE_BUCKET = registerItem("grape_bucket", p -> new JuiceBucketItem(ModFluids.GRAPE_JUICE, p));
+    public static final Item SWEET_BERRIES_BUCKET = registerItem("sweet_berries_bucket", p -> new JuiceBucketItem(ModFluids.SWEET_BERRIES_JUICE, p));
+    public static final Item GLOW_BERRIES_BUCKET = registerItem("glow_berries_bucket", p -> new JuiceBucketItem(ModFluids.GLOW_BERRIES_JUICE, p));
+    public static void init() {
 
-        // 沙发
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "white_sofa"), WHITE_SOFA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "light_gray_sofa"), LIGHT_GRAY_SOFA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "gray_sofa"), GRAY_SOFA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "black_sofa"), BLACK_SOFA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "brown_sofa"), BROWN_SOFA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "red_sofa"), RED_SOFA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "orange_sofa"), ORANGE_SOFA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "yellow_sofa"), YELLOW_SOFA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "lime_sofa"), LIME_SOFA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "green_sofa"), GREEN_SOFA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "cyan_sofa"), CYAN_SOFA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "light_blue_sofa"), LIGHT_BLUE_SOFA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "blue_sofa"), BLUE_SOFA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "purple_sofa"), PURPLE_SOFA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "magenta_sofa"), MAGENTA_SOFA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "pink_sofa"), PINK_SOFA);
+    }
 
-        // 高脚凳
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "white_bar_stool"), WHITE_BAR_STOOL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "light_gray_bar_stool"), LIGHT_GRAY_BAR_STOOL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "gray_bar_stool"), GRAY_BAR_STOOL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "black_bar_stool"), BLACK_BAR_STOOL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "brown_bar_stool"), BROWN_BAR_STOOL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "red_bar_stool"), RED_BAR_STOOL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "orange_bar_stool"), ORANGE_BAR_STOOL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "yellow_bar_stool"), YELLOW_BAR_STOOL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "lime_bar_stool"), LIME_BAR_STOOL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "green_bar_stool"), GREEN_BAR_STOOL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "cyan_bar_stool"), CYAN_BAR_STOOL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "light_blue_bar_stool"), LIGHT_BLUE_BAR_STOOL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "blue_bar_stool"), BLUE_BAR_STOOL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "purple_bar_stool"), PURPLE_BAR_STOOL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "magenta_bar_stool"), MAGENTA_BAR_STOOL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "pink_bar_stool"), PINK_BAR_STOOL);
+    public static Item registerItemViaBlock(Block block, BiFunction<Block, Item.Properties, Item> biFunction, Item.Properties properties) {
+        return registerItem(
+                blockIdToItemId(block.builtInRegistryHolder().key()), properties2 -> biFunction.apply(block, properties2), properties.useBlockDescriptionPrefix()
+        );
+    }
 
-        // 黑板
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "chalkboard"), CHALKBOARD);
+    private static ResourceKey<Item> blockIdToItemId(ResourceKey<Block> resourceKey) {
+        return ResourceKey.create(Registries.ITEM, resourceKey.identifier());
+    }
 
-        // 展板
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "base_sandwich_board"), BASE_SANDWICH_BOARD);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "grass_sandwich_board"), GRASS_SANDWICH_BOARD);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "allium_sandwich_board"), ALLIUM_SANDWICH_BOARD);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "azure_bluet_sandwich_board"), AZURE_BLUET_SANDWICH_BOARD);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "cornflower_sandwich_board"), CORNFLOWER_SANDWICH_BOARD);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "orchid_sandwich_board"), ORCHID_SANDWICH_BOARD);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "peony_sandwich_board"), PEONY_SANDWICH_BOARD);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "pink_petals_sandwich_board"), PINK_PETALS_SANDWICH_BOARD);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "pitcher_plant_sandwich_board"), PITCHER_PLANT_SANDWICH_BOARD);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "poppy_sandwich_board"), POPPY_SANDWICH_BOARD);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "sunflower_sandwich_board"), SUNFLOWER_SANDWICH_BOARD);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "torchflower_sandwich_board"), TORCHFLOWER_SANDWICH_BOARD);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "tulip_sandwich_board"), TULIP_SANDWICH_BOARD);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "wither_rose_sandwich_board"), WITHER_ROSE_SANDWICH_BOARD);
+    public static Item registerItem(ResourceKey<Item> resourceKey, Function<Item.Properties, Item> function, Item.Properties properties) {
+        Item item = function.apply(properties.setId(resourceKey));
+        if (item instanceof BlockItem blockItem) {
+            blockItem.registerBlocks(Item.BY_BLOCK, item);
+        }
 
-        // 彩灯
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_colorless"), STRING_LIGHTS_COLORLESS);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_white"), STRING_LIGHTS_WHITE);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_light_gray"), STRING_LIGHTS_LIGHT_GRAY);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_gray"), STRING_LIGHTS_GRAY);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_black"), STRING_LIGHTS_BLACK);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_brown"), STRING_LIGHTS_BROWN);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_red"), STRING_LIGHTS_RED);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_orange"), STRING_LIGHTS_ORANGE);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_yellow"), STRING_LIGHTS_YELLOW);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_lime"), STRING_LIGHTS_LIME);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_green"), STRING_LIGHTS_GREEN);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_cyan"), STRING_LIGHTS_CYAN);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_light_blue"), STRING_LIGHTS_LIGHT_BLUE);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_blue"), STRING_LIGHTS_BLUE);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_purple"), STRING_LIGHTS_PURPLE);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_magenta"), STRING_LIGHTS_MAGENTA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_pink"), STRING_LIGHTS_PINK);
+        return Registry.register(BuiltInRegistries.ITEM, resourceKey, item);
+    }
 
-        // 挂画
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "ysbb_painting"), YSBB_PAINTING);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "tartaric_acid_painting"), TARTARIC_ACID_PAINTING);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "cr019_painting"), CR019_PAINTING);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "unknown_painting"), UNKNOWN_PAINTING);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "master_marisa_painting"), MASTER_MARISA_PAINTING);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "son_of_man_painting"), SON_OF_MAN_PAINTING);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "david_painting"), DAVID_PAINTING);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "girl_with_pearl_earring_painting"), GIRL_WITH_PEARL_EARRING_PAINTING);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "starry_night_painting"), STARRY_NIGHT_PAINTING);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "van_gogh_self_portrait_painting"), VAN_GOGH_SELF_PORTRAIT_PAINTING);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "father_painting"), FATHER_PAINTING);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "great_wave_painting"), GREAT_WAVE_PAINTING);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "mona_lisa_painting"), MONA_LISA_PAINTING);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "mondrian_painting"), MONDRIAN_PAINTING);
+    private static Function<Item.Properties, Item> createBlockItemWithCustomItemName(Block block) {
+        return properties -> new BlockItem(block, properties.useItemDescriptionPrefix());
+    }
 
-        // 其他方块物品
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "bar_counter"), BAR_COUNTER);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "stepladder"), STEPLADDER);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "trellis"), TRELLIS);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "pressing_tub"), PRESSING_TUB);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "tap"), TAP);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "barrel"), BARREL);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "molotov"), MOLOTOV);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "bar_cabinet"), BAR_CABINET);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "glass_bar_cabinet"), GLASS_BAR_CABINET);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "wine"), WINE);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "champagne"), CHAMPAGNE);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "vodka"), VODKA);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "brandy"), BRANDY);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "carignan"), CARIGNAN);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "sakura_wine"), SAKURA_WINE);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "plum_wine"), PLUM_WINE);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "whiskey"), WHISKEY);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "ice_wine"), ICE_WINE);
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "vinegar"), VINEGAR);
+    public static Item registerItem(String string) {
+        return registerItem(PortHelper.createItemId(string), Item::new, new Item.Properties());
+    }
+
+    public static Item registerItem(String string, Function<Item.Properties, Item> function) {
+        return registerItem(PortHelper.createItemId(string), function, new Item.Properties());
+    }
+
+    public static Item registerItem(String string, Function<Item.Properties, Item> function, Item.Properties properties) {
+        return registerItem(PortHelper.createItemId(string), function, properties);
+    }
+
+
+    public static Item registerItemViaBlock(Block block, BiFunction<Block, Item.Properties, Item> biFunction) {
+        return registerItemViaBlock(block, biFunction, new Item.Properties());
+    }
+
+    public static Item registerItemViaBlock(Block block) {
+        return registerItemViaBlock(block, BlockItem::new);
     }
 }

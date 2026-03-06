@@ -3,9 +3,11 @@ package com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import org.jspecify.annotations.NonNull;
 
 public class BarCabinetBlockEntity extends BaseBlockEntity {
     /**
@@ -26,37 +28,26 @@ public class BarCabinetBlockEntity extends BaseBlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-
-        if (tag.contains("left_item")) {
-            this.leftItem = ItemStack.of(tag.getCompound("left_item"));
-        } else {
-            this.leftItem = ItemStack.EMPTY;
-        }
-
-        if (tag.contains("right_item")) {
-            this.rightItem = ItemStack.of(tag.getCompound("right_item"));
-        } else {
-            this.rightItem = ItemStack.EMPTY;
-        }
-
-        this.isSingle = tag.getBoolean("is_single");
-    }
-
-    @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-
+    protected void saveAdditional(@NonNull ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
         if (!this.leftItem.isEmpty()) {
-            tag.put("left_item", this.leftItem.save(new CompoundTag()));
+            valueOutput.store("left_item", ItemStack.CODEC, this.leftItem);
         }
 
         if (!this.rightItem.isEmpty()) {
-            tag.put("right_item", this.rightItem.save(new CompoundTag()));
+            valueOutput.store("right_item", ItemStack.CODEC, this.rightItem);
         }
 
-        tag.putBoolean("is_single", this.isSingle);
+        valueOutput.putBoolean("is_single", this.isSingle);
+    }
+
+    @Override
+    protected void loadAdditional(@NonNull ValueInput valueInput) {
+        super.loadAdditional(valueInput);
+
+        valueInput.read("left_item", ItemStack.CODEC).ifPresentOrElse(itemStack -> this.leftItem = itemStack, () -> this.leftItem = ItemStack.EMPTY);
+        valueInput.read("right_item", ItemStack.CODEC).ifPresentOrElse(itemStack -> this.rightItem = itemStack, () -> this.rightItem = ItemStack.EMPTY);
+        this.isSingle = valueInput.getBooleanOr("is_single", false);
     }
 
     public ItemStack getLeftItem() {

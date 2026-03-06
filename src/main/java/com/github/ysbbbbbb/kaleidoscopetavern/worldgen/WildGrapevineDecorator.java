@@ -3,16 +3,16 @@ package com.github.ysbbbbbb.kaleidoscopetavern.worldgen;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModTreeDecoratorTypes;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
+import org.jspecify.annotations.NonNull;
 
-@MethodsReturnNonnullByDefault
 public class WildGrapevineDecorator extends TreeDecorator {
-    public static final Codec<WildGrapevineDecorator> CODEC = RecordCodecBuilder.create(instance ->
+    public static final MapCodec<WildGrapevineDecorator> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
                     Codec.floatRange(0.0F, 1.0F).fieldOf("probability").forGetter(d -> d.probability),
                     Codec.intRange(1, 16).fieldOf("max_vine_count").forGetter(d -> d.maxVineCount),
@@ -40,7 +40,7 @@ public class WildGrapevineDecorator extends TreeDecorator {
     }
 
     @Override
-    protected TreeDecoratorType<?> type() {
+    protected @NonNull TreeDecoratorType<?> type() {
         return ModTreeDecoratorTypes.WILD_GRAPEVINE;
     }
 

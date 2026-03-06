@@ -3,8 +3,8 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.DrinkBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.DrinkBlockItem;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.VoxelShapeUtils;
-import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemHandlerHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -29,19 +29,21 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.EnumMap;
 import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class DrinkBlock extends BottleBlock implements EntityBlock {
     protected final IntegerProperty countProperty;
     protected final int maxCount;
     protected final EnumMap<Direction, VoxelShape>[] shapes;
+    protected final String id;
 
     @SuppressWarnings("unchecked")
-    public DrinkBlock(boolean irregular, int maxCount, VoxelShape... shapes) {
-        super(irregular);
+    public DrinkBlock(String id, boolean irregular, int maxCount, VoxelShape... shapes) {
+        super(id, irregular);
+        this.id = id;
         this.maxCount = maxCount;
         this.countProperty = IntegerProperty.create("count", 1, maxCount);
         this.shapes = new EnumMap[shapes.length];
@@ -59,8 +61,8 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
                 .setValue(WATERLOGGED, false));
     }
 
-    public DrinkBlock(int maxCount, VoxelShape... shapes) {
-        this(false, maxCount, shapes);
+    public String getId() {
+        return id;
     }
 
     public boolean tryIncreaseCount(Level level, BlockPos pos, BlockState state, ItemStack stack) {
@@ -78,19 +80,18 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
         // 如果是空手，那么可以尝试取回
         if (!player.getItemInHand(hand).isEmpty()) {
-            return super.use(state, level, pos, player, hand, hitResult);
+            return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
         }
 
         // 尝试给玩家物品
         if (level.getBlockEntity(pos) instanceof DrinkBlockEntity be) {
-            ItemStack stack = be.removeItem();
-            if (!stack.isEmpty()) {
+            ItemStack removeItem = be.removeItem();
+            if (!removeItem.isEmpty()) {
                 be.refresh();
-                ItemHandlerHelper.giveItemToPlayer(player, stack);
+                ItemUtils.giveItemToPlayer(player, removeItem);
                 // 播放放置的音效
                 level.playSound(null, pos, SoundEvents.GLASS_PLACE, SoundSource.BLOCKS);
             }
@@ -108,9 +109,9 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     }
 
     @Override
-    public void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
+    public void onProjectileHit(Level level, @NonNull BlockState state, @NonNull BlockHitResult hit, @NonNull Projectile projectile) {
         // 获取其中所含的效果等级最高的酒
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             super.onProjectileHit(level, state, hit, projectile);
             return;
         }
@@ -141,7 +142,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     }
 
     @Override
-    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
+    public @NotNull List<ItemStack> getDrops(@NonNull BlockState state, LootParams.@NonNull Builder params) {
         List<ItemStack> stacks = super.getDrops(state, params);
         BlockEntity blockEntity = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (blockEntity instanceof DrinkBlockEntity be) {
@@ -159,7 +160,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos, @NonNull CollisionContext context) {
         if (this.shapes.length == 0) {
             return super.getShape(state, level, pos, context);
         }
@@ -173,7 +174,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NonNull BlockPos pos, @NonNull BlockState state) {
         return new DrinkBlockEntity(pos, state);
     }
 
@@ -193,9 +194,15 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
         private boolean irregular = false;
         private int maxCount;
         private VoxelShape[] shapes;
+        private String id = "";
 
         public Builder irregular() {
             this.irregular = true;
+            return this;
+        }
+
+        public Builder setId(String id) {
+            this.id = id;
             return this;
         }
 
@@ -210,7 +217,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
         }
 
         public Block build() {
-            return new DrinkBlock(irregular, maxCount, shapes);
+            return new DrinkBlock(id, irregular, maxCount, shapes);
         }
     }
 }

@@ -4,18 +4,18 @@ import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.PositionType;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.ChalkboardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -33,13 +33,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collections;
 import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final MapCodec<ChalkboardBlock> CODEC = simpleCodec(ChalkboardBlock::new);
+
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
     public static final EnumProperty<PositionType> POSITION = EnumProperty.create("position", PositionType.class);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -56,8 +58,8 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
     private static final VoxelShape UP_WEST_SHAPE = Block.box(15, 0, 0, 16, 14, 16);
     private static final VoxelShape DOWN_WEST_SHAPE = Block.box(15, 2, 0, 16, 16, 16);
 
-    public ChalkboardBlock() {
-        super(Properties.of()
+    public ChalkboardBlock(Properties properties) {
+        super(properties
                 .mapColor(MapColor.WOOD)
                 .instrument(NoteBlockInstrument.GUITAR)
                 .strength(0.8F)
@@ -72,8 +74,8 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, BlockState state, @NonNull Level level, @NonNull BlockPos pos,
+                                                @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
         Half half = state.getValue(HALF);
         PositionType position = state.getValue(POSITION);
         Direction facing = state.getValue(FACING);
@@ -98,16 +100,15 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
             return TextBlockEntity.onItemUse(level, chalkboard, player, hand);
         }
 
-        return super.use(state, level, pos, player, hand, hitResult);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-        if (state.getValue(WATERLOGGED)) {
-            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+    protected @NonNull BlockState updateShape(@NonNull BlockState blockState, @NonNull LevelReader levelReader, @NonNull ScheduledTickAccess scheduledTickAccess, @NonNull BlockPos blockPos, @NonNull Direction direction, @NonNull BlockPos blockPos2, @NonNull BlockState blockState2, @NonNull RandomSource randomSource) {
+        if (blockState.getValue(WATERLOGGED)) {
+            scheduledTickAccess.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
         }
-        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+        return super.updateShape(blockState, levelReader, scheduledTickAccess, blockPos, direction, blockPos2, blockState2, randomSource);
     }
 
     @Override
@@ -116,7 +117,7 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
         BlockPos pos = context.getClickedPos();
         Level level = context.getLevel();
         FluidState fluidState = context.getLevel().getFluidState(pos);
-        if (pos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(pos.above()).canBeReplaced(context)) {
+        if (pos.getY() < level.getMaxY() - 1 && level.getBlockState(pos.above()).canBeReplaced(context)) {
             Direction clickedFace = context.getClickedFace();
             if (clickedFace.getAxis().isVertical()) {
                 clickedFace = context.getHorizontalDirection().getOpposite();
@@ -130,19 +131,19 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public @NotNull BlockState playerWillDestroy(@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state, @NonNull Player player) {
         handleRemove(level, pos, state, player);
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
-    public void wasExploded(Level level, BlockPos blockPos, Explosion explosion) {
-        handleRemove(level, blockPos, level.getBlockState(blockPos), null);
-        super.wasExploded(level, blockPos, explosion);
+    public void wasExploded(@NonNull ServerLevel serverLevel, @NonNull BlockPos blockPos, @NonNull Explosion explosion) {
+        handleRemove(serverLevel, blockPos, serverLevel.getBlockState(blockPos), null);
+        super.wasExploded(serverLevel, blockPos, explosion);
     }
 
     private static void handleRemove(Level world, BlockPos pos, BlockState state, @Nullable Player player) {
-        if (world.isClientSide) {
+        if (world.isClientSide()) {
             return;
         }
 
@@ -190,7 +191,7 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+    public void setPlacedBy(@NonNull Level level, @NonNull BlockPos pos, BlockState state, @Nullable LivingEntity entity, @NonNull ItemStack stack) {
         Direction direction = state.getValue(FACING);
 
         // 如果不是玩家放置或者玩家没有按下 Shift 键，那么就尝试和周围的黑板组合成大黑板
@@ -300,7 +301,7 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NonNull BlockPos pos, BlockState state) {
         Half half = state.getValue(HALF);
         PositionType position = state.getValue(POSITION);
         // 小黑板
@@ -316,7 +317,7 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NonNull Level level, @NonNull BlockState state, @NonNull BlockEntityType<T> type) {
         return createTickerHelper(type, ModBlocks.CHALKBOARD_BE, TextBlockEntity::tick);
     }
 
@@ -326,17 +327,17 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
         PositionType position = state.getValue(POSITION);
         // 小黑板
         if (half == Half.BOTTOM && position == PositionType.SINGLE) {
-            return RenderShape.ENTITYBLOCK_ANIMATED;
+            return RenderShape.MODEL;
         }
         // 大黑板
         if (half == Half.BOTTOM && position == PositionType.MIDDLE) {
-            return RenderShape.ENTITYBLOCK_ANIMATED;
+            return RenderShape.MODEL;
         }
         return RenderShape.INVISIBLE;
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos, @NonNull CollisionContext context) {
         Direction facing = state.getValue(FACING);
         Half half = state.getValue(HALF);
         if (facing == Direction.NORTH) {
@@ -351,7 +352,7 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
     }
 
     @Override
-    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder lootParamsBuilder) {
+    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.@NonNull Builder lootParamsBuilder) {
         if (state.getValue(HALF) == Half.BOTTOM) {
             return super.getDrops(state, lootParamsBuilder);
         }
@@ -376,5 +377,10 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
     @Override
     public @NotNull BlockState mirror(BlockState pState, Mirror pMirror) {
         return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 }

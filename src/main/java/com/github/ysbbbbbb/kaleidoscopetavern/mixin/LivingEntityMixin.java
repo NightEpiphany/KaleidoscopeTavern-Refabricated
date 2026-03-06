@@ -12,9 +12,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
 
-    @Inject(method = "getEquipmentSlotForItem", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getEquipmentSlotForItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"), cancellable = true)
     private static void getEquipmentSlotForItem(ItemStack itemStack, CallbackInfoReturnable<EquipmentSlot> cir) {
-        if (itemStack.getItem() instanceof StringLightsBlockItem)
+        if (itemStack.getItem() instanceof StringLightsBlockItem) {
+            if (cir == null || itemStack.isEmpty()) {
+                return;
+            }
             cir.setReturnValue(EquipmentSlot.CHEST);
+        }
     }
 }

@@ -8,14 +8,15 @@ import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -58,42 +59,39 @@ public class RenderUtils {
      */
     public static void renderSurface(PoseStack poseStack, MultiBufferSource buffer, TextureAtlasSprite sprite,
                                      int color, int light, int size, float y) {
-        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.translucent());
+        VertexConsumer vertexConsumer = buffer.getBuffer(RenderTypes.translucentMovingBlock());
         Matrix4f matrix = poseStack.last().pose();
 
         // 贴图的位置和大小
         int margin = (16 - size) / 2;
         float min = margin / 16f, max = 1 - margin / 16f;
+        float spriteSize = size / 16f;
 
         // 渲染一个平面
-        vertexConsumer.vertex(matrix, min, y, min)
-                .color(color)
-                .uv(sprite.getU0(), sprite.getV0())
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(light)
-                .normal(0, 1, 0)
-                .endVertex();
-        vertexConsumer.vertex(matrix, min, y, max)
-                .color(color)
-                .uv(sprite.getU0(), sprite.getV(size))
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(light)
-                .normal(0, 1, 0)
-                .endVertex();
-        vertexConsumer.vertex(matrix, max, y, max)
-                .color(color)
-                .uv(sprite.getU(size), sprite.getV(size))
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(light)
-                .normal(0, 1, 0)
-                .endVertex();
-        vertexConsumer.vertex(matrix, max, y, min)
-                .color(color)
-                .uv(sprite.getU(size), sprite.getV0())
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(light)
-                .normal(0, 1, 0)
-                .endVertex();
+        vertexConsumer.addVertex(matrix, min, y, min)
+                .setColor(color)
+                .setUv(sprite.getU0(), sprite.getV0())
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(light)
+                .setNormal(0, 1, 0);
+        vertexConsumer.addVertex(matrix, min, y, max)
+                .setColor(color)
+                .setUv(sprite.getU0(), sprite.getV(spriteSize))
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(light)
+                .setNormal(0, 1, 0);
+        vertexConsumer.addVertex(matrix, max, y, max)
+                .setColor(color)
+                .setUv(sprite.getU(spriteSize), sprite.getV(spriteSize))
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(light)
+                .setNormal(0, 1, 0);
+        vertexConsumer.addVertex(matrix, max, y, min)
+                .setColor(color)
+                .setUv(sprite.getU(spriteSize), sprite.getV0())
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(light)
+                .setNormal(0, 1, 0);
     }
 
     /**
@@ -123,8 +121,8 @@ public class RenderUtils {
                 return sprites[0];
             }
         }
-        ResourceLocation missing = MissingTextureAtlasSprite.getLocation();
-        return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(missing);
+        Identifier missing = MissingTextureAtlasSprite.getLocation();
+        return Minecraft.getInstance().getModelManager().atlasManager.get(new Material(TextureAtlas.LOCATION_BLOCKS, missing));
     }
 
     private static int getFluidColor(BlockAndTintGetter level, BlockPos pos, Fluid fluid) {

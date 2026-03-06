@@ -7,13 +7,13 @@ import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 
 public class StringLightsBlockItem extends BlockItem {
-    public StringLightsBlockItem(Block block) {
-        super(block, new Properties());
+    public StringLightsBlockItem(Block block, Properties properties) {
+        super(block, properties);
     }
 
     @Deprecated
     public @Nullable EquipmentSlot getEquipmentSlot(ItemStack stack) {
         return EquipmentSlot.CHEST;
     }
-}
 
+}

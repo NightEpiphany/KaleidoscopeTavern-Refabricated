@@ -1,8 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.model.deco;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.Model;
@@ -10,16 +8,16 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 
 @Environment(EnvType.CLIENT)
-public class SmallChalkboardModel extends Model {
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(KaleidoscopeTavern.MOD_ID, "small_chalk"), "main");
+public class SmallChalkboardModel extends Model<SmallChalkboardModel.State> {
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "small_chalk"), "main");
     private final ModelPart bone;
 
     public SmallChalkboardModel(ModelPart root) {
-        super(RenderType::entityCutoutNoCull);
+        super(root, RenderTypes::entitySolid);
         this.bone = root.getChild("bone");
     }
 
@@ -30,8 +28,7 @@ public class SmallChalkboardModel extends Model {
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        bone.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+    @Environment(EnvType.CLIENT)
+    public record State() {
     }
 }

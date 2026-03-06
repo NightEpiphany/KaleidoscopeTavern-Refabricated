@@ -1,41 +1,43 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.network.message;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.gui.block.TextScreen;
-import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.networking.v1.FabricPacket;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
-public record TextOpenS2CMessage(BlockPos pos) implements FabricPacket {
-    public static final PacketType<TextOpenS2CMessage> TYPE = PacketType.create(NetworkHandler.TEXT_OPEN_S2C_PACKET, TextOpenS2CMessage::new);
+public record TextOpenS2CMessage(BlockPos pos) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<TextOpenS2CMessage> TYPE = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "text_open"));
 
-    public TextOpenS2CMessage(FriendlyByteBuf buf) {
-        this(buf.readBlockPos());
-    }
+    public static final StreamCodec<FriendlyByteBuf, TextOpenS2CMessage> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public @NotNull TextOpenS2CMessage decode(FriendlyByteBuf buf) {
+            return new TextOpenS2CMessage(buf.readBlockPos());
+        }
+
+        @Override
+        public void encode(FriendlyByteBuf buf, TextOpenS2CMessage msg) {
+            buf.writeBlockPos(msg.pos());
+        }
+    };
 
     @Override
-    public void write(FriendlyByteBuf friendlyByteBuf) {
-        friendlyByteBuf.writeBlockPos(pos);
-    }
-
-    @Override
-    public PacketType<?> getType() {
+    public @NotNull Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 
     @Environment(EnvType.CLIENT)
-    public static void receive(TextOpenS2CMessage message, LocalPlayer localPlayer, PacketSender packetSender) {
+    private static void onHandle(TextOpenS2CMessage message) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) {
             return;
@@ -58,5 +60,10 @@ public record TextOpenS2CMessage(BlockPos pos) implements FabricPacket {
             }
             mc.setScreen(new TextScreen(textBlock));
         }
+    }
+
+
+    public static void receive(TextOpenS2CMessage textOpenS2CMessage, ClientPlayNetworking.Context context) {
+        onHandle(textOpenS2CMessage);
     }
 }

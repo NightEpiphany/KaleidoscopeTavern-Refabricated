@@ -3,23 +3,25 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.PositionType;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.BarCabinetBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -27,16 +29,17 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class BarCabinetBlock extends BaseEntityBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final MapCodec<BarCabinetBlock> CODEC = simpleCodec(BarCabinetBlock::new);
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<PositionType> POSITION = EnumProperty.create("position", PositionType.class);
 
-    public BarCabinetBlock() {
-        super(Properties.of()
+    public BarCabinetBlock(Properties properties) {
+        super(properties
                 .mapColor(MapColor.WOOD)
                 .strength(2.5F)
                 .sound(SoundType.WOOD)
@@ -48,14 +51,13 @@ public class BarCabinetBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
-        if (level.isClientSide || hand != InteractionHand.MAIN_HAND) {
+    public @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, Level level, @NonNull BlockPos pos,
+                                                @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
+        if (level.isClientSide() || hand != InteractionHand.MAIN_HAND) {
             return InteractionResult.PASS;
         }
 
         Direction direction = state.getValue(FACING);
-        ItemStack stack = player.getItemInHand(hand);
 
         // 判断点击的是左侧还是右侧
         boolean isLeftSide = switch (direction) {
@@ -74,7 +76,7 @@ public class BarCabinetBlock extends BaseEntityBlock {
             return InteractionResult.SUCCESS;
         }
 
-        return super.use(state, level, pos, player, hand, hitResult);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     private boolean onClick(BarCabinetBlockEntity barCabinet, Player player, ItemStack stack, boolean isLeftSide) {
@@ -179,15 +181,14 @@ public class BarCabinetBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    protected @NonNull BlockState updateShape(BlockState state, @NonNull LevelReader levelReader, @NonNull ScheduledTickAccess scheduledTickAccess, @NonNull BlockPos blockPos, @NonNull Direction direction, @NonNull BlockPos blockPos2, @NonNull BlockState blockState2, @NonNull RandomSource randomSource) {
         Direction self = state.getValue(FACING);
         Direction left = self.getClockWise();
         Direction right = self.getCounterClockWise();
 
         // 如果更新来自左边
         if (direction == left) {
-            boolean leftIsCabinet = neighborState.is(this) && neighborState.getValue(FACING) == self;
+            boolean leftIsCabinet = blockState2.is(this) && blockState2.getValue(FACING) == self;
             PositionType position = state.getValue(POSITION);
             if (leftIsCabinet) {
                 if (position == PositionType.SINGLE) {
@@ -203,7 +204,7 @@ public class BarCabinetBlock extends BaseEntityBlock {
                 }
             }
         } else if (direction == right) {
-            boolean rightIsCabinet = neighborState.is(this) && neighborState.getValue(FACING) == self;
+            boolean rightIsCabinet = blockState2.is(this) && blockState2.getValue(FACING) == self;
             PositionType position = state.getValue(POSITION);
             if (rightIsCabinet) {
                 if (position == PositionType.SINGLE) {
@@ -219,7 +220,7 @@ public class BarCabinetBlock extends BaseEntityBlock {
                 }
             }
         }
-        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+        return super.updateShape(state, levelReader, scheduledTickAccess, blockPos, direction, blockPos2, blockState2, randomSource);
     }
 
     @Override
@@ -256,7 +257,7 @@ public class BarCabinetBlock extends BaseEntityBlock {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+    public @NotNull List<ItemStack> getDrops(@NonNull BlockState state, LootParams.@NonNull Builder builder) {
         List<ItemStack> stacks = super.getDrops(state, builder);
         BlockEntity blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (blockEntity instanceof BarCabinetBlockEntity barCabinet) {
@@ -274,22 +275,27 @@ public class BarCabinetBlock extends BaseEntityBlock {
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NonNull BlockPos pos, @NonNull BlockState state) {
         return new BarCabinetBlockEntity(pos, state);
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState state) {
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public @NotNull RenderShape getRenderShape(@NonNull BlockState state) {
         return RenderShape.MODEL;
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot) {
+    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror) {
+    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 }

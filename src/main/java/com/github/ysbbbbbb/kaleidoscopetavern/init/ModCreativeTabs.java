@@ -6,26 +6,26 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 
 public class ModCreativeTabs {
-    private static final ResourceLocation MAIN_ICON_ID = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "wine");
+    private static final Identifier MAIN_ICON_ID = Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "wine");
 
-    private static final ResourceLocation DECO_ICON_ID = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "stepladder");
+    private static final Identifier DECO_ICON_ID = Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "stepladder");
 
     private static final ResourceKey<CreativeModeTab> TAVERN_MAIN_TAB = ResourceKey.create(Registries.CREATIVE_MODE_TAB,
-            new ResourceLocation(KaleidoscopeTavern.MOD_ID, "tavern_main"));
+            Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "tavern_main"));
 
     private static final ResourceKey<CreativeModeTab> TAVERN_DECO_TAB = ResourceKey.create(Registries.CREATIVE_MODE_TAB,
-            new ResourceLocation(KaleidoscopeTavern.MOD_ID, "tavern_deco"));
+            Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "tavern_deco"));
 
 
     public static void registerTabs() {
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TAVERN_MAIN_TAB, FabricItemGroup.builder()
                 .title(Component.translatable("item_group.kaleidoscope_tavern.tavern_main.name"))
-                .icon(() -> BuiltInRegistries.ITEM.get(MAIN_ICON_ID).getDefaultInstance())
+                .icon(() -> BuiltInRegistries.ITEM.getValue(MAIN_ICON_ID).getDefaultInstance())
                 .displayItems((par, output) -> {
                     output.accept(ModItems.GRAPEVINE);
                     output.accept(ModItems.GRAPE);
@@ -56,7 +56,7 @@ public class ModCreativeTabs {
 
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TAVERN_DECO_TAB, FabricItemGroup.builder()
                 .title(Component.translatable("item_group.kaleidoscope_tavern.tavern_deco.name"))
-                .icon(() -> BuiltInRegistries.ITEM.get(DECO_ICON_ID).getDefaultInstance())
+                .icon(() -> BuiltInRegistries.ITEM.getValue(DECO_ICON_ID).getDefaultInstance())
                 .displayItems((par, output) -> {
                     output.accept(ModItems.BAR_CABINET);
                     output.accept(ModItems.GLASS_BAR_CABINET);

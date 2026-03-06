@@ -31,6 +31,7 @@ public class ChalkboardBlockEntity extends TextBlockEntity {
         return this.isLarge() ? 1500 : 350;
     }
 
+
     public boolean isLarge() {
         return isLarge;
     }

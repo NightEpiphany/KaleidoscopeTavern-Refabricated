@@ -6,13 +6,13 @@ import com.github.ysbbbbbb.kaleidoscopetavern.util.TextAlignment;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import org.jspecify.annotations.NonNull;
 
 @Environment(EnvType.CLIENT)
 public class TextScreen extends Screen {
@@ -38,10 +38,9 @@ public class TextScreen extends Screen {
         int boxWidth = 256;
         int maxTextLength = this.blockEntity.getMaxTextLength();
 
-        this.customSetting = this.addRenderableWidget(new MultiLineEditBox(font,
-                posX, posY, boxWidth, 120,
-                Component.translatable("gui.kaleidoscope_tavern.text.edit.placeholder"),
-                Component.literal("Custom Setting Box")));
+        this.customSetting = this.addRenderableWidget(
+                MultiLineEditBox.builder().setPlaceholder(Component.translatable("gui.kaleidoscope_tavern.text.edit.placeholder")).build(font, boxWidth, 120, Component.literal("Custom Setting Box"))
+        );
         this.customSetting.setValue(text);
         this.customSetting.setCharacterLimit(maxTextLength);
         this.customSetting.setValueListener(s -> text = s);
@@ -97,20 +96,9 @@ public class TextScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(graphics);
-        super.render(graphics, mouseX, mouseY, partialTick);
-    }
-
-    @Override
-    public void tick() {
-        this.customSetting.tick();
-    }
-
-    @Override
-    public void resize(Minecraft mc, int pWidth, int pHeight) {
+    public void resize(int i, int j) {
         String customSettingValue = this.customSetting.getValue();
-        super.resize(mc, pWidth, pHeight);
+        super.resize(i, j);
         this.customSetting.setValue(customSettingValue);
     }
 
@@ -120,7 +108,7 @@ public class TextScreen extends Screen {
     }
 
     @Override
-    public boolean mouseReleased(double x, double y, int button) {
-        return super.mouseReleased(x, y, button) || this.customSetting.mouseReleased(x, y, button);
+    public boolean mouseReleased(@NonNull MouseButtonEvent mouseButtonEvent) {
+        return super.mouseReleased(mouseButtonEvent) || this.customSetting.mouseReleased(mouseButtonEvent);
     }
 }

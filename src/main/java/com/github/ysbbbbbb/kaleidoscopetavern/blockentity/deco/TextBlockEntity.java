@@ -6,7 +6,6 @@ import com.github.ysbbbbbb.kaleidoscopetavern.util.TextAlignment;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -18,8 +17,11 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
 
@@ -149,23 +151,23 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
     public abstract int getMaxTextLength();
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-        this.text = tag.getString("text");
-        this.color = DyeColor.byId(tag.getInt("color"));
-        this.textAlignment = TextAlignment.byId(tag.getInt("text_alignment"));
-        this.isWaxed = tag.getBoolean("is_waxed");
-        this.isGlowing = tag.getBoolean("is_glowing");
+    public void loadAdditional(@NonNull ValueInput valueInput) {
+        super.loadAdditional(valueInput);
+        this.text = valueInput.getStringOr("text", "");
+        this.color = DyeColor.byId(valueInput.getIntOr("color", DyeColor.WHITE.getId()));
+        this.textAlignment = TextAlignment.byId(valueInput.getIntOr("text_alignment", TextAlignment.CENTER.getId()));
+        this.isWaxed = valueInput.getBooleanOr("is_waxed", false);
+        this.isGlowing = valueInput.getBooleanOr("is_glowing", false);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.putString("text", this.text);
-        tag.putInt("color", this.color.getId());
-        tag.putInt("text_alignment", this.textAlignment.getId());
-        tag.putBoolean("is_waxed", this.isWaxed);
-        tag.putBoolean("is_glowing", this.isGlowing);
+    protected void saveAdditional(@NonNull ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+        valueOutput.putString("text", this.text);
+        valueOutput.putInt("color", this.color.getId());
+        valueOutput.putInt("text_alignment", this.textAlignment.getId());
+        valueOutput.putBoolean("is_waxed", this.isWaxed);
+        valueOutput.putBoolean("is_glowing", this.isGlowing);
     }
 
     public boolean playerIsTooFarAwayToEdit(UUID id) {

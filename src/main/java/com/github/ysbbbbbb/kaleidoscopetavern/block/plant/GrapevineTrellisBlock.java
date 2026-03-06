@@ -15,10 +15,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
@@ -37,11 +34,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import static com.github.ysbbbbbb.kaleidoscopetavern.block.plant.ITrellis.axisHasTrellis;
 import static com.github.ysbbbbbb.kaleidoscopetavern.block.plant.ITrellis.updateType;
+import static com.github.ysbbbbbb.kaleidoscopetavern.util.PortHelper.getSlotForHand;
 
-@SuppressWarnings("deprecation")
 public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlock, ITrellis, BonemealableBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
@@ -53,8 +51,8 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
 
     private final float growPerTickProbability;
 
-    public GrapevineTrellisBlock() {
-        super(Properties.of()
+    public GrapevineTrellisBlock(Properties properties) {
+        super(properties
                 .mapColor(MapColor.WOOD)
                 .instrument(NoteBlockInstrument.GUITAR)
                 .strength(0.8F)
@@ -71,12 +69,11 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
         // 如果玩家拿的是剪刀，可以剪下葡萄藤
         ItemStack itemInHand = player.getItemInHand(hand);
         if (!itemInHand.is(Items.SHEARS)) {
-            return super.use(state, level, pos, player, hand, hitResult);
+            return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
         }
         BlockState newState = ModBlocks.TRELLIS
                 .defaultBlockState()
@@ -85,24 +82,23 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
         level.setBlockAndUpdate(pos, newState);
         // 掉落一个葡萄藤物品
         Block.popResource(level, pos, ModItems.GRAPEVINE.getDefaultInstance());
-        itemInHand.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+        itemInHand.hurtAndBreak(1, player, getSlotForHand(hand));
         player.playSound(SoundEvents.BEEHIVE_SHEAR);
         return InteractionResult.SUCCESS;
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-        if (state.getValue(WATERLOGGED)) {
-            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+    protected @NonNull BlockState updateShape(@NonNull BlockState blockState, @NonNull LevelReader levelReader, @NonNull ScheduledTickAccess scheduledTickAccess, @NonNull BlockPos blockPos, @NonNull Direction direction, @NonNull BlockPos blockPos2, @NonNull BlockState blockState2, @NonNull RandomSource randomSource) {
+        if (blockState.getValue(WATERLOGGED)) {
+            scheduledTickAccess.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
         }
-        boolean xHas = axisHasTrellis(level, pos, Direction.Axis.X);
-        boolean yHas = axisHasTrellis(level, pos, Direction.Axis.Y);
-        boolean zHas = axisHasTrellis(level, pos, Direction.Axis.Z);
-        var trellisType = updateType(state.getValue(TYPE), xHas, yHas, zHas);
+        boolean xHas = axisHasTrellis(levelReader, blockPos, Direction.Axis.X);
+        boolean yHas = axisHasTrellis(levelReader, blockPos, Direction.Axis.Y);
+        boolean zHas = axisHasTrellis(levelReader, blockPos, Direction.Axis.Z);
+        var trellisType = updateType(blockState.getValue(TYPE), xHas, yHas, zHas);
 
-        state = state.setValue(TYPE, trellisType);
-        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+        blockState = blockState.setValue(TYPE, trellisType);
+        return super.updateShape(blockState, levelReader, scheduledTickAccess, blockPos, direction, blockPos2, blockState2, randomSource);
     }
 
     @Override
@@ -111,7 +107,7 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+    public void randomTick(@NonNull BlockState state, @NonNull ServerLevel level, @NonNull BlockPos pos, RandomSource random) {
         if (EventHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.growPerTickProbability)) {
             this.doGrow(level, pos, state);
         }
@@ -164,7 +160,7 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
      * 必须要求下方有一格的空气方块
      */
     public boolean canGrowGrape(LevelReader level, BlockPos pos) {
-        if (pos.getY() < level.getMinBuildHeight() + 1) {
+        if (pos.getY() < level.getMaxY() + 1) {
             return false;
         }
         return level.getBlockState(pos.below()).isAir();
@@ -244,17 +240,17 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(@NonNull LevelReader level, @NonNull BlockPos pos, @NonNull BlockState state) {
         return this.canGrow(level, pos, state);
     }
 
     @Override
-    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(@NonNull Level level, @NonNull RandomSource random, @NonNull BlockPos pos, @NonNull BlockState state) {
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+    public void performBonemeal(@NonNull ServerLevel level, @NonNull RandomSource random, @NonNull BlockPos pos, @NonNull BlockState state) {
         this.doGrow(level, pos, state);
     }
 
@@ -264,18 +260,18 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public @NotNull VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getCollisionShape(BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos, @NonNull CollisionContext context) {
         return collisionShape(state.getValue(TYPE));
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos, @NonNull CollisionContext context) {
         return selectShape(state.getValue(TYPE));
     }
 
     @Override
-    public @NotNull ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
-        return ModItems.GRAPEVINE.getDefaultInstance();
+    protected @NonNull ItemStack getCloneItemStack(@NonNull LevelReader levelReader, @NonNull BlockPos blockPos, @NonNull BlockState blockState, boolean bl) {
+        return  ModItems.GRAPEVINE.getDefaultInstance();
     }
 
     @Override

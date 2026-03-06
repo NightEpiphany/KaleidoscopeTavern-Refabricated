@@ -3,8 +3,10 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.BarrelBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.FluidUtils;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,13 +31,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collections;
 import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class BarrelBlock extends BaseEntityBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final MapCodec<BarrelBlock> CODEC = simpleCodec(BarrelBlock::new);
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     /**
      * 对应酒桶的上中下三层
      */
@@ -58,8 +61,8 @@ public class BarrelBlock extends BaseEntityBlock {
 
     private static final AttachFace[] LAYERS = {AttachFace.FLOOR, AttachFace.WALL, AttachFace.CEILING};
 
-    public BarrelBlock() {
-        super(Properties.of()
+    public BarrelBlock(Properties properties) {
+        super(properties
                 .mapColor(MapColor.WOOD)
                 .strength(2.5F)
                 .sound(SoundType.WOOD)
@@ -73,8 +76,7 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
         if (hand != InteractionHand.MAIN_HAND) {
             return InteractionResult.PASS;
         }
@@ -92,7 +94,7 @@ public class BarrelBlock extends BaseEntityBlock {
             boolean clickedLid = isLid(state);
             ItemStack itemInHand = player.getItemInHand(hand);
 
-            // 如果是空手，且没有点击中心，则尝试关盖
+            // 如果的空手，且没有点击中心，则尝试关盖
             if (itemInHand.isEmpty() && !clickedLid) {
                 return barrelEntity.closeLid(player) ? InteractionResult.SUCCESS : InteractionResult.PASS;
             }
@@ -126,7 +128,7 @@ public class BarrelBlock extends BaseEntityBlock {
             barrelEntity.tipBrewInfo(player);
             return InteractionResult.SUCCESS;
         }
-        return super.use(state, level, pos, player, hand, hitResult);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     /**
@@ -145,8 +147,8 @@ public class BarrelBlock extends BaseEntityBlock {
 
     @Override
     @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        if (level.isClientSide) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NonNull BlockState state, @NonNull BlockEntityType<T> blockEntityType) {
+        if (level.isClientSide()) {
             return null;
         }
         return createTickerHelper(blockEntityType, ModBlocks.BARREL_BE,
@@ -160,7 +162,7 @@ public class BarrelBlock extends BaseEntityBlock {
         Level level = context.getLevel();
 
         // 需要 3 格高度
-        if (pos.getY() > level.getMaxBuildHeight() - 3) {
+        if (pos.getY() > level.getMaxY() - 3) {
             return null;
         }
 
@@ -187,8 +189,8 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
-        if (level.isClientSide) {
+    public void setPlacedBy(Level level, @NonNull BlockPos pos, @NonNull BlockState state, @Nullable LivingEntity entity, @NonNull ItemStack stack) {
+        if (level.isClientSide()) {
             return;
         }
 
@@ -213,15 +215,15 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public @NotNull BlockState playerWillDestroy(@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state, @NonNull Player player) {
         handleRemove(level, pos, state, player);
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
-    public void wasExploded(Level level, BlockPos blockPos, Explosion explosion) {
-        handleRemove(level, blockPos, level.getBlockState(blockPos), null);
-        super.wasExploded(level, blockPos, explosion);
+    public void wasExploded(@NonNull ServerLevel serverLevel, @NonNull BlockPos blockPos, @NonNull Explosion explosion) {
+        handleRemove(serverLevel, blockPos, serverLevel.getBlockState(blockPos), null);
+        super.wasExploded(serverLevel, blockPos, explosion);
     }
 
     public static BlockPos getOriginPos(BlockPos pos, BlockState state) {
@@ -250,7 +252,7 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     private static void handleRemove(Level level, BlockPos pos, BlockState state, @Nullable Player player) {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return;
         }
 
@@ -269,7 +271,7 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.@NonNull Builder builder) {
         // 仅原点方块（FLOOR 层中心）掉落物品，避免重复掉落
         if (state.getValue(LAYER) == AttachFace.FLOOR && state.getValue(INDEX) == 4) {
             return super.getDrops(state, builder);
@@ -284,7 +286,7 @@ public class BarrelBlock extends BaseEntityBlock {
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NonNull BlockPos pos, BlockState state) {
         // 仅底层中间方块附加 BlockEntity
         AttachFace layer = state.getValue(LAYER);
         int index = state.getValue(INDEX);
@@ -295,7 +297,7 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos, @NonNull CollisionContext context) {
         Direction facing = state.getValue(FACING);
         int index = state.getValue(INDEX);
         int col = index % 3;
@@ -313,7 +315,7 @@ public class BarrelBlock extends BaseEntityBlock {
         AttachFace layer = state.getValue(LAYER);
         int index = state.getValue(INDEX);
         if (layer == AttachFace.FLOOR && index == 4) {
-            return RenderShape.ENTITYBLOCK_ANIMATED;
+            return RenderShape.MODEL;
         }
         return RenderShape.INVISIBLE;
     }
@@ -326,5 +328,10 @@ public class BarrelBlock extends BaseEntityBlock {
     @Override
     public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 }

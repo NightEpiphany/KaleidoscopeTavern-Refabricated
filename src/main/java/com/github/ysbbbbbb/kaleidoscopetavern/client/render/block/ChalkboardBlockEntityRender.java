@@ -4,21 +4,26 @@ import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.ChalkboardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.model.deco.LargeChalkboardModel;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.model.deco.SmallChalkboardModel;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.render.renderstate.ChalkboardBlockEntityRenderState;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
-public class ChalkboardBlockEntityRender extends TextBlockEntityRender<ChalkboardBlockEntity> {
-    private static final ResourceLocation SMALL_TEXTURE = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/entity/deco/small_chalkboard.png");
-    private static final ResourceLocation LARGE_TEXTURE = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/entity/deco/large_chalkboard.png");
+public class ChalkboardBlockEntityRender extends TextBlockEntityRender<ChalkboardBlockEntity, ChalkboardBlockEntityRenderState> {
+    private static final Identifier SMALL_TEXTURE = Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "textures/entity/deco/small_chalkboard.png");
+    private static final Identifier LARGE_TEXTURE = Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "textures/entity/deco/large_chalkboard.png");
 
     private static final float TEXT_SCALE = 0.012f;
     private static final int LINE_HEIGHT = 12;
@@ -34,30 +39,36 @@ public class ChalkboardBlockEntityRender extends TextBlockEntityRender<Chalkboar
     }
 
     @Override
-    protected void renderModel(ChalkboardBlockEntity textBlock, PoseStack poseStack, MultiBufferSource buffer,
-                               int packedLight, int packedOverlay, Direction facing) {
+    public void extractRenderState(ChalkboardBlockEntity blockEntity, ChalkboardBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
+        super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay);
+        blockEntityRenderState.large = blockEntity.isLarge();
+    }
+
+
+    @Override
+    public ChalkboardBlockEntityRenderState createRenderState() {
+        return null;
+    }
+
+    @Override
+    protected void renderModel(ChalkboardBlockEntityRenderState textBlockRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, Direction facing) {
         poseStack.pushPose();
 
         poseStack.translate(0.5, 1.5, 0.5);
         poseStack.mulPose(Axis.ZN.rotationDegrees(180));
         poseStack.mulPose(Axis.YN.rotationDegrees(180 - facing.get2DDataValue() * 90));
 
-        if (textBlock.isLarge()) {
-            VertexConsumer consumer = buffer.getBuffer(RenderType.entityCutoutNoCull(LARGE_TEXTURE));
-            large.renderToBuffer(poseStack, consumer, packedLight, packedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
-        } else {
-            VertexConsumer consumer = buffer.getBuffer(RenderType.entityCutoutNoCull(SMALL_TEXTURE));
-            small.renderToBuffer(poseStack, consumer, packedLight, packedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+        if (textBlockRenderState.large) {
+            submitNodeCollector.submitModel(large, new SmallChalkboardModel.State(), poseStack, RenderTypes.entitySolid(LARGE_TEXTURE), textBlockRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0, null);
+        }else {
+            submitNodeCollector.submitModel(small, new SmallChalkboardModel.State(), poseStack, RenderTypes.entitySolid(SMALL_TEXTURE), textBlockRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0, null);
         }
-
         poseStack.popPose();
     }
 
     @Override
-    protected void renderText(ChalkboardBlockEntity textBlock, PoseStack poseStack, MultiBufferSource buffer,
-                              int packedLight, int packedOverlay, Direction facing) {
+    protected void renderText(ChalkboardBlockEntityRenderState textBlockRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, Direction facing) {
         poseStack.pushPose();
-
         if (facing == Direction.EAST) {
             poseStack.translate(0.08, 1.535, 0.5);
         } else if (facing == Direction.WEST) {
@@ -70,9 +81,8 @@ public class ChalkboardBlockEntityRender extends TextBlockEntityRender<Chalkboar
 
         poseStack.mulPose(Axis.YN.rotationDegrees(facing.get2DDataValue() * 90));
 
-        int maxWidth = textBlock.isLarge() ? 232 : 63;
-        super.doTextRender(textBlock, poseStack, buffer, packedLight, textBlock.getText(),
-                maxWidth, TEXT_SCALE, MAX_LINES, LINE_HEIGHT);
+        int maxWidth = textBlockRenderState.large ? 232 : 63;
+        doTextRender(textBlockRenderState, poseStack, textBlockRenderState.text, maxWidth, TEXT_SCALE, MAX_LINES, LINE_HEIGHT);
 
         poseStack.popPose();
     }

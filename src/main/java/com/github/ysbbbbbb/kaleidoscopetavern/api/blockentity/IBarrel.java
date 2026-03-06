@@ -1,9 +1,9 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
-import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemStackHandler;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.neo.ItemStackHandler;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -184,7 +184,7 @@ public interface IBarrel {
      *
      * @return 当前酿造配方的 ResourceLocation ID，或者 null 如果没有正在使用的配方
      */
-    @Nullable ResourceLocation getRecipeId();
+    @Nullable Identifier getRecipeId();
 
     /**
      * 获取当前阶段的剩余时间，单位为 tick，每过一个 tick 减少 1，当达到 0 时进入下一个阶段。

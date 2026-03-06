@@ -13,19 +13,14 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": ["com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern"],
-		"client": ["com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavernClient"],
-		"fabric-datagen": ["com.github.ysbbbbbb.kaleidoscopetavern.init.ModDataGen"],
-		"jade": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.jade.ModJadePlugin"],
-		"jei_mod_plugin": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.jei.ModJeiPlugin"],
-		"rei_client": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.ModREIClientPlugin"],
-		"emi": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.emi.ModEmiPlugin"]
+		"client": ["com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavernClient"]
 	},
 	"mixins": [
 		"kaleidoscope_tavern.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.18.4",
-		"minecraft": "~1.20.1",
+		"minecraft": "~1.21.11",
 		"java": ">=17",
 		"fabric-api": "*"
 	}

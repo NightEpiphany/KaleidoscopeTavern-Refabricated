@@ -1,8 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.model.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.Model;
@@ -10,19 +8,19 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 
 @Environment(EnvType.CLIENT)
-public class BarrelModel extends Model {
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(KaleidoscopeTavern.MOD_ID, "barrel"), "main");
+public class BarrelModel extends Model<BarrelModel.State> {
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "barrel"), "main");
     private final ModelPart root;
     private final ModelPart close;
     private final ModelPart open;
     private final ModelPart body;
 
     public BarrelModel(ModelPart root) {
-        super(RenderType::entityCutoutNoCull);
+        super(root, RenderTypes::entityCutoutNoCull);
         this.root = root.getChild("root");
         this.close = this.root.getChild("close");
         this.open = this.root.getChild("open");
@@ -60,9 +58,12 @@ public class BarrelModel extends Model {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight,
-                               int packedOverlay, float red, float green, float blue, float alpha) {
-        root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+    public void setupAnim(State object) {
+        super.setupAnim(object);
+        // 根据酒桶的开盖状态切换模型显示
+        boolean open = object.open();
+        this.getOpen().visible = open;
+        this.getClose().visible = !open;
     }
 
     public ModelPart getClose() {
@@ -71,5 +72,9 @@ public class BarrelModel extends Model {
 
     public ModelPart getOpen() {
         return open;
+    }
+
+    @Environment(EnvType.CLIENT)
+    public record State(boolean open) {
     }
 }

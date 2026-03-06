@@ -1,7 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IPressingTub;
-import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.PressingTubBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
@@ -9,7 +8,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
-import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemStackHandler;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.neo.ItemStackHandler;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -25,14 +24,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -40,18 +37,21 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gamerules.GameRules;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Supplier;
 
-@SuppressWarnings("UnstableApiUsage")
 public class PressingTubBlockEntity extends BaseBlockEntity implements IPressingTub, Container, SidedStorageBlockEntity {
-    private final RecipeManager.CachedCheck<Container, PressingTubRecipe> quickCheck = RecipeManager.createCheck(ModRecipes.PRESSING_TUB_RECIPE);
+    private final RecipeManager.CachedCheck<SingleRecipeInput, PressingTubRecipe> quickCheck = RecipeManager.createCheck(ModRecipes.PRESSING_TUB_RECIPE);
 
     /**
      * 压榨桶的物品槽，目前只有一个槽位，用于放置被压榨的物品，最大可放入一组件（64个）物品
@@ -73,17 +73,18 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-        this.items.deserializeNBT(tag.getCompound("items"));
-        this.fluid.readFromNBT(tag.getCompound("fluid"));
+    protected void loadAdditional(@NonNull ValueInput valueInput) {
+        super.loadAdditional(valueInput);
+        this.items.deserializeNBT(valueInput);
+        this.fluid.readFromNBT(valueInput);
     }
 
+
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.put("items", this.items.serializeNBT());
-        tag.put("fluid", this.fluid.writeToNBT(new CompoundTag()));
+    protected void saveAdditional(@NonNull ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+        this.items.serialize(valueOutput);
+        this.fluid.writeToNBT(valueOutput);
     }
 
     @Override
@@ -148,58 +149,72 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
             return false;
         }
 
-        SimpleContainer container = new SimpleContainer(stack);
-        return this.quickCheck.getRecipeFor(container, level).map(recipe -> {
-            FluidVariant fluidVariant = FluidVariant.of(recipe.getFluid());
-            FluidVariant fluidInTub = this.fluid.getFluidVariant();
+        SingleRecipeInput container = new SingleRecipeInput(stack);
+        if (level instanceof ServerLevel serverLevel) {
+            return this.quickCheck.getRecipeFor(container, serverLevel).map(holder -> {
+                PressingTubRecipe recipe = holder.value();
+                FluidVariant fluidVariant = FluidVariant.of(recipe.getFluid());
+                FluidVariant fluidInTub = this.fluid.getFluidVariant();
 
-            if (!fluidInTub.isBlank() && !fluidVariant.equals(fluidInTub)) {
+                if (!fluidInTub.isBlank() && !fluidVariant.equals(fluidInTub)) {
+                    playFailPressEffect(stack);
+                    // 丢出内容物并刷新状态
+                    if (this.dropContents()) {
+                        this.refresh();
+                    }
+                    return false;
+                }
+
+                // 液体已满，无法继续压榨
+                if (this.fluid.getFluidAmountTransfer() >= IPressingTub.MAX_FLUID_AMOUNT_TRANSFER) {
+                    playFinishedPressEffect();
+                    return false;
+                }
+                ItemStack output = recipe.assemble(container, serverLevel.registryAccess());
+
+                // 产物为空，无法继续压榨（一般不太可能发生）
+                if (output.isEmpty()) {
+                    playFailPressEffect(stack);
+                    return false;
+                }
+
+                long insertAmount = toTransferAmount(recipe.getFluidAmount());
+                boolean inserted = false;
+                try (Transaction transaction = Transaction.openOuter()) {
+                    long actual = this.fluid.insert(fluidVariant, insertAmount, transaction);
+                    if (actual > 0) {
+                        inserted = true;
+                        transaction.commit();
+                    }
+                }
+                if (!inserted) {
+                    playFinishedPressEffect();
+                    return false;
+                }
+                this.items.extractItem(0, 1, false);
+
+                playSuccessPressEffect(stack);
+                return true;
+            }).orElseGet(() -> {
                 playFailPressEffect(stack);
-                // 丢出内容物并刷新状态
+                // 没有找到配方，丢出内容物并刷新状态
                 if (this.dropContents()) {
                     this.refresh();
                 }
                 return false;
-            }
-
-            // 液体已满，无法继续压榨
-            if (this.fluid.getFluidAmountTransfer() >= IPressingTub.MAX_FLUID_AMOUNT_TRANSFER) {
-                playFinishedPressEffect();
-                return false;
-            }
-            ItemStack output = recipe.assemble(container, level.registryAccess());
-
-            // 产物为空，无法继续压榨（一般不太可能发生）
-            if (output.isEmpty()) {
-                playFailPressEffect(stack);
-                return false;
-            }
-
-            long insertAmount = toTransferAmount(recipe.getFluidAmount());
-            boolean inserted = false;
-            try (Transaction transaction = Transaction.openOuter()) {
-                long actual = this.fluid.insert(fluidVariant, insertAmount, transaction);
-                if (actual > 0) {
-                    inserted = true;
-                    transaction.commit();
-                }
-            }
-            if (!inserted) {
-                playFinishedPressEffect();
-                return false;
-            }
-            this.items.extractItem(0, 1, false);
-
-            playSuccessPressEffect(stack);
-            return true;
-        }).orElseGet(() -> {
+            });
+        }
+        else {
             playFailPressEffect(stack);
-            // 没有找到配方，丢出内容物并刷新状态
-            if (this.dropContents()) {
-                this.refresh();
-            }
             return false;
-        });
+        }
+    }
+
+    private static long toTransferAmount(int milliBuckets) {
+        if (milliBuckets <= 0) {
+            return 0;
+        }
+        return (long) milliBuckets * FluidConstants.BUCKET / (long) CustomFluidTank.MB_PER_BUCKET;
     }
 
     /**
@@ -362,6 +377,13 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
         return true;
     }
 
+    private static SoundEvent getBucketFillSound(FluidVariant variant) {
+        if (variant.isBlank()) {
+            return null;
+        }
+        return FluidVariantAttributes.getFillSound(variant);
+    }
+
     public boolean dropContents() {
         if (level == null) {
             return false;
@@ -414,7 +436,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     }
 
     private void popResource(Level level, Supplier<ItemEntity> supplier, ItemStack stack) {
-        if (!level.isClientSide && !stack.isEmpty() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+        if (!level.isClientSide() && level instanceof ServerLevel serverLevel && !stack.isEmpty() && serverLevel.getGameRules().get(GameRules.BLOCK_DROPS)) {
             ItemEntity entity = supplier.get();
             entity.setDefaultPickUpDelay();
             level.addFreshEntity(entity);
@@ -436,20 +458,6 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
         return this.fluid.getFluidAmountMb();
     }
 
-    private static long toTransferAmount(int milliBuckets) {
-        if (milliBuckets <= 0) {
-            return 0;
-        }
-        return (long) milliBuckets * FluidConstants.BUCKET / (long) CustomFluidTank.MB_PER_BUCKET;
-    }
-
-    private static SoundEvent getBucketFillSound(FluidVariant variant) {
-        if (variant.isBlank()) {
-            return null;
-        }
-        return FluidVariantAttributes.getFillSound(variant);
-    }
-
     @Override
     public int getContainerSize() {
         return items.getSlots();
@@ -461,27 +469,22 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     }
 
     @Override
-    public @NotNull ItemStack getItem(int slot) {
-        return items.getStackInSlot(slot);
+    public @NotNull ItemStack getItem(int i) {
+        return items.getStackInSlot(i);
     }
 
     @Override
-    public @NotNull ItemStack removeItem(int slot, int amount) {
-        return items.extractItem(slot, amount, false);
+    public @NotNull ItemStack removeItem(int i, int j) {
+        return items.extractItem(i, j, false);
     }
 
     @Override
-    public @NotNull ItemStack removeItemNoUpdate(int slot) {
-        ItemStack current = items.getStackInSlot(slot);
+    public @NotNull ItemStack removeItemNoUpdate(int i) {
+        ItemStack current = items.getStackInSlot(i);
         if (current.isEmpty()) {
             return ItemStack.EMPTY;
         }
-        return items.extractItem(slot, current.getCount(), false);
-    }
-
-    @Override
-    public void setItem(int slot, ItemStack stack) {
-        items.setStackInSlot(slot, stack);
+        return items.extractItem(i, current.getCount(), false);
     }
 
     @Override
@@ -494,7 +497,12 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     }
 
     @Override
-    public boolean stillValid(Player player) {
+    public void setItem(int i, @NonNull ItemStack itemStack) {
+        items.setStackInSlot(i, itemStack);
+    }
+
+    @Override
+    public boolean stillValid(@NonNull Player player) {
         if (level == null || level.getBlockEntity(worldPosition) != this) {
             return false;
         }
@@ -511,17 +519,13 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     }
 
     @Override
-    public boolean canPlaceItem(int slot, ItemStack stack) {
+    public boolean canPlaceItem(int slot, @NonNull ItemStack stack) {
         return items.isItemValid(slot, stack);
     }
 
     @Override
     public @Nullable Storage<ItemVariant> getItemStorage(@Nullable Direction side) {
-        if (side == null || side.getAxis().isVertical()) {
-            return Storage.empty();
-        }
-        Direction facing = getBlockState().getValue(PressingTubBlock.FACING);
-        if (side == facing) {
+        if (side == Direction.DOWN) {
             return Storage.empty();
         }
         return InventoryStorage.of(this, side);

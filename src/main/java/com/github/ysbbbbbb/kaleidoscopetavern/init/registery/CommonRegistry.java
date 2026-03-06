@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.init.registery;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.BottleBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.dispenser.BottleBlockDispenseBehavior;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PressingTubBlockEntity;
@@ -9,17 +10,18 @@ import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
-import net.fabricmc.fabric.api.registry.FuelRegistry;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.registry.FuelRegistryEvents;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.block.DispenserBlock;
 
 public class CommonRegistry {
     public static void init() {
         NetworkHandler.init();
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new DrinkEffectDataReloadListener());
+        ResourceLoader.get(PackType.SERVER_DATA).registerReloader(Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "drink_effect"), new DrinkEffectDataReloadListener());
         dispenseRegister();
         storageRegister();
         events();
@@ -31,7 +33,9 @@ public class CommonRegistry {
     }
 
     public static void fuelRegistry() {
-        FuelRegistry.INSTANCE.add(ModItems.GRAPEVINE, 200);
+        FuelRegistryEvents.BUILD.register((builder, context) -> {
+            builder.add(ModItems.GRAPEVINE, context.baseSmeltTime());
+        });
     }
 
     public static void dispenseRegister() {
@@ -43,7 +47,7 @@ public class CommonRegistry {
         }});
     }
 
-    @SuppressWarnings("UnstableApiUsage")
+
     public static void storageRegister() {
         ItemStorage.SIDED.registerForBlockEntity(
                 PressingTubBlockEntity::getItemStorage,

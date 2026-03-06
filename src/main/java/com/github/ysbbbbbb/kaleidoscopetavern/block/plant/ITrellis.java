@@ -4,6 +4,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.TrellisType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
@@ -37,7 +38,7 @@ public interface ITrellis {
     /**
      * 指定轴向是否有藤架（仅满足一个即可）
      */
-    static boolean axisHasTrellis(LevelAccessor level, BlockPos pos, Direction.Axis axis) {
+    static boolean axisHasTrellis(LevelReader level, BlockPos pos, Direction.Axis axis) {
         Direction positive = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE);
         BlockState positiveState = level.getBlockState(pos.relative(positive));
         if (positiveState.getBlock() instanceof ITrellis trellis) {

@@ -1,32 +1,30 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.item;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.entity.ThrownMolotovEntity;
-import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class MolotovBlockItem extends BottleBlockItem {
-    public MolotovBlockItem(Block block) {
-        super(block);
+    public MolotovBlockItem(Block block, Properties properties) {
+        super(block, properties.stacksTo(16));
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public @NonNull InteractionResult use(@NonNull Level level, Player player, @NonNull InteractionHand hand) {
         player.startUsingItem(hand);
-        return InteractionResultHolder.consume(player.getItemInHand(hand));
+        return InteractionResult.CONSUME;
     }
 
     @Override
@@ -42,12 +40,12 @@ public class MolotovBlockItem extends BottleBlockItem {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
-        int time = this.getUseDuration(stack) - timeLeft;
+    public boolean releaseUsing(@NonNull ItemStack stack, @NonNull Level level, @NonNull LivingEntity entity, int timeLeft) {
+        int time = this.getUseDuration(stack, entity) - timeLeft;
         if (time < 10) {
-            return;
+            return false;
         }
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             ThrownMolotovEntity molotov = new ThrownMolotovEntity(level, entity);
             molotov.shootFromRotation(entity, entity.getXRot(), entity.getYRot(), 0, 0.8f, 1);
             level.addFreshEntity(molotov);
@@ -60,15 +58,16 @@ public class MolotovBlockItem extends BottleBlockItem {
                 stack.shrink(1);
             }
         }
+        return false;
     }
 
     @Override
-    public @NotNull UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.SPEAR;
+    public @NonNull ItemUseAnimation getUseAnimation(@NonNull ItemStack stack) {
+        return ItemUseAnimation.SPEAR;
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(@NonNull ItemStack stack, @NonNull LivingEntity entity) {
         return 72000;
     }
 }
