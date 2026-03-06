@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated
 @Environment(EnvType.CLIENT)
 public class SitRenderer extends EntityRenderer<SitEntity> {
     private static final ResourceLocation EMPTY = KaleidoscopeTavern.modLoc("textures/entity/empty.png");
