@@ -46,6 +46,10 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
      * 酒桶检查时间，每 5s 检查一次，选取最接近的质数，避免与其他周期性事件同时发生，导致性能问题
      */
     private static final int CHECK_INTERVAL = 97;
+    private static final String INGREDIENT_ITEMS_KEY = "ingredient_items";
+    private static final String INGREDIENT_SIZE_KEY = "ingredient_size";
+    private static final String OUTPUT_ITEMS_KEY = "output_items";
+    private static final String OUTPUT_SIZE_KEY = "output_size";
     /**
      * 配方缓存
      */
@@ -58,6 +62,11 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
         public int getSlotLimit(int slot) {
             // 最大只运行 16 个物品，防止玩家浪费
             return 16;
+        }
+
+        @Override
+        protected void onContentsChanged(int slot) {
+            refresh();
         }
     };
     /**
@@ -152,6 +161,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
                 ItemStack assemble = new ItemStack(ModItems.VINEGAR, 16);
                 output.setStackInSlot(0, assemble);
                 recipeId = BarrelRecipeSerializer.EMPTY_RECIPE_ID;
+                recipeHolder = null;
                 brewLevel = BREWING_STARTED;
                 brewTime = this.getBrewTimeForLevel();
                 this.clearItemsAndFluid();
@@ -168,15 +178,13 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
         if (this.isMaxBrewLevel()) {
             return -1;
         }
-        if (this.level instanceof ServerLevel serverLevel && this.recipeHolder != null) {
-            return serverLevel.recipeAccess().byKey(this.recipeHolder.id()).map(recipe -> {
-                if (recipe.value() instanceof BarrelRecipe barrelRecipe) {
-                    return barrelRecipe.unitTime() * this.brewLevel;
-                }
-                return BarrelRecipeSerializer.DEFAULT_UNIT_TIME * this.brewLevel;
-            }).orElse(BarrelRecipeSerializer.DEFAULT_UNIT_TIME * this.brewLevel);
+        if (this.level instanceof ServerLevel serverLevel) {
+            RecipeHolder<BarrelRecipe> holder = this.resolveRecipeHolder(serverLevel);
+            if (holder != null) {
+                return holder.value().unitTime() * this.brewLevel;
+            }
         }
-        return -1;
+        return BarrelRecipeSerializer.DEFAULT_UNIT_TIME * this.brewLevel;
     }
 
     public void clearItemsAndFluid() {
@@ -223,6 +231,9 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
 
     @Override
     public boolean addIngredient(@Nullable LivingEntity user, ItemStack stack) {
+        if (stack.isEmpty()) {
+            return false;
+        }
         // 盖子必须打开才能添加物品
         if (!open) {
             return false;
@@ -236,9 +247,10 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
             this.tip(user, "add_ingredient_fluid_not_full");
             return false;
         }
-        int count = stack.getCount();
+        int count = Math.min(16, stack.getCount());
+        ItemStack input = stack.copyWithCount(count);
         // 只尝试放入 16 个
-        ItemStack remaining = this.addIngredientOnce(this.ingredient, stack.copy(), false);
+        ItemStack remaining = this.addIngredientOnce(this.ingredient, input, false);
         // 如果数量发生了变化，代表成功添加了部分或全部物品
         if (remaining.getCount() < count) {
             // 不需要刷新，因为 items 内部会调用 onContentsChanged 来刷新状态
@@ -264,7 +276,13 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
 
         // 不可堆叠的物品，直接尝试放入任意空槽
         if (!stack.isStackable()) {
-            return ItemUtils.insertItem(inventory, stack, simulate);
+            int slots = inventory.getSlots();
+            for (int i = 0; i < slots; i++) {
+                if (inventory.getStackInSlot(i).isEmpty()) {
+                    return inventory.insertItem(i, stack, simulate);
+                }
+            }
+            return stack;
         }
 
         int slots = inventory.getSlots();
@@ -303,6 +321,10 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
         }
         // 处于发酵状态时无法移除物品
         if (this.isBrewing()) {
+            return false;
+        }
+        if (fluid.getFluidAmountMb() < MAX_FLUID_AMOUNT) {
+            this.tip(user, "add_ingredient_fluid_not_full");
             return false;
         }
         // 倒序遍历物品槽，优先移除最后一个槽的物品
@@ -402,18 +424,14 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
         if (this.recipeId == null || this.recipeId.equals(BarrelRecipeSerializer.EMPTY_RECIPE_ID)) {
             return below == ModBlocks.EMPTY_BOTTLE;
         }
-        if (this.recipeHolder == null) {
+        if (!(level instanceof ServerLevel serverLevel)) {
             return false;
         }
-        if (level instanceof ServerLevel serverLevel) {
-            return serverLevel.recipeAccess().byKey(this.recipeHolder.id()).map(recipe -> {
-                if (recipe.value() instanceof BarrelRecipe barrelRecipe) {
-                    return barrelRecipe.carrier().test(blockItem.getDefaultInstance());
-                }
-                return false;
-            }).orElse(false);
+        RecipeHolder<BarrelRecipe> holder = this.resolveRecipeHolder(serverLevel);
+        if (holder == null) {
+            return false;
         }
-        return false;
+        return holder.value().carrier().test(blockItem.getDefaultInstance());
     }
 
     @Override
@@ -434,28 +452,21 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
             }
             return;
         }
-        if (this.recipeHolder == null || !(level instanceof ServerLevel serverLevel)) {
+        if (!(level instanceof ServerLevel serverLevel)) {
             return;
         }
-        serverLevel.recipeAccess().byKey(this.recipeHolder.id()).ifPresentOrElse(recipe -> {
-            if (recipe.value() instanceof BarrelRecipe barrelRecipe) {
-                ItemStack belowStack = belowState.getBlock().asItem().getDefaultInstance();
-                if (barrelRecipe.carrier().test(belowStack)) {
-                    this.transform(level, below, belowState, (BottleBlockItem) barrelRecipe.result().getItem());
-                }
-                // 容器不匹配？啥也不做
-            } else {
-                // 不是 BarrelRecipe？虽然不太可能，但是变成醋吧
-                if (belowState.is(ModBlocks.EMPTY_BOTTLE)) {
-                    this.transform(level, below, belowState, (BottleBlockItem) ModItems.VINEGAR);
-                }
-            }
-        }, () -> {
-            // 没有找到配方，变成醋
+        RecipeHolder<BarrelRecipe> holder = this.resolveRecipeHolder(serverLevel);
+        if (holder == null) {
             if (belowState.is(ModBlocks.EMPTY_BOTTLE)) {
                 this.transform(level, below, belowState, (BottleBlockItem) ModItems.VINEGAR);
             }
-        });
+            return;
+        }
+        BarrelRecipe barrelRecipe = holder.value();
+        ItemStack belowStack = belowState.getBlock().asItem().getDefaultInstance();
+        if (barrelRecipe.carrier().test(belowStack)) {
+            this.transform(level, below, belowState, (BottleBlockItem) barrelRecipe.result().getItem());
+        }
     }
 
     private void transform(Level level, BlockPos below, BlockState belowState, BottleBlockItem result) {
@@ -479,6 +490,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
         if (output.getStackInSlot(0).isEmpty()) {
             this.clearItemsAndFluid(); // 以防万一，再次清空物品槽和液体槽
             this.recipeId = null;
+            this.recipeHolder = null;
             this.brewLevel = BREWING_NOT_STARTED;
             this.brewTime = -1;
             this.refresh();
@@ -488,20 +500,30 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
     @Override
     protected void loadAdditional(@NonNull ValueInput valueInput) {
         super.loadAdditional(valueInput);
-        this.ingredient.deserializeNBT(valueInput);
-        this.output.deserializeNBT(valueInput);
+        if (valueInput.contains(INGREDIENT_ITEMS_KEY) || valueInput.contains(INGREDIENT_SIZE_KEY)) {
+            this.ingredient.deserializeNBT(valueInput, INGREDIENT_ITEMS_KEY, INGREDIENT_SIZE_KEY);
+        } else {
+            this.ingredient.deserializeNBT(valueInput);
+        }
+        this.normalizeIngredientInventory();
+        if (valueInput.contains(OUTPUT_ITEMS_KEY) || valueInput.contains(OUTPUT_SIZE_KEY)) {
+            this.output.deserializeNBT(valueInput, OUTPUT_ITEMS_KEY, OUTPUT_SIZE_KEY);
+        } else {
+            this.output.deserializeNBT(valueInput);
+        }
         this.fluid.readFromNBT(valueInput);
         this.open = valueInput.getBooleanOr("open", true);
         this.brewLevel = valueInput.getIntOr("brew_level", BREWING_NOT_STARTED);
         this.brewTime = valueInput.getIntOr("brew_time", -1);
         this.recipeId = valueInput.getString("recipe_id").map(Identifier::parse).orElse(null);
+        this.recipeHolder = null;
     }
 
     @Override
     protected void saveAdditional(@NonNull ValueOutput valueOutput) {
         super.saveAdditional(valueOutput);
-        this.ingredient.serialize(valueOutput);
-        this.output.serialize(valueOutput);
+        this.ingredient.serialize(valueOutput, INGREDIENT_ITEMS_KEY, INGREDIENT_SIZE_KEY);
+        this.output.serialize(valueOutput, OUTPUT_ITEMS_KEY, OUTPUT_SIZE_KEY);
         this.fluid.writeToNBT(valueOutput);
         valueOutput.putBoolean("open", this.open);
         valueOutput.putInt("brew_level", this.brewLevel);
@@ -592,6 +614,50 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
     @Nullable
     public Identifier getRecipeId() {
         return this.recipeId;
+    }
+
+    private @Nullable RecipeHolder<BarrelRecipe> resolveRecipeHolder(ServerLevel serverLevel) {
+        if (this.recipeId == null || this.recipeId.equals(BarrelRecipeSerializer.EMPTY_RECIPE_ID)) {
+            this.recipeHolder = null;
+            return null;
+        }
+        if (this.recipeHolder != null && this.recipeHolder.id().identifier().equals(this.recipeId)) {
+            return this.recipeHolder;
+        }
+        this.recipeHolder = serverLevel.recipeAccess().getSynchronizedRecipes()
+                .getAllOfType(ModRecipes.BARREL_RECIPE)
+                .stream()
+                .filter(holder -> holder.id().identifier().equals(this.recipeId))
+                .findFirst()
+                .orElse(null);
+        return this.recipeHolder;
+    }
+
+    private void normalizeIngredientInventory() {
+        int currentSlots = this.ingredient.getSlots();
+        if (currentSlots == MAX_ITEM_SLOTS) {
+            for (int i = 0; i < currentSlots; i++) {
+                ItemStack slot = this.ingredient.getStackInSlot(i);
+                int limit = this.ingredient.getSlotLimit(i);
+                if (!slot.isEmpty() && slot.getCount() > limit) {
+                    this.ingredient.setStackInSlot(i, slot.copyWithCount(limit));
+                }
+            }
+            return;
+        }
+
+        ItemStack[] oldStacks = new ItemStack[currentSlots];
+        for (int i = 0; i < currentSlots; i++) {
+            oldStacks[i] = this.ingredient.getStackInSlot(i).copy();
+        }
+
+        this.ingredient.setSize(MAX_ITEM_SLOTS);
+        for (ItemStack oldStack : oldStacks) {
+            if (oldStack.isEmpty()) {
+                continue;
+            }
+            ItemUtils.insertItem(this.ingredient, oldStack, false);
+        }
     }
 
     // 换算到Fabric的液体计量单位，单位为桶，应该是4桶

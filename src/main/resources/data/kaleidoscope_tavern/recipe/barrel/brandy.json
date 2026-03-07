@@ -1,13 +1,9 @@
 {
   "type": "kaleidoscope_tavern:barrel",
-  "carrier": {
-    "item": "kaleidoscope_tavern:empty_bottle"
-  },
+  "carrier": "kaleidoscope_tavern:empty_bottle",
   "fluid": "kaleidoscope_tavern:grape_juice",
   "ingredients": [
-    {
-      "item": "minecraft:apple"
-    }
+    "minecraft:apple"
   ],
   "result": {
     "count": 1,

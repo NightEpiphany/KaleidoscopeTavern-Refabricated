@@ -26,7 +26,7 @@ public class DrinkEffectDataReloadListener extends SimpleJsonResourceReloadListe
         for (var entry : resources.entrySet()) {
             var result = entry.getValue();
             if (result == null) continue;
-            INSTANCE.put(result.item().getItem(), result);
+            INSTANCE.put(result.item(), result);
         }
         KaleidoscopeTavern.LOGGER.info("Successfully loaded drink effect data with {} entries", INSTANCE.size());
     }

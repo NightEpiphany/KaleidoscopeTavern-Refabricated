@@ -1,7 +1,8 @@
-package com.github.ysbbbbbb.kaleidoscopetavern.client.registry;
+package com.github.ysbbbbbb.kaleidoscopetavern.client.init.registry;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ClientSetupEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModEntitiesRender;
+import com.github.ysbbbbbb.kaleidoscopetavern.compat.create.ponder.init.PonderCompat;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
 import net.fabricmc.api.EnvType;
@@ -19,6 +20,7 @@ public class ClientRegistry {
         ClientSetupEvent.init();
         ModEntitiesRender.init();
         ModFluids.registerFluidRenderers();
+        modCompat();
     }
 
     public static void renderType() {
@@ -40,6 +42,7 @@ public class ClientRegistry {
                 TORCHFLOWER_SANDWICH_BOARD,
                 TULIP_SANDWICH_BOARD,
                 WITHER_ROSE_SANDWICH_BOARD,
+                EYEBLOSSOM_SANDWICH_BOARD,
                 STRING_LIGHTS_COLORLESS,
                 STRING_LIGHTS_WHITE,
                 STRING_LIGHTS_LIGHT_BLUE,
@@ -83,5 +86,9 @@ public class ClientRegistry {
                 GRAY_BAR_STOOL,
                 LIGHT_GRAY_BAR_STOOL
         );
+    }
+
+    private static void modCompat() {
+        PonderCompat.init();
     }
 }

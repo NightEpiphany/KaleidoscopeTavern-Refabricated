@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "kaleidoscope_tavern:base_sandwich_board"
-    },
-    {
-      "item": "minecraft:allium"
-    }
+    "kaleidoscope_tavern:base_sandwich_board",
+    "minecraft:allium"
   ],
   "result": {
     "count": 1,

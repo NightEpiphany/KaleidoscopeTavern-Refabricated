@@ -2,6 +2,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.container.BarrelRecipeContainer;
+import com.github.ysbbbbbb.kaleidoscopetavern.crafting.serializer.BarrelRecipeSerializer;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.neo.RecipeMatcher;
 import net.minecraft.core.HolderLookup;
@@ -15,6 +16,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
+
+import java.util.List;
 
 /**
  * 酒桶的配方类
@@ -34,16 +37,21 @@ public record BarrelRecipe(
         ItemStack result,
         int unitTime
 ) implements Recipe<BarrelRecipeContainer> {
+    public static final int INGREDIENT_UNIT_COUNT = 16;
+
     @Override
     public boolean matches(BarrelRecipeContainer container, @NonNull Level level) {
-        boolean emptyIngredients = this.ingredients.stream().allMatch(Ingredient::isEmpty);
+        NonNullList<Ingredient> effectiveIngredients = this.effectiveIngredients();
+        List<ItemStack> nonEmptyInputs = container.getNonEmptyItems();
+        boolean emptyIngredients = effectiveIngredients.isEmpty();
         // 如果全为空
         if (emptyIngredients) {
             return container.getFluid().isSame(this.fluid) && container.itemsIsEmpty();
         }
         // 否则匹配输入的流体和物品
         return container.getFluid().isSame(this.fluid)
-               && RecipeMatcher.findMatches(container.getItems(), ingredients) != null;
+               && container.hasUnitCount(INGREDIENT_UNIT_COUNT)
+               && RecipeMatcher.findMatches(nonEmptyInputs, effectiveIngredients) != null;
     }
 
     @Override
@@ -78,12 +86,26 @@ public record BarrelRecipe(
 
     @Override
     public @NonNull PlacementInfo placementInfo() {
-        return PlacementInfo.create(this.ingredients);
+        return PlacementInfo.create(this.effectiveIngredients());
     }
 
     @Override
     public @NonNull RecipeBookCategory recipeBookCategory() {
         return Registry.register(BuiltInRegistries.RECIPE_BOOK_CATEGORY, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "barrel"), new RecipeBookCategory());
+    }
+
+    private NonNullList<Ingredient> effectiveIngredients() {
+        NonNullList<Ingredient> filtered = NonNullList.create();
+        for (Ingredient ingredient : this.ingredients) {
+            if (!ingredient.isEmpty() && !BarrelRecipeSerializer.isPlaceholderIngredient(ingredient)) {
+                filtered.add(ingredient);
+            }
+        }
+        return filtered;
+    }
+
+    public NonNullList<Ingredient> requiredIngredients() {
+        return this.effectiveIngredients();
     }
 
 }

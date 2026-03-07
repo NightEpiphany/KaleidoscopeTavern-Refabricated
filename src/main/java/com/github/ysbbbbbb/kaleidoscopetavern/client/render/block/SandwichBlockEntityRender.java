@@ -7,12 +7,11 @@ import com.mojang.math.Axis;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import org.apache.commons.lang3.StringUtils;
 
 @Environment(EnvType.CLIENT)
 public class SandwichBlockEntityRender extends TextBlockEntityRender<SandwichBoardBlockEntity, SandwichBoardBlockEntityRenderState> {
@@ -50,7 +49,8 @@ public class SandwichBlockEntityRender extends TextBlockEntityRender<SandwichBoa
         poseStack.mulPose(Axis.YN.rotationDegrees(facing.get2DDataValue() * 90));
 
         int maxWidth = 55;
-        doTextRender(textBlockRenderState, poseStack, textBlockRenderState.text, maxWidth, TEXT_SCALE, MAX_LINES, LINE_HEIGHT);
+        if (StringUtils.isNotBlank(textBlockRenderState.text))
+            doTextRender(textBlockRenderState, poseStack, textBlockRenderState.text, maxWidth, TEXT_SCALE, MAX_LINES, LINE_HEIGHT, submitNodeCollector);
 
         poseStack.popPose();
     }

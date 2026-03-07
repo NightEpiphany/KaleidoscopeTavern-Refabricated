@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +26,7 @@ import org.jspecify.annotations.NonNull;
 
 @Environment(EnvType.CLIENT)
 public class StringLightsLayer<S extends HumanoidRenderState, M extends HumanoidModel<? super S>> extends RenderLayer<S, M> {
-    private final Minecraft minecraft = Minecraft.getInstance();
+    private final ItemModelResolver itemModelResolver = Minecraft.getInstance().getItemModelResolver();
 
     public StringLightsLayer(RenderLayerParent<S, M> renderLayerParent) {
         super(renderLayerParent);
@@ -34,15 +35,15 @@ public class StringLightsLayer<S extends HumanoidRenderState, M extends Humanoid
     @Override
     public void submit(@NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, int i, S entityRenderState, float f, float g) {
         ItemStack stack = entityRenderState.chestEquipment;
+        ItemStackRenderState itemStackRenderState = new ItemStackRenderState();
         if (stack.getItem() instanceof StringLightsBlockItem && this.getParentModel() instanceof HumanoidModel<?> humanoidModel) {
-            ItemModelResolver itemModelResolver = this.minecraft.getItemModelResolver();
             poseStack.pushPose();
             humanoidModel.body.translateAndRotate(poseStack);
             poseStack.translate(0f, -0.1875f, -0.4375f);
             poseStack.mulPose(Axis.YP.rotationDegrees(180f));
             poseStack.scale(-0.625f, -0.625f, 0.625f);
-            ItemStackRenderState itemStackRenderState = new ItemStackRenderState();
             itemModelResolver.updateForTopItem(itemStackRenderState, stack, ItemDisplayContext.HEAD, null, null, 0);
+            itemStackRenderState.submit(poseStack, submitNodeCollector, i, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }
     }

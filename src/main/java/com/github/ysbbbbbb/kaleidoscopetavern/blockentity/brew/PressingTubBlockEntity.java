@@ -171,7 +171,6 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
                     return false;
                 }
                 ItemStack output = recipe.assemble(container, serverLevel.registryAccess());
-
                 // 产物为空，无法继续压榨（一般不太可能发生）
                 if (output.isEmpty()) {
                     playFailPressEffect(stack);

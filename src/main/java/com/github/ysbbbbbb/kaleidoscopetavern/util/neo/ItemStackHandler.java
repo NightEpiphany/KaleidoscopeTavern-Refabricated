@@ -17,6 +17,8 @@ import net.minecraft.world.level.storage.ValueOutput;
  * @author moigferdsrte
  */
 public class ItemStackHandler implements IItemHandler {
+    private static final String DEFAULT_ITEMS_KEY = "Items";
+    private static final String DEFAULT_SIZE_KEY = "Size";
     protected NonNullList<ItemStack> stacks;
 
     public ItemStackHandler() {
@@ -135,14 +137,18 @@ public class ItemStackHandler implements IItemHandler {
     }
 
     public void serialize(ValueOutput output) {
-        ValueOutput.TypedOutputList<ItemStackWithSlot> itemList = output.list("Items", ItemStackWithSlot.CODEC);
+        this.serialize(output, DEFAULT_ITEMS_KEY, DEFAULT_SIZE_KEY);
+    }
+
+    public void serialize(ValueOutput output, String itemsKey, String sizeKey) {
+        ValueOutput.TypedOutputList<ItemStackWithSlot> itemList = output.list(itemsKey, ItemStackWithSlot.CODEC);
         for (int i = 0; i < stacks.size(); i++) {
             var stack = stacks.get(i);
             if (!stack.isEmpty()) {
                 itemList.add(new ItemStackWithSlot(i, stack));
             }
         }
-        output.putInt("Size", stacks.size());
+        output.putInt(sizeKey, stacks.size());
     }
 
     public CompoundTag serializeNBT(ValueOutput output) {
@@ -163,8 +169,12 @@ public class ItemStackHandler implements IItemHandler {
     }
 
     public void deserializeNBT(ValueInput input) {
-        setSize(input.getIntOr("Size", stacks.size()));
-        input.listOrEmpty("Items", ItemStackWithSlot.CODEC).forEach(slot -> {
+        this.deserializeNBT(input, DEFAULT_ITEMS_KEY, DEFAULT_SIZE_KEY);
+    }
+
+    public void deserializeNBT(ValueInput input, String itemsKey, String sizeKey) {
+        setSize(input.getIntOr(sizeKey, stacks.size()));
+        input.listOrEmpty(itemsKey, ItemStackWithSlot.CODEC).forEach(slot -> {
             if (slot.isValidInContainer(stacks.size())) {
                 stacks.set(slot.slot(), slot.stack());
             }

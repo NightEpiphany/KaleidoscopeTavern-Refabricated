@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "kaleidoscope_tavern:base_sandwich_board"
-    },
-    {
-      "item": "minecraft:azure_bluet"
-    }
+    "kaleidoscope_tavern:base_sandwich_board",
+    "minecraft:azure_bluet"
   ],
   "result": {
     "count": 1,

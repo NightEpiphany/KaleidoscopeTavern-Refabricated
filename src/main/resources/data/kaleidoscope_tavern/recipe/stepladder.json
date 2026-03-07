@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "L": {
-      "item": "minecraft:ladder"
-    }
+    "L": "minecraft:ladder"
   },
   "pattern": [
     "L  ",

@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "L": {
-      "tag": "c:ingots/iron"
-    },
-    "W": {
-      "item": "minecraft:orange_wool"
-    }
+    "L": "#c:ingots/iron",
+    "W": "minecraft:orange_wool"
   },
   "pattern": [
     "W W",

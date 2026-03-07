@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
+import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -82,7 +83,8 @@ public class ChalkboardBlockEntityRender extends TextBlockEntityRender<Chalkboar
         poseStack.mulPose(Axis.YN.rotationDegrees(facing.get2DDataValue() * 90));
 
         int maxWidth = textBlockRenderState.large ? 232 : 63;
-        doTextRender(textBlockRenderState, poseStack, textBlockRenderState.text, maxWidth, TEXT_SCALE, MAX_LINES, LINE_HEIGHT);
+        if (StringUtils.isNotBlank(textBlockRenderState.text))
+            doTextRender(textBlockRenderState, poseStack, textBlockRenderState.text, maxWidth, TEXT_SCALE, MAX_LINES, LINE_HEIGHT, submitNodeCollector);
 
         poseStack.popPose();
     }

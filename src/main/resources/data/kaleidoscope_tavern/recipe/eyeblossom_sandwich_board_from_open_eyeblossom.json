@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "kaleidoscope_tavern:base_sandwich_board",
+    "minecraft:open_eyeblossom"
+  ],
+  "result": {
+    "count": 1,
+    "id": "kaleidoscope_tavern:eyeblossom_sandwich_board"
+  }
+}

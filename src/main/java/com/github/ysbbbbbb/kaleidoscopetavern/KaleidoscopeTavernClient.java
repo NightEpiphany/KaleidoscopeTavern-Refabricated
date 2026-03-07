@@ -1,6 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern;
 
-import com.github.ysbbbbbb.kaleidoscopetavern.client.registry.ClientRegistry;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.init.registry.ClientRegistry;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

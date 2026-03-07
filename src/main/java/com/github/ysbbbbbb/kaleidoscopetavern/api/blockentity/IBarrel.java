@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface IBarrel {
     /**
-     * 酒桶的物品槽数量，默认为 4 组。
+     * 酒桶的物品槽数量，默认为 4 * 16，64个物品。
      */
     int MAX_ITEM_SLOTS = 4;
 

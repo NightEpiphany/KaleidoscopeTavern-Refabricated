@@ -42,6 +42,8 @@ public class TextScreen extends Screen {
                 MultiLineEditBox.builder().setPlaceholder(Component.translatable("gui.kaleidoscope_tavern.text.edit.placeholder")).build(font, boxWidth, 120, Component.literal("Custom Setting Box"))
         );
         this.customSetting.setValue(text);
+        this.customSetting.setX(posX);
+        this.customSetting.setY(posY);
         this.customSetting.setCharacterLimit(maxTextLength);
         this.customSetting.setValueListener(s -> text = s);
 

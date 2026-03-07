@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:item_frame"
-    },
-    {
-      "item": "minecraft:bamboo_raft"
-    }
+    "minecraft:item_frame",
+    "minecraft:bamboo_raft"
   ],
   "result": {
     "count": 1,

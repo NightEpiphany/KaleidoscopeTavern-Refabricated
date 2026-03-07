@@ -13,7 +13,9 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": ["com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern"],
-		"client": ["com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavernClient"]
+		"client": ["com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavernClient"],
+		"jade": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.jade.ModJadePlugin"],
+		"jei_mod_plugin": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.jei.ModJeiPlugin"]
 	},
 	"mixins": [
 		"kaleidoscope_tavern.mixins.json"

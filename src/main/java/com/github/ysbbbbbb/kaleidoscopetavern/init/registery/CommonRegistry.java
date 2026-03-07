@@ -6,6 +6,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.block.dispenser.BottleBlockDispens
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PressingTubBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.datamap.resources.DrinkEffectDataReloadListener;
 import com.github.ysbbbbbb.kaleidoscopetavern.event.AddFeaturesEvent;
+import com.github.ysbbbbbb.kaleidoscopetavern.event.PlayerSitEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
@@ -30,6 +31,7 @@ public class CommonRegistry {
 
     public static void events() {
         AddFeaturesEvent.addFeatures();
+        PlayerSitEvent.register();
     }
 
     public static void fuelRegistry() {

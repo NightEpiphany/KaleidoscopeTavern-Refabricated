@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "kaleidoscope_tavern:base_sandwich_board"
-    },
-    {
-      "item": "minecraft:white_tulip"
-    }
+    "kaleidoscope_tavern:base_sandwich_board",
+    "minecraft:white_tulip"
   ],
   "result": {
     "count": 1,

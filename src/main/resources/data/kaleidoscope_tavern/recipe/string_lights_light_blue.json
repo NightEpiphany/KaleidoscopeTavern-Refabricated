@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "C": {
-      "item": "minecraft:chain"
-    },
-    "D": {
-      "item": "minecraft:light_blue_dye"
-    },
-    "L": {
-      "item": "minecraft:lantern"
-    }
+    "C": "minecraft:iron_chain",
+    "D": "minecraft:light_blue_dye",
+    "L": "minecraft:lantern"
   },
   "pattern": [
     "CCC",

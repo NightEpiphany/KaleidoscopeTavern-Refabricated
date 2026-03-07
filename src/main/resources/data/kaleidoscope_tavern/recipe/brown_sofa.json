@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "L": {
-      "tag": "c:ingots/iron"
-    },
-    "W": {
-      "item": "minecraft:brown_wool"
-    }
+    "L": "#c:ingots/iron",
+    "W": "minecraft:brown_wool"
   },
   "pattern": [
     "W W",

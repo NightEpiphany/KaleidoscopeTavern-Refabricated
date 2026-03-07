@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "B": {
-      "item": "minecraft:blue_dye"
-    },
-    "F": {
-      "item": "minecraft:item_frame"
-    },
-    "R": {
-      "item": "minecraft:red_dye"
-    },
-    "W": {
-      "item": "minecraft:white_dye"
-    },
-    "Y": {
-      "item": "minecraft:yellow_dye"
-    }
+    "B": "minecraft:blue_dye",
+    "F": "minecraft:item_frame",
+    "R": "minecraft:red_dye",
+    "W": "minecraft:white_dye",
+    "Y": "minecraft:yellow_dye"
   },
   "pattern": [
     " B ",

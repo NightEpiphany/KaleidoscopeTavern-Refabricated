@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:item_frame"
-    },
-    {
-      "tag": "c:gems/diamond"
-    }
+    "minecraft:item_frame",
+    "#c:gems/diamond"
   ],
   "result": {
     "count": 1,

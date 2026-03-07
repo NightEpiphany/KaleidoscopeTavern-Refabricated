@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "kaleidoscope_tavern:base_sandwich_board"
-    },
-    {
-      "item": "minecraft:pitcher_plant"
-    }
+    "kaleidoscope_tavern:base_sandwich_board",
+    "minecraft:pitcher_plant"
   ],
   "result": {
     "count": 1,

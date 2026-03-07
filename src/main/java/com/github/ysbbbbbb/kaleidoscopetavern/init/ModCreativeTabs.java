@@ -127,6 +127,7 @@ public class ModCreativeTabs {
                     output.accept(ModItems.TULIP_SANDWICH_BOARD);
                     output.accept(ModItems.TORCHFLOWER_SANDWICH_BOARD);
                     output.accept(ModItems.WITHER_ROSE_SANDWICH_BOARD);
+                    output.accept(ModItems.EYEBLOSSOM_SANDWICH_BOARD);
                     output.accept(ModItems.PEONY_SANDWICH_BOARD);
                     output.accept(ModItems.PITCHER_PLANT_SANDWICH_BOARD);
 

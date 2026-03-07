@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.api.entity.ISittable;
 import com.github.ysbbbbbb.kaleidoscopetavern.entity.SitEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
@@ -35,7 +36,7 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
-public class BarStoolBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
+public class BarStoolBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock, ISittable {
     public static final MapCodec<BarStoolBlock> CODEC = simpleCodec(BarStoolBlock::new);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -103,20 +104,6 @@ public class BarStoolBlock extends HorizontalDirectionalBlock implements SimpleW
     }
 
     @Override
-    public @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, Level level, @NonNull BlockPos pos,
-                                                @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
-        List<SitEntity> entities = level.getEntitiesOfClass(SitEntity.class, new AABB(pos));
-        if (entities.isEmpty()) {
-            SitEntity entitySit = new SitEntity(level);
-            entitySit.setYRot(state.getValue(FACING).toYRot());
-            level.addFreshEntity(entitySit);
-            player.startRiding(entitySit);
-            return InteractionResult.SUCCESS;
-        }
-        return InteractionResult.PASS;
-    }
-
-    @Override
     public void destroy(LevelAccessor levelAccessor, @NonNull BlockPos pos, @NonNull BlockState state) {
         levelAccessor.getEntitiesOfClass(SitEntity.class, new AABB(pos)).forEach(Entity::discard);
     }
@@ -139,5 +126,10 @@ public class BarStoolBlock extends HorizontalDirectionalBlock implements SimpleW
     @Override
     protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
         return CODEC;
+    }
+
+    @Override
+    public float getSitHeight() {
+        return 0.9483f;
     }
 }

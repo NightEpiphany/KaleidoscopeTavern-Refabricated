@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:item_frame"
-    },
-    {
-      "item": "minecraft:apple"
-    }
+    "minecraft:item_frame",
+    "minecraft:apple"
   ],
   "result": {
     "count": 1,

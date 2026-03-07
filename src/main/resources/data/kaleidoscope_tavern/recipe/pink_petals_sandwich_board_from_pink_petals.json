@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "kaleidoscope_tavern:base_sandwich_board"
-    },
-    {
-      "item": "minecraft:pink_petals"
-    }
+    "kaleidoscope_tavern:base_sandwich_board",
+    "minecraft:pink_petals"
   ],
   "result": {
     "count": 1,

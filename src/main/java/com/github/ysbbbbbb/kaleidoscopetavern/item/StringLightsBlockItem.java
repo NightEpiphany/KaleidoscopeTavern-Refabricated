@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class StringLightsBlockItem extends BlockItem {
     public StringLightsBlockItem(Block block, Properties properties) {
-        super(block, properties.useBlockDescriptionPrefix());
+        super(block, properties.useBlockDescriptionPrefix().equippable(EquipmentSlot.CHEST));
     }
 
     @Deprecated

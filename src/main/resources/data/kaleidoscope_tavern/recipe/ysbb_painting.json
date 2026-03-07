@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:item_frame"
-    },
-    {
-      "item": "minecraft:lime_dye"
-    }
+    "minecraft:item_frame",
+    "minecraft:lime_dye"
   ],
   "result": {
     "count": 1,

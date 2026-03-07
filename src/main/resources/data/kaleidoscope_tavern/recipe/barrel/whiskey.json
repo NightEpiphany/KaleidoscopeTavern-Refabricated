@@ -1,13 +1,9 @@
 {
   "type": "kaleidoscope_tavern:barrel",
-  "carrier": {
-    "item": "kaleidoscope_tavern:empty_bottle"
-  },
+  "carrier": "kaleidoscope_tavern:empty_bottle",
   "fluid": "minecraft:water",
   "ingredients": [
-    {
-      "item": "minecraft:wheat"
-    }
+    "minecraft:wheat"
   ],
   "result": {
     "count": 1,

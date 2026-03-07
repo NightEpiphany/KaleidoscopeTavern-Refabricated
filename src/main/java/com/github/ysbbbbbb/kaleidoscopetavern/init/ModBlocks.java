@@ -76,6 +76,7 @@ public class ModBlocks {
     public static final Block TORCHFLOWER_SANDWICH_BOARD = sandwichBoardReg("torchflower_sandwich_board", Items.TORCHFLOWER);
     public static final Block TULIP_SANDWICH_BOARD = sandwichBoardReg("tulip_sandwich_board", Items.RED_TULIP, Items.ORANGE_TULIP, Items.WHITE_TULIP, Items.PINK_TULIP);
     public static final Block WITHER_ROSE_SANDWICH_BOARD = sandwichBoardReg("wither_rose_sandwich_board", Items.WITHER_ROSE);
+    public static final Block EYEBLOSSOM_SANDWICH_BOARD = sandwichBoardReg("eyeblossom_sandwich_board", Items.OPEN_EYEBLOSSOM, Items.CLOSED_EYEBLOSSOM);
     // 彩灯
     public static final Block STRING_LIGHTS_COLORLESS = stringLightReg("string_lights_colorless", null);
     public static final Block STRING_LIGHTS_WHITE = stringLightReg("string_lights_white", Items.WHITE_DYE);
@@ -157,16 +158,16 @@ public class ModBlocks {
             .ignitedByLava());
 
     // 酒
-    public static final Block WINE = wineReg(ModFoods.ModWines.WINE);
-    public static final Block CHAMPAGNE = wineReg(ModFoods.ModWines.CHAMPAGNE);
-    public static final Block VODKA = wineReg(ModFoods.ModWines.VODKA);
-    public static final Block BRANDY = wineReg(ModFoods.ModWines.BRANDY);
-    public static final Block CARIGNAN = wineReg(ModFoods.ModWines.CARIGNAN);
-    public static final Block SAKURA_WINE = wineReg(ModFoods.ModWines.SAKURA_WINE);
-    public static final Block PLUM_WINE = wineReg(ModFoods.ModWines.PLUM_WINE);
-    public static final Block WHISKEY = wineReg(ModFoods.ModWines.WHISKEY);
-    public static final Block ICE_WINE = wineReg(ModFoods.ModWines.ICE_WINE);
-    public static final Block VINEGAR = wineReg(ModFoods.ModWines.VINEGAR);
+    public static final Block WINE = wineReg(ModFoods.ModWines.WINE, "wine");
+    public static final Block CHAMPAGNE = wineReg(ModFoods.ModWines.CHAMPAGNE, "champagne");
+    public static final Block VODKA = wineReg(ModFoods.ModWines.VODKA, "vodka");
+    public static final Block BRANDY = wineReg(ModFoods.ModWines.BRANDY, "brandy");
+    public static final Block CARIGNAN = wineReg(ModFoods.ModWines.CARIGNAN, "carignan");
+    public static final Block SAKURA_WINE = wineReg(ModFoods.ModWines.SAKURA_WINE, "sakura_wine");
+    public static final Block PLUM_WINE = wineReg(ModFoods.ModWines.PLUM_WINE, "plum_wine");
+    public static final Block WHISKEY = wineReg(ModFoods.ModWines.WHISKEY, "whiskey");
+    public static final Block ICE_WINE = wineReg(ModFoods.ModWines.ICE_WINE, "ice_wine");
+    public static final Block VINEGAR = wineReg(ModFoods.ModWines.VINEGAR, "vinegar");
 
 
     public static final BlockEntityType<SandwichBoardBlockEntity> SANDWICH_BOARD_BE = FabricBlockEntityTypeBuilder.create(SandwichBoardBlockEntity::new,
@@ -183,7 +184,8 @@ public class ModBlocks {
             SUNFLOWER_SANDWICH_BOARD,
             TORCHFLOWER_SANDWICH_BOARD,
             TULIP_SANDWICH_BOARD,
-            WITHER_ROSE_SANDWICH_BOARD
+            WITHER_ROSE_SANDWICH_BOARD,
+            EYEBLOSSOM_SANDWICH_BOARD
     ).build();
     public static final BlockEntityType<ChalkboardBlockEntity> CHALKBOARD_BE = FabricBlockEntityTypeBuilder.create(ChalkboardBlockEntity::new, CHALKBOARD).build();
     public static final BlockEntityType<BarrelBlockEntity> BARREL_BE = FabricBlockEntityTypeBuilder.create(BarrelBlockEntity::new, BARREL).build();
@@ -245,7 +247,7 @@ public class ModBlocks {
         return commonReg(string, PaintingBlock::new, BlockBehaviour.Properties.of());
     }
 
-    private static Block wineReg(Block block) {
-        return Registry.register(BuiltInRegistries.BLOCK, PortHelper.createBlockId(((DrinkBlock) block).getId()), block);
+    private static Block wineReg(Block block, String s) {
+        return Registry.register(BuiltInRegistries.BLOCK, PortHelper.createBlockId(s), block);
     }
 }

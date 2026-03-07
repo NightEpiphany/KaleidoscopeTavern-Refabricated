@@ -8,6 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 
 import java.util.function.BiFunction;
@@ -51,19 +52,20 @@ public class ModItems {
     public static final Item PINK_BAR_STOOL = registerItem("pink_bar_stool", p -> new BarStoolBlockItem(ModBlocks.PINK_BAR_STOOL, p));
     // 展板
     public static final Item BASE_SANDWICH_BOARD = registerItem("base_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.BASE_SANDWICH_BOARD, p));
-    public static final Item GRASS_SANDWICH_BOARD = registerItem("grass_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.GRASS_SANDWICH_BOARD, p));
-    public static final Item ALLIUM_SANDWICH_BOARD = registerItem("allium_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.ALLIUM_SANDWICH_BOARD, p));
-    public static final Item AZURE_BLUET_SANDWICH_BOARD = registerItem("azure_bluet_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.AZURE_BLUET_SANDWICH_BOARD, p));
-    public static final Item CORNFLOWER_SANDWICH_BOARD = registerItem("cornflower_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.CORNFLOWER_SANDWICH_BOARD, p));
-    public static final Item ORCHID_SANDWICH_BOARD = registerItem("orchid_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.ORCHID_SANDWICH_BOARD, p));
-    public static final Item PEONY_SANDWICH_BOARD = registerItem("peony_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.PEONY_SANDWICH_BOARD, p));
-    public static final Item PINK_PETALS_SANDWICH_BOARD = registerItem("pink_petals_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.PINK_PETALS_SANDWICH_BOARD, p));
-    public static final Item PITCHER_PLANT_SANDWICH_BOARD = registerItem("pitcher_plant_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.PITCHER_PLANT_SANDWICH_BOARD, p));
-    public static final Item POPPY_SANDWICH_BOARD = registerItem("poppy_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.POPPY_SANDWICH_BOARD, p));
-    public static final Item SUNFLOWER_SANDWICH_BOARD = registerItem("sunflower_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.SUNFLOWER_SANDWICH_BOARD, p));
-    public static final Item TORCHFLOWER_SANDWICH_BOARD = registerItem("torchflower_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.TORCHFLOWER_SANDWICH_BOARD, p));
-    public static final Item TULIP_SANDWICH_BOARD = registerItem("tulip_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.TULIP_SANDWICH_BOARD, p));
-    public static final Item WITHER_ROSE_SANDWICH_BOARD = registerItem("wither_rose_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.WITHER_ROSE_SANDWICH_BOARD, p));
+    public static final Item GRASS_SANDWICH_BOARD = registerItem("grass_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.GRASS_SANDWICH_BOARD, p, Items.SHORT_GRASS));
+    public static final Item ALLIUM_SANDWICH_BOARD = registerItem("allium_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.ALLIUM_SANDWICH_BOARD, p, Items.ALLIUM));
+    public static final Item AZURE_BLUET_SANDWICH_BOARD = registerItem("azure_bluet_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.AZURE_BLUET_SANDWICH_BOARD, p, Items.AZURE_BLUET));
+    public static final Item CORNFLOWER_SANDWICH_BOARD = registerItem("cornflower_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.CORNFLOWER_SANDWICH_BOARD, p, Items.CORNFLOWER));
+    public static final Item ORCHID_SANDWICH_BOARD = registerItem("orchid_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.ORCHID_SANDWICH_BOARD, p, Items.BLUE_ORCHID));
+    public static final Item PEONY_SANDWICH_BOARD = registerItem("peony_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.PEONY_SANDWICH_BOARD, p, Items.PEONY));
+    public static final Item PINK_PETALS_SANDWICH_BOARD = registerItem("pink_petals_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.PINK_PETALS_SANDWICH_BOARD, p, Items.PINK_PETALS));
+    public static final Item PITCHER_PLANT_SANDWICH_BOARD = registerItem("pitcher_plant_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.PITCHER_PLANT_SANDWICH_BOARD, p, Items.PITCHER_PLANT));
+    public static final Item POPPY_SANDWICH_BOARD = registerItem("poppy_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.POPPY_SANDWICH_BOARD, p, Items.POPPY));
+    public static final Item SUNFLOWER_SANDWICH_BOARD = registerItem("sunflower_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.SUNFLOWER_SANDWICH_BOARD, p, Items.SUNFLOWER));
+    public static final Item TORCHFLOWER_SANDWICH_BOARD = registerItem("torchflower_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.TORCHFLOWER_SANDWICH_BOARD, p, Items.TORCHFLOWER));
+    public static final Item TULIP_SANDWICH_BOARD = registerItem("tulip_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.TULIP_SANDWICH_BOARD, p, Items.WHITE_TULIP));
+    public static final Item WITHER_ROSE_SANDWICH_BOARD = registerItem("wither_rose_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.WITHER_ROSE_SANDWICH_BOARD, p, Items.WITHER_ROSE));
+    public static final Item EYEBLOSSOM_SANDWICH_BOARD = registerItem("eyeblossom_sandwich_board", p -> new SandwichBoardBlockItem(ModBlocks.EYEBLOSSOM_SANDWICH_BOARD, p, Items.OPEN_EYEBLOSSOM));
 
     // 彩灯
     public static final Item STRING_LIGHTS_COLORLESS = registerItem("string_lights_colorless", p -> new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_COLORLESS, p));

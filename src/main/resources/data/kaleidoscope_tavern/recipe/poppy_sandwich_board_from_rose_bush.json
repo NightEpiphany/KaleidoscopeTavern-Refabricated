@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "kaleidoscope_tavern:base_sandwich_board"
-    },
-    {
-      "item": "minecraft:rose_bush"
-    }
+    "kaleidoscope_tavern:base_sandwich_board",
+    "minecraft:rose_bush"
   ],
   "result": {
     "count": 1,

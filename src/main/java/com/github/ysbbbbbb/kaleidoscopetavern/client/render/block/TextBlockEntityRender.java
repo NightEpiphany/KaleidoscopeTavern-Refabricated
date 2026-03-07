@@ -10,7 +10,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -26,7 +25,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.StringUtils;
-import org.joml.Matrix4f;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -36,7 +34,6 @@ import java.util.List;
 public abstract class TextBlockEntityRender<T extends TextBlockEntity, M extends TextBlockEntityRenderState> implements BlockEntityRenderer<T, M> {
     protected static final int OUTLINE_RENDER_DISTANCE = Mth.square(16);
     protected final Font font;
-    private final Minecraft minecraft = Minecraft.getInstance();
 
     public TextBlockEntityRender(BlockEntityRendererProvider.Context context) {
         this.font = context.font();
@@ -84,14 +81,12 @@ public abstract class TextBlockEntityRender<T extends TextBlockEntity, M extends
      * 需要注意的是这个方法没有进行矩阵的 push 和 pop 操作 <br>
      * 调用这个方法之前需要做好矩阵状态的保存和恢复
      */
-    protected void doTextRender(M textBlockRenderState, PoseStack poseStack, String text, int maxWidth, float scale, int maxLines, int lineHeight) {
+    protected void doTextRender(M textBlockRenderState, PoseStack poseStack, String text, int maxWidth, float scale, int maxLines, int lineHeight, SubmitNodeCollector submitNodeCollector) {
         poseStack.scale(scale, -scale, scale);
-        MultiBufferSource.BufferSource buffer = minecraft.renderBuffers().bufferSource();
         int darkColor = this.getDarkColor(textBlockRenderState.color, textBlockRenderState.glowing);
         int textColor;
         boolean hasOutline;
         int light;
-
         if (textBlockRenderState.glowing) {
             textColor = textBlockRenderState.color.getTextColor();
             hasOutline = this.isOutlineVisible(textBlockRenderState.blockPos, textColor);
@@ -101,6 +96,8 @@ public abstract class TextBlockEntityRender<T extends TextBlockEntity, M extends
             hasOutline = false;
             light = textBlockRenderState.lightCoords;
         }
+        int submitTextColor = ARGB.opaque(textColor);
+        int submitDarkColor = ARGB.opaque(darkColor);
 
         Component renderText = getRenderText(text);
         List<FormattedCharSequence> splitLines = font.split(renderText, maxWidth);
@@ -110,14 +107,18 @@ public abstract class TextBlockEntityRender<T extends TextBlockEntity, M extends
             FormattedCharSequence line = splitLines.get(i);
             float posX = this.getPosX(textBlockRenderState, maxWidth, font.width(line));
             float posY = i * lineHeight - 19;
-            Matrix4f pose = poseStack.last().pose();
-
-            if (hasOutline) {
-                font.drawInBatch8xOutline(line, posX, posY, textColor, darkColor, pose, buffer, light);
-            } else {
-                font.drawInBatch(line, posX, posY, textColor, false, pose,
-                        buffer, Font.DisplayMode.POLYGON_OFFSET, 0, light);
-            }
+            submitNodeCollector.submitText(
+                    poseStack,
+                    posX,
+                    posY,
+                    line,
+                    false,
+                    Font.DisplayMode.POLYGON_OFFSET,
+                    light,
+                    submitTextColor,
+                    0,
+                    hasOutline ? submitDarkColor : 0
+            );
         }
     }
 

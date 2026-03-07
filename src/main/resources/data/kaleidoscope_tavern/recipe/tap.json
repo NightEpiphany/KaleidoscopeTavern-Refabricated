@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "H": {
-      "item": "minecraft:hopper"
-    },
-    "L": {
-      "item": "minecraft:lever"
-    }
+    "H": "minecraft:hopper",
+    "L": "minecraft:lever"
   },
   "pattern": [
     "L",

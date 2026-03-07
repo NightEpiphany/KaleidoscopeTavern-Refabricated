@@ -3,9 +3,9 @@ package com.github.ysbbbbbb.kaleidoscopetavern.datamap.data;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
@@ -17,9 +17,9 @@ import java.util.List;
  *                第一层为 brew level -> 效果组的映射
  *                第二层为效果组中的每个都会尝试触发的效果条目
  */
-public record DrinkEffectData(ItemStack item, List<List<Entry>> effects) {
+public record DrinkEffectData(Item item, List<List<Entry>> effects) {
     public static final Codec<DrinkEffectData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ItemStack.CODEC.fieldOf("item").forGetter(DrinkEffectData::item),
+            BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(DrinkEffectData::item),
             Codec.list(Codec.list(Entry.ENTRY_CODEC)).fieldOf("effects").forGetter(DrinkEffectData::effects)
     ).apply(instance, DrinkEffectData::new));
 

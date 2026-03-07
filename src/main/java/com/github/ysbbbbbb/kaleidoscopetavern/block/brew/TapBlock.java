@@ -134,7 +134,6 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
                 level.scheduleTick(pos, this, TAKE_DRINK_TICKS);
                 return InteractionResult.SUCCESS;
             }
-
             this.emptyOpen(level, pos, state);
             return InteractionResult.SUCCESS;
         }

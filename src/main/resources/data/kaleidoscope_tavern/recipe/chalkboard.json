@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": {
-      "item": "minecraft:ink_sac"
-    },
-    "S": {
-      "tag": "minecraft:signs"
-    }
+    "I": "minecraft:ink_sac",
+    "S": "#minecraft:signs"
   },
   "pattern": [
     "III",

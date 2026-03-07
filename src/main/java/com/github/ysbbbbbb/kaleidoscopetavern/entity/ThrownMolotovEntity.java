@@ -30,7 +30,8 @@ public class ThrownMolotovEntity extends ThrowableProjectile {
     }
 
     public ThrownMolotovEntity(Level level, LivingEntity shooter) {
-        super(ModEntities.THROWN_MOLOTOV, level);
+        super(ModEntities.THROWN_MOLOTOV, shooter.getX(), shooter.getEyeY() - 0.1F, shooter.getZ(), level);
+        this.setOwner(shooter);
     }
 
     public ThrownMolotovEntity(Level level, double pX, double pY, double pZ) {

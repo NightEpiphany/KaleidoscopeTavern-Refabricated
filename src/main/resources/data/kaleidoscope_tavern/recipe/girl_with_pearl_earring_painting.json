@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:item_frame"
-    },
-    {
-      "item": "minecraft:ender_pearl"
-    }
+    "minecraft:item_frame",
+    "minecraft:ender_pearl"
   ],
   "result": {
     "count": 1,

@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.api.entity.ISittable;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.ConnectionType;
 import com.github.ysbbbbbb.kaleidoscopetavern.entity.SitEntity;
 import com.mojang.serialization.MapCodec;
@@ -36,7 +37,7 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
-public class SofaBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock, IConnectionBlock {
+public class SofaBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock, IConnectionBlock, ISittable {
     public static final MapCodec<SofaBlock> CODEC = simpleCodec(SofaBlock::new);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -120,20 +121,6 @@ public class SofaBlock extends HorizontalDirectionalBlock implements SimpleWater
     }
 
     @Override
-    public @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, Level level, @NonNull BlockPos pos,
-                                                @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
-        List<SitEntity> entities = level.getEntitiesOfClass(SitEntity.class, new AABB(pos));
-        if (entities.isEmpty()) {
-            SitEntity entitySit = new SitEntity(level);
-            entitySit.setYRot(state.getValue(FACING).toYRot());
-            level.addFreshEntity(entitySit);
-            player.startRiding(entitySit);
-            return InteractionResult.SUCCESS;
-        }
-        return InteractionResult.PASS;
-    }
-
-    @Override
     public void destroy(LevelAccessor levelAccessor, @NonNull BlockPos pos, @NonNull BlockState state) {
         levelAccessor.getEntitiesOfClass(SitEntity.class, new AABB(pos)).forEach(Entity::discard);
     }
@@ -178,5 +165,10 @@ public class SofaBlock extends HorizontalDirectionalBlock implements SimpleWater
     @Override
     protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
         return CODEC;
+    }
+
+    @Override
+    public float getSitHeight() {
+        return 0.55f;
     }
 }

@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:item_frame"
-    },
-    {
-      "item": "minecraft:iron_hoe"
-    }
+    "minecraft:item_frame",
+    "minecraft:iron_hoe"
   ],
   "result": {
     "count": 1,

@@ -9,6 +9,9 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BarrelRecipeContainer implements RecipeInput {
     private final NonNullList<ItemStack> items;
     private final Fluid fluid;
@@ -45,6 +48,25 @@ public class BarrelRecipeContainer implements RecipeInput {
 
     public NonNullList<ItemStack> getItems() {
         return items;
+    }
+
+    public List<ItemStack> getNonEmptyItems() {
+        List<ItemStack> nonEmpty = new ArrayList<>(this.items.size());
+        for (ItemStack stack : this.items) {
+            if (!stack.isEmpty()) {
+                nonEmpty.add(stack);
+            }
+        }
+        return nonEmpty;
+    }
+
+    public boolean hasUnitCount(int requiredCount) {
+        for (ItemStack stack : this.items) {
+            if (!stack.isEmpty() && stack.getCount() < requiredCount) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean itemsIsEmpty() {

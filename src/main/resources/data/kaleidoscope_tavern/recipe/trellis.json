@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "item": "kaleidoscope_tavern:grapevine"
-    }
+    "G": "kaleidoscope_tavern:grapevine"
   },
   "pattern": [
     "G",

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "B": {
-      "item": "minecraft:barrel"
-    }
+    "B": "minecraft:barrel"
   },
   "pattern": [
     "BBB",

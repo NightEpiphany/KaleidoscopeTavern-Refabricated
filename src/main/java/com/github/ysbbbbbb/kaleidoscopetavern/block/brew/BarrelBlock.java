@@ -84,11 +84,14 @@ public class BarrelBlock extends BaseEntityBlock {
         if (barrelEntity == null) {
             return InteractionResult.PASS;
         }
+        if (level.isClientSide()) {
+            return InteractionResult.SUCCESS;
+        }
         // 只有顶层可以交互
         if (isCeiling(state)) {
             if (!barrelEntity.isOpen()) {
                 // 如果是关着的，此时点击顶层会尝试开盖
-                return barrelEntity.openLid(player) ? InteractionResult.SUCCESS : InteractionResult.PASS;
+                return barrelEntity.openLid(player) ? InteractionResult.SUCCESS : InteractionResult.FAIL;
             }
 
             boolean clickedLid = isLid(state);
@@ -96,7 +99,7 @@ public class BarrelBlock extends BaseEntityBlock {
 
             // 如果的空手，且没有点击中心，则尝试关盖
             if (itemInHand.isEmpty() && !clickedLid) {
-                return barrelEntity.closeLid(player) ? InteractionResult.SUCCESS : InteractionResult.PASS;
+                return barrelEntity.closeLid(player) ? InteractionResult.SUCCESS : InteractionResult.FAIL;
             }
 
             // 只有点击中心，才能进行添加物品或流体的交互
@@ -111,7 +114,7 @@ public class BarrelBlock extends BaseEntityBlock {
                         return InteractionResult.SUCCESS;
                     }
                     // 流体容器不可作为原料输入
-                    return InteractionResult.PASS;
+                    return InteractionResult.FAIL;
                 }
 
                 // 其他情况，有物品，则尝试添加
@@ -123,6 +126,7 @@ public class BarrelBlock extends BaseEntityBlock {
                 if (itemInHand.isEmpty() && barrelEntity.removeIngredient(player)) {
                     return InteractionResult.SUCCESS;
                 }
+                return InteractionResult.FAIL;
             }
         } else {
             barrelEntity.tipBrewInfo(player);
