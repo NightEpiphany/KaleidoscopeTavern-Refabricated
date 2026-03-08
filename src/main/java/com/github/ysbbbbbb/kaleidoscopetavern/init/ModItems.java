@@ -76,6 +76,7 @@ public class ModItems {
     public static final Item TORCHFLOWER_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.TORCHFLOWER_SANDWICH_BOARD);
     public static final Item TULIP_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.TULIP_SANDWICH_BOARD);
     public static final Item WITHER_ROSE_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.WITHER_ROSE_SANDWICH_BOARD);
+    public static final Item EYEBLOSSOM_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.EYEBLOSSOM_SANDWICH_BOARD);
 
     // 彩灯
     public static final Item STRING_LIGHTS_COLORLESS = new StringLightsBlockItem(ModBlocks.STRING_LIGHTS_COLORLESS);
@@ -204,6 +205,7 @@ public class ModItems {
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "torchflower_sandwich_board"), TORCHFLOWER_SANDWICH_BOARD);
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "tulip_sandwich_board"), TULIP_SANDWICH_BOARD);
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "wither_rose_sandwich_board"), WITHER_ROSE_SANDWICH_BOARD);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "eyeblossom_sandwich_board"), EYEBLOSSOM_SANDWICH_BOARD);
 
         // 彩灯
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "string_lights_colorless"), STRING_LIGHTS_COLORLESS);

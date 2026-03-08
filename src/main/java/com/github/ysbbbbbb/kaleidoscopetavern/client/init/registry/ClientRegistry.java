@@ -1,4 +1,4 @@
-package com.github.ysbbbbbb.kaleidoscopetavern.client.registry;
+package com.github.ysbbbbbb.kaleidoscopetavern.client.init.registry;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ClientSetupEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModEntitiesRender;
@@ -40,6 +40,7 @@ public class ClientRegistry {
                 TORCHFLOWER_SANDWICH_BOARD,
                 TULIP_SANDWICH_BOARD,
                 WITHER_ROSE_SANDWICH_BOARD,
+                EYEBLOSSOM_SANDWICH_BOARD,
                 STRING_LIGHTS_COLORLESS,
                 STRING_LIGHTS_WHITE,
                 STRING_LIGHTS_LIGHT_BLUE,
