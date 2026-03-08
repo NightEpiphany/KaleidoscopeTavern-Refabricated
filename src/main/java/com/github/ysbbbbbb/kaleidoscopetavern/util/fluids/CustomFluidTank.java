@@ -87,6 +87,64 @@ public class CustomFluidTank extends SingleVariantStorage<FluidVariant> {
         return tag;
     }
 
+    public long fill(FluidVariant resource, long maxAmount, FluidAction action) {
+        if (resource == null || resource.isBlank() || maxAmount <= 0) {
+            return 0;
+        }
+        if (this.amount <= 0 || this.variant.isBlank()) {
+            long filled = Math.min(this.capacity, maxAmount);
+            if (filled > 0 && action.execute()) {
+                this.variant = resource;
+                this.amount = filled;
+                if (this.onContentsChanged != null) {
+                    this.onContentsChanged.run();
+                }
+            }
+            return filled;
+        }
+        if (!this.variant.equals(resource)) {
+            return 0;
+        }
+        long space = this.capacity - this.amount;
+        if (space <= 0) {
+            return 0;
+        }
+        long filled = Math.min(space, maxAmount);
+        if (filled > 0 && action.execute()) {
+            this.amount += filled;
+            if (this.onContentsChanged != null) {
+                this.onContentsChanged.run();
+            }
+        }
+        return filled;
+    }
+
+    public long fill(FluidVariant resource, int maxAmount, FluidAction action) {
+        return fill(resource, (long) maxAmount, action);
+    }
+
+    public long drain(long maxAmount, FluidAction action) {
+        if (maxAmount <= 0 || this.amount <= 0 || this.variant.isBlank()) {
+            return 0;
+        }
+        long drained = Math.min(maxAmount, this.amount);
+        if (drained > 0 && action.execute()) {
+            this.amount -= drained;
+            if (this.amount <= 0) {
+                this.amount = 0;
+                this.variant = FluidVariant.blank();
+            }
+            if (this.onContentsChanged != null) {
+                this.onContentsChanged.run();
+            }
+        }
+        return drained;
+    }
+
+    public long drain(int maxAmount, FluidAction action) {
+        return drain((long) maxAmount, action);
+    }
+
     public void readFromNBT(CompoundTag tag) {
         long readAmount = tag.getLong("amount");
         if (readAmount <= 0) {
@@ -110,6 +168,14 @@ public class CustomFluidTank extends SingleVariantStorage<FluidVariant> {
         } catch (RuntimeException e) {
             this.amount = 0;
             this.variant = FluidVariant.blank();
+        }
+    }
+    public enum FluidAction {
+        EXECUTE,
+        SIMULATE;
+
+        public boolean execute() {
+            return this == EXECUTE;
         }
     }
 }

@@ -33,6 +33,7 @@ public class ModBlocks {
     public static final Block PURPLE_SOFA = new SofaBlock();
     public static final Block MAGENTA_SOFA = new SofaBlock();
     public static final Block PINK_SOFA = new SofaBlock();
+
     // 高脚凳
     public static final Block WHITE_BAR_STOOL = new BarStoolBlock();
     public static final Block LIGHT_GRAY_BAR_STOOL = new BarStoolBlock();
@@ -50,6 +51,7 @@ public class ModBlocks {
     public static final Block PURPLE_BAR_STOOL = new BarStoolBlock();
     public static final Block MAGENTA_BAR_STOOL = new BarStoolBlock();
     public static final Block PINK_BAR_STOOL = new BarStoolBlock();
+
     // 展板
     public static final Block BASE_SANDWICH_BOARD = new SandwichBoardBlock();
     public static final Block GRASS_SANDWICH_BOARD = new SandwichBoardBlock(Items.GRASS);
@@ -65,6 +67,8 @@ public class ModBlocks {
     public static final Block TORCHFLOWER_SANDWICH_BOARD = new SandwichBoardBlock(Items.TORCHFLOWER);
     public static final Block TULIP_SANDWICH_BOARD = new SandwichBoardBlock(Items.RED_TULIP, Items.ORANGE_TULIP, Items.WHITE_TULIP, Items.PINK_TULIP);
     public static final Block WITHER_ROSE_SANDWICH_BOARD = new SandwichBoardBlock(Items.WITHER_ROSE);
+    public static final Block EYEBLOSSOM_SANDWICH_BOARD = new SandwichBoardBlock();
+
     // 彩灯
     public static final Block STRING_LIGHTS_COLORLESS = new StringLightsBlock(null);
     public static final Block STRING_LIGHTS_WHITE = new StringLightsBlock(Items.WHITE_DYE);
@@ -83,6 +87,7 @@ public class ModBlocks {
     public static final Block STRING_LIGHTS_PURPLE = new StringLightsBlock(Items.PURPLE_DYE);
     public static final Block STRING_LIGHTS_MAGENTA = new StringLightsBlock(Items.MAGENTA_DYE);
     public static final Block STRING_LIGHTS_PINK = new StringLightsBlock(Items.PINK_DYE);
+
     // 挂画
     public static final Block YSBB_PAINTING = new PaintingBlock();
     public static final Block TARTARIC_ACID_PAINTING = new PaintingBlock();
@@ -99,6 +104,7 @@ public class ModBlocks {
     public static final Block MONA_LISA_PAINTING = new PaintingBlock();
     public static final Block MONDRIAN_PAINTING = new PaintingBlock();
     public static final Block NIGHT_EPIPHANY_PAINTING = new PaintingBlock();
+
     // 果盆
     public static final Block PRESSING_TUB = new PressingTubBlock();
     // 空瓶
@@ -226,7 +232,8 @@ public class ModBlocks {
             SUNFLOWER_SANDWICH_BOARD,
             TORCHFLOWER_SANDWICH_BOARD,
             TULIP_SANDWICH_BOARD,
-            WITHER_ROSE_SANDWICH_BOARD
+            WITHER_ROSE_SANDWICH_BOARD,
+            EYEBLOSSOM_SANDWICH_BOARD
     ).build(null);
     public static final BlockEntityType<ChalkboardBlockEntity> CHALKBOARD_BE = BlockEntityType.Builder.of(ChalkboardBlockEntity::new, CHALKBOARD).build(null);
     public static final BlockEntityType<PressingTubBlockEntity> PRESSING_TUB_BE = BlockEntityType.Builder.of(PressingTubBlockEntity::new, PRESSING_TUB).build(null);
@@ -296,6 +303,7 @@ public class ModBlocks {
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "torchflower_sandwich_board"), TORCHFLOWER_SANDWICH_BOARD);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "tulip_sandwich_board"), TULIP_SANDWICH_BOARD);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "wither_rose_sandwich_board"), WITHER_ROSE_SANDWICH_BOARD);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "eyeblossom_sandwich_board"), EYEBLOSSOM_SANDWICH_BOARD);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_colorless"), STRING_LIGHTS_COLORLESS);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_white"), STRING_LIGHTS_WHITE);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "string_lights_light_gray"), STRING_LIGHTS_LIGHT_GRAY);
