@@ -97,7 +97,7 @@ public record BarrelRecipe(
     private NonNullList<Ingredient> effectiveIngredients() {
         NonNullList<Ingredient> filtered = NonNullList.create();
         for (Ingredient ingredient : this.ingredients) {
-            if (!ingredient.isEmpty() && !BarrelRecipeSerializer.isPlaceholderIngredient(ingredient)) {
+            if (!ingredient.isEmpty()) {
                 filtered.add(ingredient);
             }
         }

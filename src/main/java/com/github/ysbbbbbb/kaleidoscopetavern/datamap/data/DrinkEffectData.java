@@ -6,6 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -38,5 +39,10 @@ public record DrinkEffectData(Item item, List<List<Entry>> effects) {
                 Codec.INT.fieldOf("amplifier").forGetter(Entry::amplifier),
                 Codec.FLOAT.fieldOf("probability").forGetter(Entry::probability)
         ).apply(instance, Entry::new));
+    }
+
+    @Override
+    public @NonNull String toString() {
+        return "DrinkEffect:{" + item.toString() + "---" + effects.toString() + "}";
     }
 }

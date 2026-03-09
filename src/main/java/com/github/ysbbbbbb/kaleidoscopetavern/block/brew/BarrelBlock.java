@@ -7,6 +7,8 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,6 +25,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -107,10 +110,12 @@ public class BarrelBlock extends BaseEntityBlock {
                 // 如果拿的是流体容器
                 if (FluidUtils.isFluidContainer(itemInHand)) {
                     if (barrelEntity.addFluid(player, itemInHand)) {
+                        level.playSound(null, pos, barrelEntity.getFluid().getFluid() == Fluids.LAVA ? SoundEvents.BUCKET_EMPTY_LAVA : SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 0.655F, 0.8F);
                         return InteractionResult.SUCCESS;
                     }
                     // 如果倒出失败了，再尝试从酒桶里装流体到容器里
                     if (barrelEntity.removeFluid(player, itemInHand)) {
+                        level.playSound(null, pos, barrelEntity.getFluid().getFluid() == Fluids.LAVA ? SoundEvents.BUCKET_FILL_LAVA : SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 0.655F, 0.8F);
                         return InteractionResult.SUCCESS;
                     }
                     // 流体容器不可作为原料输入

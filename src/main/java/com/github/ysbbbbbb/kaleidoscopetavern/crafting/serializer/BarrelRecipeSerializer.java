@@ -11,7 +11,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.material.Fluid;
@@ -24,26 +23,24 @@ public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
     public static final Identifier EMPTY_RECIPE_ID = Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "empty");
     public static final int DEFAULT_UNIT_TIME = 2400;
     public static final int MAX_INGREDIENTS = 4;
-    private static final Ingredient PLACEHOLDER_INGREDIENT = Ingredient.of(Items.BARRIER);
-    private static final NonNullList<Ingredient> DEFAULT_INGREDIENTS = NonNullList.withSize(MAX_INGREDIENTS, PLACEHOLDER_INGREDIENT);
 
-    public static boolean isPlaceholderIngredient(Ingredient ingredient) {
-        return ingredient.test(Items.BARRIER.getDefaultInstance());
-    }
-
-    private static NonNullList<Ingredient> toSizedIngredients(List<Ingredient> list) {
-        NonNullList<Ingredient> nonnull = NonNullList.withSize(MAX_INGREDIENTS, PLACEHOLDER_INGREDIENT);
-        for (int i = 0; i < Math.min(list.size(), MAX_INGREDIENTS); i++) {
-            nonnull.set(i, list.get(i));
+    private static NonNullList<Ingredient> normalizeIngredients(List<Ingredient> list) {
+        NonNullList<Ingredient> nonnull = NonNullList.create();
+        int size = Math.min(list.size(), MAX_INGREDIENTS);
+        for (int i = 0; i < size; i++) {
+            Ingredient ingredient = list.get(i);
+            if (ingredient != null && !ingredient.isEmpty()) {
+                nonnull.add(ingredient);
+            }
         }
         return nonnull;
     }
 
     private static final MapCodec<BarrelRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Ingredient.CODEC.listOf().xmap(
-                    BarrelRecipeSerializer::toSizedIngredients,
-                    nonnull -> nonnull.stream().filter(i -> !i.isEmpty() && !isPlaceholderIngredient(i)).toList()
-            ).optionalFieldOf("ingredients", DEFAULT_INGREDIENTS).forGetter(BarrelRecipe::ingredients),
+                    BarrelRecipeSerializer::normalizeIngredients,
+                    nonnull -> nonnull.stream().filter(i -> !i.isEmpty()).toList()
+            ).optionalFieldOf("ingredients", NonNullList.create()).forGetter(BarrelRecipe::ingredients),
             BuiltInRegistries.FLUID.byNameCodec().fieldOf("fluid").forGetter(BarrelRecipe::fluid),
             Ingredient.CODEC.fieldOf("carrier").forGetter(BarrelRecipe::carrier),
             ItemStack.CODEC.fieldOf("result").forGetter(BarrelRecipe::result),
@@ -54,9 +51,12 @@ public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
         @Override
         public @NotNull BarrelRecipe decode(RegistryFriendlyByteBuf buf) {
             int size = Math.min(MAX_INGREDIENTS, buf.readVarInt());
-            NonNullList<Ingredient> ingredients = NonNullList.withSize(MAX_INGREDIENTS, PLACEHOLDER_INGREDIENT);
+            NonNullList<Ingredient> ingredients = NonNullList.create();
             for (int i = 0; i < size; i++) {
-                ingredients.set(i, Ingredient.CONTENTS_STREAM_CODEC.decode(buf));
+                Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
+                if (!ingredient.isEmpty()) {
+                    ingredients.add(ingredient);
+                }
             }
             Identifier fluidId = buf.readIdentifier();
             Fluid fluid = Objects.requireNonNull(BuiltInRegistries.FLUID.getValue(fluidId));
@@ -68,7 +68,7 @@ public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
 
         @Override
         public void encode(RegistryFriendlyByteBuf buf, BarrelRecipe recipe) {
-            var nonEmpty = recipe.ingredients().stream().filter(i -> !i.isEmpty() && !isPlaceholderIngredient(i)).toList();
+            var nonEmpty = recipe.ingredients().stream().filter(i -> !i.isEmpty()).limit(MAX_INGREDIENTS).toList();
             buf.writeVarInt(nonEmpty.size());
             for (Ingredient ingredient : nonEmpty) {
                 Ingredient.CONTENTS_STREAM_CODEC.encode(buf, ingredient);

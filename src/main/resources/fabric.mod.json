@@ -15,7 +15,9 @@
 		"main": ["com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern"],
 		"client": ["com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavernClient"],
 		"jade": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.jade.ModJadePlugin"],
-		"jei_mod_plugin": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.jei.ModJeiPlugin"]
+		"jei_mod_plugin": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.jei.ModJeiPlugin"],
+		"rei_client": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.ModREIClientPlugin"],
+		"rei_common": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.ModREICommonPlugin"]
 	},
 	"mixins": [
 		"kaleidoscope_tavern.mixins.json"

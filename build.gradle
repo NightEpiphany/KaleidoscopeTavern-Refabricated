@@ -46,6 +46,8 @@ repositories {
 	maven {
 		url "https://cursemaven.com"
 	}
+	maven { url "https://maven.shedaniel.me/" }
+	maven { url "https://maven.terraformersmc.com/releases/" }
 }
 
 dependencies {
@@ -55,9 +57,17 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "curse.maven:create-fly-1346281:7658527"
 	modImplementation "maven.modrinth:jade:${project.jade_version}"
-	modImplementation("mezz.jei:jei-1.21.11-fabric:27.4.0.15")
+	modCompileOnly("mezz.jei:jei-1.21.11-fabric:27.4.0.15")
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// REI 前置
+	modImplementation "me.shedaniel.cloth:cloth-config-fabric:21.11.153"
+	modImplementation "dev.architectury:architectury-fabric:19.0.1"
+	// REI API for Fabric
+	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:21.11.814"
+	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:21.11.814"
+	modRuntimeOnly "maven.modrinth:rei:21.11.814+fabric-fabric,1.21.11"
 	
 }
 
