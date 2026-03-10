@@ -11,12 +11,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public record TextOpenS2CMessage(BlockPos pos) implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<TextOpenS2CMessage> TYPE = new CustomPacketPayload.Type<>(KaleidoscopeTavern.modLoc("text_open"));
+    public static final CustomPacketPayload.Type<TextOpenS2CMessage> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "text_open"));
 
     public static final StreamCodec<FriendlyByteBuf, TextOpenS2CMessage> STREAM_CODEC = new StreamCodec<>() {
         @Override

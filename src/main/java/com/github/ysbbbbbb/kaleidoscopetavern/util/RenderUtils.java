@@ -23,6 +23,7 @@ import org.joml.Matrix4f;
 
 @Environment(EnvType.CLIENT)
 public class RenderUtils {
+    private static final int ALPHA_MASK = 0xFF000000;
     /**
      * 渲染流体的工具方法
      *
@@ -39,10 +40,9 @@ public class RenderUtils {
         renderSurface(poseStack, buffer, sprite, color, light, Mth.clamp(size, 1, 16), y);
     }
 
-    public static void renderFluid(BlockAndTintGetter level, BlockPos pos, Fluid fluid, PoseStack poseStack, MultiBufferSource buffer, int light, int size, float y) {
+    public static void renderWaterFluid(BlockAndTintGetter level, BlockPos pos, Fluid fluid, PoseStack poseStack, MultiBufferSource buffer, int light, int size, float y) {
         TextureAtlasSprite sprite = getStillFluidSprite(level, pos, fluid);
-        int color = getFluidColor(level, pos, fluid);
-        renderSurface(poseStack, buffer, sprite, color, light, Mth.clamp(size, 1, 16), y);
+        renderSurface(poseStack, buffer, sprite, -12618012, light, Mth.clamp(size, 1, 16), y);
     }
 
     /**
@@ -134,5 +134,9 @@ public class RenderUtils {
             return 0xFFFFFFFF;
         }
         return handler.getFluidColor(level, pos, state);
+    }
+
+    private static int ensureAlpha(int color) {
+        return (color & ALPHA_MASK) == 0 ? color | ALPHA_MASK : color;
     }
 }

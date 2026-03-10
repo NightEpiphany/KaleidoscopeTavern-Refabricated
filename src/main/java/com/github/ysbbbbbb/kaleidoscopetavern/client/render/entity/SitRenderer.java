@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @Deprecated
 @Environment(EnvType.CLIENT)
 public class SitRenderer extends EntityRenderer<SitEntity> {
-    private static final ResourceLocation EMPTY = KaleidoscopeTavern.modLoc("textures/entity/empty.png");
+    private static final ResourceLocation EMPTY = ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "textures/entity/empty.png");
 
     public SitRenderer(EntityRendererProvider.Context context) {
         super(context);

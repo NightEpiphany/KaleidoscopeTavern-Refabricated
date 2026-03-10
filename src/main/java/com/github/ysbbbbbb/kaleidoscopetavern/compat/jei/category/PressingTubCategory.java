@@ -34,9 +34,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PressingTubCategory implements IRecipeCategory<RecipeHolder<PressingTubRecipe>> {
-    public static final RecipeType<RecipeHolder<PressingTubRecipe>> TYPE = RecipeType.createRecipeHolderType(KaleidoscopeTavern.modLoc("pressing_tub"));
+    public static final RecipeType<RecipeHolder<PressingTubRecipe>> TYPE = RecipeType.createRecipeHolderType(ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "pressing_tub"));
 
-    private static final ResourceLocation BG = KaleidoscopeTavern.modLoc("textures/gui/jei/pressing_tub.png");
+    private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "textures/gui/jei/pressing_tub.png");
     private static final MutableComponent TITLE = Component.translatable("block.kaleidoscope_tavern.pressing_tub");
 
     public static final int WIDTH = 155;

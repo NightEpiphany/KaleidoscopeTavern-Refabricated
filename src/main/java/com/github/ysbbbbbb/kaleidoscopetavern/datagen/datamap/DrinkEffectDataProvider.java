@@ -18,6 +18,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Item;
@@ -237,7 +238,7 @@ public class DrinkEffectDataProvider implements DataProvider {
                     .encodeStart(JsonOps.INSTANCE, entry.getValue())
                     .resultOrPartial(KaleidoscopeTavern.LOGGER::error)
                     .ifPresent(json -> {
-                        var filePath = pathProvider.json(KaleidoscopeTavern.modLoc(entry.getKey()));
+                        var filePath = pathProvider.json(ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, entry.getKey()));
                         var future = this.saveStable(cache, json, filePath);
                         futures.add(future);
                     });

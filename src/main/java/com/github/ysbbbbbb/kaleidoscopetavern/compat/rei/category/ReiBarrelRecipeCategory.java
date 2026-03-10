@@ -31,7 +31,7 @@ public class ReiBarrelRecipeCategory implements DisplayCategory<DefaultCustomDis
     public static final CategoryIdentifier<DefaultCustomDisplay> ID = CategoryIdentifier.of(KaleidoscopeTavern.MOD_ID, "plugin/barrel");
 
     private static final MutableComponent TITLE = Component.translatable("block.kaleidoscope_tavern.barrel");
-    private static final ResourceLocation BG = KaleidoscopeTavern.modLoc("textures/gui/jei/barrel.png");
+    private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "textures/gui/jei/barrel.png");
 
     public static final int WIDTH = 180;
     public static final int HEIGHT = 150;

@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +17,7 @@ public record TextUpdateC2SMessage(
         BlockPos pos, String text,
         TextAlignment textAlignment
 ) implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<TextUpdateC2SMessage> TYPE = new CustomPacketPayload.Type<>(KaleidoscopeTavern.modLoc("text_update"));
+    public static final CustomPacketPayload.Type<TextUpdateC2SMessage> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "text_update"));
 
     public static final StreamCodec<FriendlyByteBuf, TextUpdateC2SMessage> STREAM_CODEC = new StreamCodec<>() {
         @Override

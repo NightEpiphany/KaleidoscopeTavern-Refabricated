@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
-    public static final ResourceLocation EMPTY_RECIPE_ID = KaleidoscopeTavern.modLoc("empty");
+    public static final ResourceLocation EMPTY_RECIPE_ID = ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "empty");
     public static final int DEFAULT_UNIT_TIME = 2400;
     public static final int MAX_INGREDIENTS = 4;
 

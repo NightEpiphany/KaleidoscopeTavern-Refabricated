@@ -1,11 +1,9 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.datagen.loottable;
 
-import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -150,15 +148,6 @@ public class BlockLootTables extends BlockLootSubProvider {
     public void add(Block block, LootTable.Builder builder) {
         this.knownBlocks.add(block);
         super.add(block, builder);
-    }
-
-
-    public Iterable<Block> getKnownBlocks() {
-        return this.knownBlocks;
-    }
-
-    public ResourceLocation modLoc(String name) {
-        return KaleidoscopeTavern.modLoc(name);
     }
 
     public LootTable.Builder createMultiItemTable(ItemLike... items) {

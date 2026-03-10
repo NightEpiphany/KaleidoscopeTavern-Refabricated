@@ -119,7 +119,7 @@ public class ShapelessRecipeProvider extends ModRecipeProvider {
                 String resultName = getId(result).getPath();
                 result.getTransformItems().forEach(transform -> {
                     String transformName = getId(transform).getPath();
-                    ResourceLocation recipeId = KaleidoscopeTavern.modLoc("%s_from_%s".formatted(resultName, transformName));
+                    ResourceLocation recipeId = ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "%s_from_%s".formatted(resultName, transformName));
                     ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, result)
                             .requires(ModItems.BASE_SANDWICH_BOARD)
                             .requires(transform)

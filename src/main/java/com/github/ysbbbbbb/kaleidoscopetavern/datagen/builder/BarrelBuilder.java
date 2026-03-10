@@ -94,13 +94,13 @@ public class BarrelBuilder implements RecipeBuilder {
     @Override
     public void save(RecipeOutput output) {
         String path = RecipeBuilder.getDefaultRecipeId(this.getResult()).getPath();
-        ResourceLocation filePath = KaleidoscopeTavern.modLoc(NAME + "/" + path);
+        ResourceLocation filePath = ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, NAME + "/" + path);
         this.save(output, filePath);
     }
 
     @Override
     public void save(RecipeOutput output, String recipeId) {
-        ResourceLocation filePath = KaleidoscopeTavern.modLoc(NAME + "/" + recipeId);
+        ResourceLocation filePath = ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, NAME + "/" + recipeId);
         this.save(output, filePath);
     }
 

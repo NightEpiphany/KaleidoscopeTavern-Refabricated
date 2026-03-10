@@ -1,12 +1,10 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.datagen.recipe;
 
-import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 
 import java.util.Arrays;
@@ -19,10 +17,6 @@ public abstract class ModRecipeProvider extends RecipeProvider {
 
     @Override
     public void buildRecipes(RecipeOutput output) {
-    }
-
-    public ResourceLocation modLoc(String path) {
-        return KaleidoscopeTavern.modLoc(path);
     }
 
     public String getRecipeIdWithCount(ItemLike itemLike, int count) {

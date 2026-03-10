@@ -31,9 +31,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class BarrelRecipeCategory implements IRecipeCategory<RecipeHolder<BarrelRecipe>> {
-    public static final RecipeType<RecipeHolder<BarrelRecipe>> TYPE = RecipeType.createRecipeHolderType(KaleidoscopeTavern.modLoc("barrel"));
+    public static final RecipeType<RecipeHolder<BarrelRecipe>> TYPE = RecipeType.createRecipeHolderType(ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "barrel"));
 
-    private static final ResourceLocation BG = KaleidoscopeTavern.modLoc("textures/gui/jei/barrel.png");
+    private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "textures/gui/jei/barrel.png");
     private static final MutableComponent TITLE = Component.translatable("block.kaleidoscope_tavern.barrel");
 
     public static final int WIDTH = 180;

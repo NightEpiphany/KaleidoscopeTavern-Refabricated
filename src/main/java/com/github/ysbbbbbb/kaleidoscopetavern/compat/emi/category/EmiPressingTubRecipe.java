@@ -25,7 +25,7 @@ public class EmiPressingTubRecipe extends BasicEmiRecipe {
             EmiIngredient.of(Ingredient.of(ModItems.PRESSING_TUB))
     );
 
-    private static final ResourceLocation BG = KaleidoscopeTavern.modLoc("textures/gui/jei/pressing_tub.png");
+    private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "textures/gui/jei/pressing_tub.png");
 
     public static final int WIDTH = 155;
     public static final int HEIGHT = 54;

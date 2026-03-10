@@ -13,6 +13,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PressingTubBuilder implements RecipeBuilder {
@@ -47,30 +48,30 @@ public class PressingTubBuilder implements RecipeBuilder {
     }
 
     @Override
-    public RecipeBuilder unlockedBy(String name, Criterion<?> trigger) {
+    public @NotNull RecipeBuilder unlockedBy(String name, Criterion<?> trigger) {
         return this;
     }
 
     @Override
-    public RecipeBuilder group(@Nullable String groupName) {
+    public @NotNull RecipeBuilder group(@Nullable String groupName) {
         return this;
     }
 
     @Override
-    public Item getResult() {
+    public @NotNull Item getResult() {
         return this.fluid.getBucket();
     }
 
     @Override
     public void save(RecipeOutput output) {
         String path = RecipeBuilder.getDefaultRecipeId(this.getResult()).getPath();
-        ResourceLocation filePath = KaleidoscopeTavern.modLoc(NAME + "/" + path);
+        ResourceLocation filePath = ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, NAME + "/" + path);
         this.save(output, filePath);
     }
 
     @Override
     public void save(RecipeOutput output, String recipeId) {
-        ResourceLocation filePath = KaleidoscopeTavern.modLoc(NAME + "/" + recipeId);
+        ResourceLocation filePath = ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, NAME + "/" + recipeId);
         this.save(output, filePath);
     }
 

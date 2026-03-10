@@ -141,7 +141,7 @@ public class FluidUtils {
         if (!(user instanceof Player player) || !player.isCreative()) {
             bucket.shrink(1);
         }
-        ItemUtils.getItemToLivingEntity(user, ModFluids.SELECT_BUCKETS.get(resource.getFluid()).getDefaultInstance());
+        ItemUtils.getItemToLivingEntity(user, resource.getFluid().getBucket().getDefaultInstance());
         SoundEvent sound = FluidVariantAttributes.getFillSound(resource);
         if (sound != null) {
             user.playSound(sound);
