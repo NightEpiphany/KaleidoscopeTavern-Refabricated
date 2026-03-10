@@ -23,6 +23,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import org.jetbrains.annotations.NotNull;
 
 import static com.github.ysbbbbbb.kaleidoscopetavern.util.RenderUtils.stableRandom;
 
@@ -39,8 +41,8 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
     }
 
     @Override
-    public void render(BarrelBlockEntity barrel, float partialTick, PoseStack poseStack,
-                       MultiBufferSource buffer, int packedLight, int packedOverlay) {
+    public void render(@NotNull BarrelBlockEntity barrel, float partialTick, @NotNull PoseStack poseStack,
+                       @NotNull MultiBufferSource buffer, int packedLight, int packedOverlay) {
         // 本体渲染
         this.renderBody(barrel, poseStack, buffer, packedLight, packedOverlay);
 
@@ -82,7 +84,11 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
             float percent = fluidAmount / (float) IBarrel.MAX_FLUID_AMOUNT;
             float y = percent * 0.75f;
             Fluid fluid = fluidTank.getFluid();
-            RenderUtils.renderFluid(fluid, poseStack, buffer, packedLight, 16, y);
+            if (fluid == Fluids.WATER) {
+                RenderUtils.renderWaterFluid(barrel.getLevel(), barrel.getBlockPos(), fluid, poseStack, buffer, packedLight, 16, y);
+            }else {
+                RenderUtils.renderFluid(fluid, poseStack, buffer, packedLight, 16, y);
+            }
 
             poseStack.popPose();
         }

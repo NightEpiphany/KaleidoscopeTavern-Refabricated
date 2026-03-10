@@ -36,7 +36,7 @@ public record BarrelRecipe(
         int unitTime
 ) implements Recipe<BarrelRecipeContainer> {
     @Override
-    public boolean matches(BarrelRecipeContainer container, Level level) {
+    public boolean matches(@NotNull BarrelRecipeContainer container, @NotNull Level level) {
         boolean emptyIngredients = this.ingredients.stream().allMatch(Ingredient::isEmpty);
         // 如果全为空
         if (emptyIngredients) {
@@ -48,8 +48,16 @@ public record BarrelRecipe(
     }
 
     @Override
-    public @NotNull ItemStack assemble(BarrelRecipeContainer container, RegistryAccess registryAccess) {
-        return getResultItem(registryAccess).copy();
+    public @NotNull ItemStack assemble(@NotNull BarrelRecipeContainer container, @NotNull RegistryAccess registryAccess) {
+        // 遍历容器，找出数量最少的输入物品数量，作为酿造结果的数量
+        // 默认数量为 16，超过这个数量的输入物品不会增加输出物品的数量
+        int count = 16;
+        for (ItemStack itemStack : container.getItems()) {
+            if (!itemStack.isEmpty()) {
+                count = Math.min(count, itemStack.getCount());
+            }
+        }
+        return getResultItem(registryAccess).copyWithCount(count);
     }
 
     @Override
@@ -58,7 +66,7 @@ public record BarrelRecipe(
     }
 
     @Override
-    public @NotNull ItemStack getResultItem(RegistryAccess registryAccess) {
+    public @NotNull ItemStack getResultItem(@NotNull RegistryAccess registryAccess) {
         return this.result;
     }
 

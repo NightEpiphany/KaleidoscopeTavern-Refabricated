@@ -371,7 +371,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         this.ingredients.deserializeNBT(tag.getCompound("items"));
         this.output.deserializeNBT(tag.getCompound("output"));
@@ -389,7 +389,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
         tag.put("items", this.ingredients.serializeNBT());
         tag.put("output", this.output.serializeNBT());
@@ -407,7 +407,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
     public void tip(@Nullable LivingEntity entity, String key) {
         if (entity instanceof ServerPlayer player) {
             Component message = Component.translatable("message.kaleidoscope_tavern.barrel.%s".formatted(key));
-            player.sendSystemMessage(message);
+            player.sendSystemMessage(message, true);
         }
     }
 

@@ -304,8 +304,8 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
         }
 
         if (carriedStack.is(Items.BUCKET)) {
-            Item bucketItem = ModFluids.SELECT_BUCKETS.get(fluidVariant.getFluid());
-            if (bucketItem != null) {
+            Item bucketItem =fluidVariant.getFluid().getBucket();
+            if (!bucketItem.getDefaultInstance().isEmpty()) {
                 try (Transaction transaction = Transaction.openOuter()) {
                     long extracted = this.fluid.extract(fluidVariant, IPressingTub.MAX_FLUID_AMOUNT_TRANSFER, transaction);
                     if (extracted != IPressingTub.MAX_FLUID_AMOUNT_TRANSFER) {
