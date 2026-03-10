@@ -1,10 +1,11 @@
-## About
-
-# Kaleidoscope: Tavern Refabricated 森罗物语 酒馆-重织
+# Kaleidoscope Tavern Refabricated   
+# 森罗物语：酒馆-重织
 
 > A Minecraft mod that brings an immersive tavern experience with a complete brewing system and rich decorative content.
 
-![Minecraft](https://img.shields.io/badge/Minecraft-Java%20Edition-brightgreen) ![Fabric](https://img.shields.io/badge/%20Fabric-1.20.1%20-orange) ![License](https://img.shields.io/badge/License-BSD%20|%20CC%20BY--NC--SA%204.0-blue)
+![Minecraft](https://img.shields.io/badge/Minecraft-Java%20Edition-brightgreen) 
+![Fabric](https://img.shields.io/badge/Fabric-1.20.1%20|%201.21.1|%201.21.11-orange) 
+![License](https://img.shields.io/badge/License-BSD%20|%20CC%20BY--NC--SA%204.0-blue)
 
 *   This is the **unofficial fabric port** for [**Kaleidoscope Tavern mod**](https://www.curseforge.com/minecraft/mc-mods/kaleidoscope-tavern), currently supports 1.20. 1.21 fabric will be announced when official neoforge version released.
 *   **The official team need to devote their full attention in forge & neoforge development, so fabric branch will be maintained by the zealous unofficial fans.**
