@@ -28,6 +28,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -39,7 +40,7 @@ import static com.github.ysbbbbbb.kaleidoscopetavern.util.RenderUtils.stableRand
 @Environment(EnvType.CLIENT)
 public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockEntity, BarrelBlockEntityRenderState> {
     private static final Identifier LARGE_TEXTURE = Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "textures/entity/brew/barrel.png");
-    private final Minecraft minecraft = Minecraft.getInstance();
+    private static final Minecraft minecraft = Minecraft.getInstance();
     private final ItemModelResolver itemModelResolver;
     private final BarrelModel model;
 
@@ -105,8 +106,11 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
             float percent = fluidAmount / (float) IBarrel.MAX_FLUID_AMOUNT;
             float y = percent * 0.65f;
             Fluid fluid = fluidTank.getFluid();
-            RenderUtils.renderFluid(fluid, poseStack, buffer, barrel.lightCoords, 16, y);
-
+            if (fluid == Fluids.WATER) {
+                RenderUtils.renderWaterFluid(minecraft.level, barrel.blockPos, fluid, poseStack, buffer, barrel.lightCoords, 16, y);
+            }else {
+                RenderUtils.renderFluid(fluid, poseStack, buffer, barrel.lightCoords, 16, y);
+            }
             poseStack.popPose();
         }
     }

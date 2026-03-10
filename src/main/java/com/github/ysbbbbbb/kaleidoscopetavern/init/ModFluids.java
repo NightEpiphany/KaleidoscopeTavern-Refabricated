@@ -28,12 +28,7 @@ import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import org.jspecify.annotations.NonNull;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class ModFluids {
-
-    public static final Map<Fluid, Item> SELECT_BUCKETS = new HashMap<>();
 
     public static final FlowingFluid GRAPE_JUICE = new JuiceFluid.Still(
             () -> ModFluids.FLOWING_GRAPE_JUICE,
@@ -102,8 +97,6 @@ public class ModFluids {
         Registry.register(BuiltInRegistries.FLUID, id(name), still);
         Registry.register(BuiltInRegistries.FLUID, id("flowing_" + name), flowing);
         Registry.register(BuiltInRegistries.BLOCK, id(name), block);
-        SELECT_BUCKETS.put(still, bucket);
-        SELECT_BUCKETS.put(flowing, bucket);
     }
 
     @Environment(EnvType.CLIENT)

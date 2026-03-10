@@ -195,7 +195,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
             }
             this.ingredient.setStackInSlot(i, ItemStack.EMPTY);
         }
-        this.fluid.drain(this.fluid.getFluidAmountMb(), CustomFluidTank.FluidAction.EXECUTE);
+        this.fluid.drain(this.fluid.getFluidAmountTransfer(), CustomFluidTank.FluidAction.EXECUTE);
     }
 
     @Override
