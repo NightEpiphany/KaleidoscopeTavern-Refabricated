@@ -1,0 +1,12 @@
+{
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "misc",
+    "ingredients":  [
+                        "minecraft:item_frame",
+                        "#c:dyes/cyan"
+                    ],
+    "result":  {
+                   "count":  1,
+                   "id":  "kaleidoscope_tavern:night_epiphany_painting"
+               }
+}

@@ -10,6 +10,8 @@ import com.google.common.collect.Lists;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.Consumables;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -29,6 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
@@ -41,7 +44,8 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
         super(block, properties
                 .stacksTo(16)
                 .useBlockDescriptionPrefix()
-                .craftRemainder(ModItems.EMPTY_BOTTLE));
+                .craftRemainder(ModItems.EMPTY_BOTTLE)
+                .component(DataComponents.CONSUMABLE, Consumables.defaultDrink().build()));
     }
 
     @Override
@@ -185,6 +189,52 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
         potion.setItem(stack);
 
         level.addFreshEntity(potion);
+    }
+
+    public void makeThrownPotion(Level level, double x, double y, double z, int brewLevel, @Nullable Entity owner, @Nullable Vec3 movement) {
+        List<MobEffectInstance> instances = this.getEffectInstances(level, brewLevel);
+
+        ItemStack stack = new ItemStack(this);
+        ThrownSplashPotion potion = new ThrownSplashPotion(level, x, y, z, stack);
+        if (owner instanceof LivingEntity livingEntity) {
+            potion.setOwner(livingEntity);
+        }
+
+        PotionContents contents = new PotionContents(Optional.empty(), Optional.empty(), instances, Optional.empty());
+        stack.set(DataComponents.POTION_CONTENTS, contents);
+        potion.setItem(stack);
+
+        if (movement != null) {
+            potion.setDeltaMovement(movement);
+        }
+
+        level.addFreshEntity(potion);
+    }
+
+    protected List<MobEffectInstance> getEffectInstances(Level level, int brewLevel) {
+        DrinkEffectData effectData = DrinkEffectDataReloadListener.INSTANCE.get(this);
+        if (effectData == null) {
+            return List.of();
+        }
+        var effects = effectData.effects();
+        if (effects.isEmpty()) {
+            return List.of();
+        }
+        brewLevel = BottleBlockItem.clampBrewLevel(brewLevel);
+        if (brewLevel < IBarrel.BREWING_STARTED) {
+            return List.of();
+        }
+        brewLevel = Math.min(brewLevel, effects.size());
+
+        List<MobEffectInstance> instances = Lists.newArrayList();
+        for (DrinkEffectData.Entry entry : effects.get(brewLevel - 1)) {
+            if (level.random.nextFloat() < entry.probability()) {
+                int duration = entry.duration() * 20;
+                int amplifier = entry.amplifier();
+                instances.add(new MobEffectInstance(entry.effect(), duration, amplifier));
+            }
+        }
+        return instances;
     }
 
     @Override

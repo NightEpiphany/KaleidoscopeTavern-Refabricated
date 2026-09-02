@@ -1,0 +1,17 @@
+{
+    "type":  "minecraft:crafting_shaped",
+    "category":  "misc",
+    "key":  {
+                "B":  "minecraft:bell",
+                "C":  "minecraft:iron_chain"
+            },
+    "pattern":  [
+                    "C",
+                    "C",
+                    "B"
+                ],
+    "result":  {
+                   "count":  8,
+                   "id":  "kaleidoscope_tavern:bell_pendant_lamp"
+               }
+}

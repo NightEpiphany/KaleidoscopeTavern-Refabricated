@@ -7,8 +7,8 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
 
 public final class ModCreativeTabs {
@@ -38,6 +38,7 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.PRESSING_TUB);
                     output.accept(ModItems.BARREL);
                     output.accept(ModItems.TAP);
+                    output.accept(ModItems.SHAKER);
 
                     output.accept(ModItems.GRAPE_BUCKET);
                     output.accept(ModItems.ICE_GRAPE_BUCKET);
@@ -47,6 +48,7 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.GLOW_BERRIES_BUCKET);
 
                     output.accept(ModItems.EMPTY_BOTTLE);
+                    output.accept(ModItems.EMPTY_GLASSWARE);
                     output.accept(ModItems.MOLOTOV);
                     output.accept(ModItems.WATERMELON_JUICE);
 
@@ -88,6 +90,22 @@ public final class ModCreativeTabs {
                     output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.VODKA));
                     output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.WHISKEY));
                     output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.RUM));
+
+                    // 鸡尾酒
+                    output.accept(ModItems.SIGNATURE_COCKTAIL);
+                    output.accept(ModItems.MYSTERY_COCKTAIL);
+                    output.accept(ModItems.WHITE_LADY);
+                    output.accept(ModItems.EMERALD);
+                    output.accept(ModItems.BRASS_HEART);
+                    output.accept(ModItems.GODFATHER);
+                    output.accept(ModItems.GRASSHOPPER);
+                    output.accept(ModItems.SCREWDRIVER);
+                    output.accept(ModItems.MOJITO);
+                    output.accept(ModItems.ALLIUM_GARDEN);
+                    output.accept(ModItems.DEPTH_CHARGE);
+                    output.accept(ModItems.NETHER_SPECIAL);
+                    output.accept(ModItems.BLOODY_MARY);
+                    output.accept(ModItems.SCULK_SPECIAL);
                 }).build());
 
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TAVERN_DECO_TAB, FabricItemGroup.builder()
@@ -96,10 +114,14 @@ public final class ModCreativeTabs {
                 .displayItems((par, output) -> {
                     output.accept(ModItems.BAR_CABINET);
                     output.accept(ModItems.GLASS_BAR_CABINET);
+                    output.accept(ModItems.CELLAR_CABINET);
                     output.accept(ModItems.BAR_COUNTER);
-                    output.accept(ModItems.STEPLADDER);
-
                     output.accept(ModItems.TABLE);
+                    output.accept(ModItems.TILTED_RACK);
+                    output.accept(ModItems.CIRCULAR_RACK);
+                    output.accept(ModItems.HOLDER);
+                    output.accept(ModItems.GLASSWARE_HOLDER);
+                    output.accept(ModItems.STEPLADDER);
 
                     output.accept(ModItems.STRING_LIGHTS_COLORLESS);
                     output.accept(ModItems.STRING_LIGHTS_WHITE);
@@ -118,6 +140,10 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.STRING_LIGHTS_PURPLE);
                     output.accept(ModItems.STRING_LIGHTS_MAGENTA);
                     output.accept(ModItems.STRING_LIGHTS_PINK);
+
+                    output.accept(ModItems.BELL_PENDANT_LAMP);
+                    output.accept(ModItems.YELLOW_PENDANT_LAMP);
+                    output.accept(ModItems.BLUE_PENDANT_LAMP);
 
                     output.accept(ModItems.WHITE_SOFA);
                     output.accept(ModItems.LIGHT_GRAY_SOFA);
@@ -167,13 +193,13 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.WITHER_ROSE_SANDWICH_BOARD);
                     output.accept(ModItems.PEONY_SANDWICH_BOARD);
                     output.accept(ModItems.PITCHER_PLANT_SANDWICH_BOARD);
-                    output.accept(ModItems.EYEBLOSSOM_SANDWICH_BOARD);
 
                     output.accept(ModItems.YSBB_PAINTING);
                     output.accept(ModItems.TARTARIC_ACID_PAINTING);
                     output.accept(ModItems.CR019_PAINTING);
                     output.accept(ModItems.UNKNOWN_PAINTING);
                     output.accept(ModItems.MASTER_MARISA_PAINTING);
+                    output.accept(ModItems.NIGHT_EPIPHANY_PAINTING);
                     output.accept(ModItems.SON_OF_MAN_PAINTING);
                     output.accept(ModItems.DAVID_PAINTING);
                     output.accept(ModItems.GIRL_WITH_PEARL_EARRING_PAINTING);
@@ -185,6 +211,16 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.MONDRIAN_PAINTING);
 
                     output.accept(ModItems.CHALKBOARD);
+
+                    // 香薰
+                    output.accept(ModItems.SAKURA_INCENSE);
+                    output.accept(ModItems.PINE_INCENSE);
+                    output.accept(ModItems.GINKGO_INCENSE);
+                    output.accept(ModItems.SPORE_INCENSE);
+                    output.accept(ModItems.CATNIP_INCENSE);
+                    output.accept(ModItems.SNOW_INCENSE);
+                    output.accept(ModItems.BUTTERFLY_INCENSE);
+                    output.accept(ModItems.FIREFLY_INCENSE);
                 }).build());
     }
 }

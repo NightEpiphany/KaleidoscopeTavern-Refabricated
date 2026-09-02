@@ -5,11 +5,13 @@ import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.BarrelRecipe;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -24,25 +26,28 @@ public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
     public static final int DEFAULT_UNIT_TIME = 2400;
     public static final int MAX_INGREDIENTS = 4;
 
-    private static NonNullList<Ingredient> normalizeIngredients(List<Ingredient> list) {
+    private static NonNullList<Ingredient> normalizeHolderSets(List<HolderSet<Item>> list) {
         NonNullList<Ingredient> nonnull = NonNullList.create();
         int size = Math.min(list.size(), MAX_INGREDIENTS);
         for (int i = 0; i < size; i++) {
-            Ingredient ingredient = list.get(i);
-            if (ingredient != null && !ingredient.isEmpty()) {
-                nonnull.add(ingredient);
+            HolderSet<Item> set = list.get(i);
+            if (set != null && (!set.isBound() || set.size() > 0)) {
+                nonnull.add(Ingredient.of(set));
             }
         }
         return nonnull;
     }
 
     private static final MapCodec<BarrelRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Ingredient.CODEC.listOf().xmap(
-                    BarrelRecipeSerializer::normalizeIngredients,
-                    nonnull -> nonnull.stream().filter(i -> !i.isEmpty()).toList()
+            Ingredient.NON_AIR_HOLDER_SET_CODEC.listOf().xmap(
+                    BarrelRecipeSerializer::normalizeHolderSets,
+                    nonnull -> nonnull.stream().filter(i -> !i.isEmpty()).map(i -> (HolderSet<Item>) HolderSet.direct(i.items().toList())).toList()
             ).optionalFieldOf("ingredients", NonNullList.create()).forGetter(BarrelRecipe::ingredients),
             BuiltInRegistries.FLUID.byNameCodec().fieldOf("fluid").forGetter(BarrelRecipe::fluid),
-            Ingredient.CODEC.fieldOf("carrier").forGetter(BarrelRecipe::carrier),
+            Ingredient.NON_AIR_HOLDER_SET_CODEC.fieldOf("carrier").xmap(
+                    Ingredient::of,
+                    i -> HolderSet.direct(i.items().toList())
+            ).forGetter(BarrelRecipe::carrier),
             ItemStack.CODEC.fieldOf("result").forGetter(BarrelRecipe::result),
             Codec.INT.optionalFieldOf("unit_time", DEFAULT_UNIT_TIME).forGetter(BarrelRecipe::unitTime)
     ).apply(instance, BarrelRecipe::new));

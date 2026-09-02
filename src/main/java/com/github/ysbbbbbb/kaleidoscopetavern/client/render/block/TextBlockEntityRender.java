@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.render.block;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.ChalkboardBlock;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.SandwichBoardBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.render.renderstate.TextBlockEntityRenderState;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.TextAlignment;
@@ -23,6 +24,8 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.RotationSegment;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.NonNull;
@@ -45,7 +48,16 @@ public abstract class TextBlockEntityRender<T extends TextBlockEntity, M extends
     @Override
     public void extractRenderState(T blockEntity, M blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay);
-        blockEntityRenderState.facing = blockEntity.getBlockState().getValue(ChalkboardBlock.FACING);
+        BlockState state = blockEntity.getBlockState();
+        if (state.getBlock() instanceof SandwichBoardBlock) {
+            // 展板使用 16 朝向 rotation
+            int rotation = state.getValue(SandwichBoardBlock.ROTATION);
+            blockEntityRenderState.rotation = rotation;
+            blockEntityRenderState.facing = RotationSegment.convertToDirection(rotation).orElse(Direction.NORTH);
+        } else {
+            blockEntityRenderState.rotation = -1;
+            blockEntityRenderState.facing = state.getValue(ChalkboardBlock.FACING);
+        }
         blockEntityRenderState.text = blockEntity.getText();
         blockEntityRenderState.color = blockEntity.getColor();
         blockEntityRenderState.glowing = blockEntity.isGlowing();

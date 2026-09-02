@@ -4,6 +4,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.client.model.brew.BarrelModel;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.model.deco.BarStoolBodyModel;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.model.deco.LargeChalkboardModel;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.model.deco.SmallChalkboardModel;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.model.mixology.ShakerModel;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModEntities;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -19,5 +20,6 @@ public final class ModEntitiesRender {
         EntityModelLayerRegistry.registerModelLayer(LargeChalkboardModel.LAYER_LOCATION, LargeChalkboardModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(BarrelModel.LAYER_LOCATION, BarrelModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(BarStoolBodyModel.LAYER_LOCATION, BarStoolBodyModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ShakerModel.LAYER_LOCATION, ShakerModel::createBodyLayer);
     }
 }

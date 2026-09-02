@@ -5,30 +5,15 @@ import com.github.ysbbbbbb.kaleidoscopetavern.entity.SitEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.entity.ThrownMolotovEntity;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
 
 public final class ModEntities {
-    public static final EntityType<SitEntity> SIT = Registry.register(
-            BuiltInRegistries.ENTITY_TYPE,
-            Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "sit"),
-            EntityType.Builder.<SitEntity>of(SitEntity::new, MobCategory.MISC).sized(0.001F, 0.001F).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "sit")))
-    );
+    public static final EntityType<SitEntity> SIT = EntityType.Builder.<SitEntity>of(SitEntity::new, net.minecraft.world.entity.MobCategory.MISC).sized(0.5f, 0.1f).clientTrackingRange(10).noSummon().build(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "sit")));
+    public static final EntityType<ThrownMolotovEntity> THROWN_MOLOTOV = EntityType.Builder.<ThrownMolotovEntity>of(ThrownMolotovEntity::new, net.minecraft.world.entity.MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(10).build(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "thrown_molotov")));
 
-    public static final EntityType<ThrownMolotovEntity> THROWN_MOLOTOV = Registry.register(
-            BuiltInRegistries.ENTITY_TYPE,
-            Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "thrown_molotov"),
-            EntityType.Builder.<ThrownMolotovEntity>of(ThrownMolotovEntity::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
-                    .clientTrackingRange(4)
-                    .updateInterval(10)
-                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "thrown_molotov")))
-    );
-
-    public static void init() {
+    public static void registerEntities() {
+        Registry.register(BuiltInRegistries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "sit"), SIT);
+        Registry.register(BuiltInRegistries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "thrown_molotov"), THROWN_MOLOTOV);
     }
-
 }

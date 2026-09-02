@@ -10,6 +10,10 @@ import net.minecraft.world.item.DyeColor;
 @Environment(EnvType.CLIENT)
 public class TextBlockEntityRenderState extends BlockEntityRenderState {
     public Direction facing = Direction.NORTH;
+    /**
+     * 16 朝向旋转值（展板使用），-1 表示未使用（黑板/粉笔板使用 facing）
+     */
+    public int rotation = -1;
     public String text = "";
     public DyeColor color = DyeColor.WHITE;
     public boolean glowing = false;

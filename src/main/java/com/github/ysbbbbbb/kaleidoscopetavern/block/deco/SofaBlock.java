@@ -3,6 +3,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 import com.github.ysbbbbbb.kaleidoscopetavern.api.entity.ISittable;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.ConnectionType;
 import com.github.ysbbbbbb.kaleidoscopetavern.entity.SitEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.SitUtil;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -170,5 +171,23 @@ public class SofaBlock extends HorizontalDirectionalBlock implements SimpleWater
     @Override
     public float getSitHeight() {
         return 0.55f;
+    }
+
+    @Override
+    protected @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, Level level, @NonNull BlockPos pos,
+                                                    @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
+        // 服务器端创建 SitEntity 并让玩家骑乘，客户端仅返回 SUCCESS 触发发包
+        List<SitEntity> entities = level.getEntitiesOfClass(SitEntity.class, new AABB(pos));
+        if (entities.isEmpty()) {
+            if (!level.isClientSide()) {
+                SitEntity entitySit = new SitEntity(level, pos, 0.5125);
+                entitySit.setYRot(state.getValue(FACING).toYRot());
+                SitUtil.addSitEntity(level, pos, entitySit, player.position());
+                level.addFreshEntity(entitySit);
+                player.startRiding(entitySit, true, false);
+            }
+            return InteractionResult.SUCCESS;
+        }
+        return InteractionResult.PASS;
     }
 }

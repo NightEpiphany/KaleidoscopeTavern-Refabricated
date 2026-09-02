@@ -1,0 +1,6 @@
+{
+  "parent": "kaleidoscope_tavern:item/painting_base",
+  "textures": {
+    "texture": "kaleidoscope_tavern:block/deco/painting/night_epiphany"
+  }
+}

@@ -26,7 +26,7 @@ public final class KaleidoscopeTavern implements ModInitializer {
         ModItems.registerItems();
         ModFluids.registerFluids();
         ModRecipes.registerRecipes();
-        ModEntities.init();
+        ModEntities.registerEntities();
         ModCreativeTabs.registerTabs();
         ModSounds.registerSounds();
         ModParticles.registerParticles();

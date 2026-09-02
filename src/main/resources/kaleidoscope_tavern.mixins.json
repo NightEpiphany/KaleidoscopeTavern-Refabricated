@@ -5,7 +5,9 @@
   "mixins": [
     "LivingEntityMixin",
     "MobMixin",
-    "RedStoneWireBlockMixin"
+    "PlayerMixin",
+    "RedStoneWireBlockMixin",
+    "ZombieVillagerAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -17,6 +19,8 @@
     "client.EntityRendererDispatcherMixin",
     "client.GameRendererMixin",
     "client.HumanoidMobRendererMixin",
+    "client.ItemInHandMixin",
+    "client.LeftClickMixin",
     "client.PlayerRendererMixin"
   ]
 }

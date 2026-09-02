@@ -1,0 +1,12 @@
+{
+    "type":  "kaleidoscope_tavern:shaker",
+    "ingredients":  [
+                        "#kaleidoscope_tavern:cocktail_ingredient_blue",
+                        "#kaleidoscope_tavern:cocktail_ingredient_light_purple",
+                        "#kaleidoscope_tavern:cocktail_ingredient_white"
+                    ],
+    "result":  {
+                   "count":  1,
+                   "id":  "kaleidoscope_tavern:depth_charge"
+               }
+}

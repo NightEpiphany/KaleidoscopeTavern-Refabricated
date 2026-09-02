@@ -1,7 +1,9 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.entity;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModEntities;
+import com.github.ysbbbbbb.kaleidoscopetavern.init.tag.TagMod;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.SitUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -11,43 +13,36 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 
 public class SitEntity extends Entity {
+    private int passengerTick = 0;
+
     public SitEntity(EntityType<? extends SitEntity> type, Level level) {
         super(type, level);
+        this.noPhysics = true;
     }
 
-    public SitEntity(Level level) {
-        super(ModEntities.SIT, level);
-        noPhysics = true;
+    public SitEntity(Level level, BlockPos pos) {
+        this(ModEntities.SIT, level);
+        this.setPos(pos.getX() + 0.5, pos.getY() + 0.4375, pos.getZ() + 0.5);
     }
 
-    @Override
-    public @NonNull Vec3 getDismountLocationForPassenger(@NonNull LivingEntity passenger) {
-        if (passenger instanceof Player player) {
-            Vec3 resetPosition = SitUtil.getPreviousPlayerPosition(player, this);
-
-            if (resetPosition != null) {
-                discard();
-                return resetPosition;
-            }
-        }
-
-        discard();
-        return super.getDismountLocationForPassenger(passenger);
+    public SitEntity(Level level, BlockPos pos, double y) {
+        this(ModEntities.SIT, level);
+        this.setPos(pos.getX() + 0.5, pos.getY() + y, pos.getZ() + 0.5);
     }
 
     @Override
-    public void remove(@NonNull RemovalReason reason) {
-        super.remove(reason);
-        SitUtil.removeSitEntity(level(), blockPosition());
+    public @NonNull Vec3 getPassengerRidingPosition(Entity entity) {
+        return super.getPassengerRidingPosition(entity).add(0, -0.0625, 0);
     }
 
     @Override
@@ -65,7 +60,70 @@ public class SitEntity extends Entity {
     }
 
     @Override
+    public void tick() {
+        if (!this.level().isClientSide()) {
+            this.checkBelowWorld();
+            this.checkPassengers();
+
+            // 每隔一段时间检查下方方块是否仍是可坐方块，否则移除实体
+            if (this.tickCount % 20 == 0) {
+                BlockState blockState = this.level().getBlockState(this.blockPosition());
+                if (!blockState.is(TagMod.SITTABLE)) {
+                    this.discard();
+                }
+            }
+        }
+    }
+
+    private void checkPassengers() {
+        if (this.getPassengers().isEmpty()) {
+            passengerTick++;
+        } else {
+            passengerTick = 0;
+        }
+        if (passengerTick > 10) {
+            this.discard();
+        }
+    }
+
+    @Override
+    public void remove(@NonNull RemovalReason reason) {
+        super.remove(reason);
+        SitUtil.removeSitEntity(level(), blockPosition());
+    }
+
+    @Override
+    public boolean skipAttackInteraction(Entity targetEntity) {
+        return true;
+    }
+
+    @Override
     public boolean hurtServer(@NonNull ServerLevel level, @NonNull DamageSource source, float amount) {
+        return false;
+    }
+
+    @Override
+    public void move(@NonNull MoverType moverType, @NonNull Vec3 movement) {}
+
+    @Override
+    public void push(@NonNull Entity pushedEntity) {}
+
+    @Override
+    public void push(double x, double y, double z) {}
+
+    @Override
+    protected boolean repositionEntityAfterLoad() {
+        return false;
+    }
+
+    @Override
+    public void thunderHit(@NonNull ServerLevel serverLevel, @NonNull LightningBolt lightningBolt) {}
+
+    @Override
+    public void refreshDimensions() {}
+
+    @Override
+    public boolean canCollideWith(@NonNull Entity entity) {
         return false;
     }
 

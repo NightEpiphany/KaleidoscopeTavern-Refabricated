@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.lang3.StringUtils;
+import org.joml.Quaternionf;
 import org.jspecify.annotations.NonNull;
 
 @Environment(EnvType.CLIENT)
@@ -31,23 +32,23 @@ public class SandwichBlockEntityRender extends TextBlockEntityRender<SandwichBoa
 
     @Override
     protected void renderText(SandwichBoardBlockEntityRenderState textBlockRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, Direction facing) {
-        poseStack.pushPose();
-
-        if (facing == Direction.SOUTH) {
-            poseStack.translate(0.5, 1.06, 0.56);
-            poseStack.mulPose(Axis.XN.rotationDegrees(22.5f));
-        } else if (facing == Direction.NORTH) {
-            poseStack.translate(0.5, 1.06, 0.44);
-            poseStack.mulPose(Axis.XP.rotationDegrees(22.5f));
-        } else if (facing == Direction.EAST) {
-            poseStack.translate(0.56, 1.06, 0.5);
-            poseStack.mulPose(Axis.ZP.rotationDegrees(22.5f));
-        } else if (facing == Direction.WEST) {
-            poseStack.translate(0.44, 1.06, 0.5);
-            poseStack.mulPose(Axis.ZN.rotationDegrees(22.5f));
+        int rotation = textBlockRenderState.rotation;
+        if (rotation < 0) {
+            // 无有效旋转值时按 0 处理
+            rotation = 0;
         }
 
-        poseStack.mulPose(Axis.YN.rotationDegrees(facing.get2DDataValue() * 90));
+        float angle = rotation * 22.5f + 180;
+        float radians = (float) Math.toRadians(angle);
+        float xOffset = (float) (-Math.sin(radians) * 0.06f);
+        float zOffset = (float) (Math.cos(radians) * 0.06f);
+        float tiltAxisX = (float) -Math.cos(radians);
+        float tiltAxisZ = (float) -Math.sin(radians);
+
+        poseStack.pushPose();
+        poseStack.translate(0.5 + xOffset, 1.06, 0.5 + zOffset);
+        poseStack.mulPose(new Quaternionf().rotateAxis((float) Math.toRadians(22.5f), tiltAxisX, 0.0f, tiltAxisZ));
+        poseStack.mulPose(Axis.YN.rotationDegrees(angle));
 
         int maxWidth = 55;
         if (StringUtils.isNotBlank(textBlockRenderState.text))

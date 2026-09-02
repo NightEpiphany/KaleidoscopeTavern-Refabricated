@@ -1,6 +1,9 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.init.registry;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.client.animation.ShakerAnimation;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.gui.overlay.ShakerOverlay;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ClientSetupEvent;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.init.CommonModelLoading;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModEntitiesRender;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModParticleFactoryRegistry;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.create.ponder.init.PonderCompat;
@@ -17,16 +20,42 @@ import static com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks.*;
 public final class ClientRegistry {
     public static void init() {
         NetworkHandler.Clientside.init();
+        CommonModelLoading.init();
         renderType();
         ClientSetupEvent.init();
         ModEntitiesRender.init();
         ModFluids.registerFluidRenderers();
         ModParticleFactoryRegistry.init();
+        ShakerAnimation.trigger();
+        ShakerOverlay.register();
         modCompatClient();
     }
 
     public static void renderType() {
+        BlockRenderLayerMap.putBlocks(ChunkSectionLayer.TRANSLUCENT,
+                SIGNATURE_COCKTAIL,
+                MYSTERY_COCKTAIL,
+                WHITE_LADY,
+                EMERALD,
+                BRASS_HEART,
+                GODFATHER,
+                GRASSHOPPER,
+                SCREWDRIVER,
+                MOJITO,
+                ALLIUM_GARDEN,
+                DEPTH_CHARGE,
+                NETHER_SPECIAL,
+                BLOODY_MARY,
+                SCULK_SPECIAL,
+                BELL_PENDANT_LAMP,
+                YELLOW_PENDANT_LAMP,
+                BLUE_PENDANT_LAMP,
+                POTION_BOTTLE,
+                XP_BOTTLE
+        );
         BlockRenderLayerMap.putBlocks(ChunkSectionLayer.CUTOUT,
+                TILTED_RACK,
+                HOLDER,
                 PRESSING_TUB,
                 BARREL,
                 CHALKBOARD,
@@ -66,10 +95,10 @@ public final class ClientRegistry {
                 MOLOTOV,
                 VODKA,
                 GRAPE_CROP,
-                ICE_GRAPE_CROP,
-                GOLD_GRAPE_CROP,
                 GRAPEVINE_TRELLIS,
+                ICE_GRAPE_CROP,
                 ICE_GRAPEVINE_TRELLIS,
+                GOLD_GRAPE_CROP,
                 GOLD_GRAPEVINE_TRELLIS,
                 WILD_GRAPEVINE,
                 WILD_GRAPEVINE_PLANT,
@@ -90,7 +119,15 @@ public final class ClientRegistry {
                 CYAN_BAR_STOOL,
                 MAGENTA_BAR_STOOL,
                 GRAY_BAR_STOOL,
-                LIGHT_GRAY_BAR_STOOL
+                LIGHT_GRAY_BAR_STOOL,
+                SAKURA_INCENSE,
+                PINE_INCENSE,
+                GINKGO_INCENSE,
+                SPORE_INCENSE,
+                CATNIP_INCENSE,
+                SNOW_INCENSE,
+                BUTTERFLY_INCENSE,
+                FIREFLY_INCENSE
         );
     }
 

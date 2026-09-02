@@ -4,6 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
 import org.jspecify.annotations.NonNull;
@@ -24,6 +27,12 @@ public record DrinkEffectData(Item item, List<List<Entry>> effects) {
             Codec.list(Codec.list(Entry.ENTRY_CODEC)).fieldOf("effects").forGetter(DrinkEffectData::effects)
     ).apply(instance, DrinkEffectData::new));
 
+    public static final StreamCodec<RegistryFriendlyByteBuf, DrinkEffectData> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.registry(net.minecraft.core.registries.Registries.ITEM), DrinkEffectData::item,
+            Entry.STREAM_CODEC.apply(ByteBufCodecs.list()).apply(ByteBufCodecs.list()), DrinkEffectData::effects,
+            DrinkEffectData::new
+    );
+
     /**
      * 具体每个效果条目
      *
@@ -33,12 +42,20 @@ public record DrinkEffectData(Item item, List<List<Entry>> effects) {
      * @param probability 效果发生的概率，范围是 0.0 到 1.0，1.0 表示 100% 发生，0.5 表示 50% 发生，以此类推
      */
     public record Entry(Holder<MobEffect> effect, int duration, int amplifier, float probability) {
-        private static final Codec<Entry> ENTRY_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        public static final Codec<Entry> ENTRY_CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 MobEffect.CODEC.fieldOf("effect").forGetter(Entry::effect),
                 Codec.INT.fieldOf("duration").forGetter(Entry::duration),
                 Codec.INT.fieldOf("amplifier").forGetter(Entry::amplifier),
                 Codec.FLOAT.fieldOf("probability").forGetter(Entry::probability)
         ).apply(instance, Entry::new));
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, Entry> STREAM_CODEC = StreamCodec.composite(
+                MobEffect.STREAM_CODEC, Entry::effect,
+                ByteBufCodecs.VAR_INT, Entry::duration,
+                ByteBufCodecs.VAR_INT, Entry::amplifier,
+                ByteBufCodecs.FLOAT, Entry::probability,
+                Entry::new
+        );
     }
 
     @Override

@@ -3,23 +3,21 @@ package com.github.ysbbbbbb.kaleidoscopetavern.compat.rei;
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.category.ReiBarrelRecipeCategory;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.category.ReiPressingTubRecipeCategory;
+import com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.category.ReiShakerRecipeCategory;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.BarrelRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
+import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.ShakerRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
 import me.shedaniel.rei.api.common.display.DisplaySerializerRegistry;
 import me.shedaniel.rei.api.common.plugins.REICommonPlugin;
 import me.shedaniel.rei.api.common.registry.display.ServerDisplayRegistry;
-import me.shedaniel.rei.api.common.util.EntryIngredients;
-import me.shedaniel.rei.plugin.common.displays.crafting.DefaultCustomDisplay;
 import net.minecraft.resources.Identifier;
-
-import java.util.Collections;
-import java.util.Optional;
 
 public class ModREICommonPlugin implements REICommonPlugin {
 
     private static final Identifier BARREL_ID = Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "plugin/barrel");
     private static final Identifier PRESSING_TUB_ID = Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "plugin/pressing_tub");
+    private static final Identifier SHAKER_ID = Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "plugin/shaker");
 
     @Override
     public void registerDisplaySerializer(DisplaySerializerRegistry registry) {
@@ -33,6 +31,9 @@ public class ModREICommonPlugin implements REICommonPlugin {
         if (!registry.isRegistered(ReiPressingTubRecipeCategory.PressingTubRecipeDisplay.SERIALIZER)) {
             registry.register(PRESSING_TUB_ID, ReiPressingTubRecipeCategory.PressingTubRecipeDisplay.SERIALIZER);
         }
+        if (!registry.isRegistered(ReiShakerRecipeCategory.ShakerRecipeDisplay.SERIALIZER)) {
+            registry.register(SHAKER_ID, ReiShakerRecipeCategory.ShakerRecipeDisplay.SERIALIZER);
+        }
     }
 
     @Override
@@ -40,5 +41,6 @@ public class ModREICommonPlugin implements REICommonPlugin {
         registerIfNeeded(DisplaySerializerRegistry.getInstance());
         registry.beginRecipeFiller(PressingTubRecipe.class).filterType(ModRecipes.PRESSING_TUB_RECIPE).fill(ReiPressingTubRecipeCategory.PressingTubRecipeDisplay::new);
         registry.beginRecipeFiller(BarrelRecipe.class).filterType(ModRecipes.BARREL_RECIPE).fill(ReiBarrelRecipeCategory.BarrelRecipeDisplay::new);
+        registry.beginRecipeFiller(ShakerRecipe.class).filterType(ModRecipes.SHAKER_RECIPE).fill(ReiShakerRecipeCategory.ShakerRecipeDisplay::new);
     }
 }

@@ -4,13 +4,18 @@ import com.github.ysbbbbbb.kaleidoscopetavern.api.entity.ISittable;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.BarStoolBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.entity.SitEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.SitUtil;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
@@ -27,12 +32,15 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
+
+import java.util.List;
 
 public class BarStoolBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, ISittable {
     public static final MapCodec<BarStoolBlock> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
@@ -159,6 +167,24 @@ public class BarStoolBlock extends BaseEntityBlock implements SimpleWaterloggedB
     @Override
     public float getSitHeight() {
         return 0.9483f;
+    }
+
+    @Override
+    protected @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, Level level, @NonNull BlockPos pos,
+                                                    @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
+        // 服务器端创建 SitEntity 并让玩家骑乘，客户端仅返回 SUCCESS 触发发包
+        List<SitEntity> entities = level.getEntitiesOfClass(SitEntity.class, new AABB(pos));
+        if (entities.isEmpty()) {
+            if (!level.isClientSide()) {
+                SitEntity entitySit = new SitEntity(level, pos, 0.875);
+                entitySit.setYRot(state.getValue(FACING).toYRot());
+                SitUtil.addSitEntity(level, pos, entitySit, player.position());
+                level.addFreshEntity(entitySit);
+                player.startRiding(entitySit, true, false);
+            }
+            return InteractionResult.SUCCESS;
+        }
+        return InteractionResult.PASS;
     }
 
     @Override

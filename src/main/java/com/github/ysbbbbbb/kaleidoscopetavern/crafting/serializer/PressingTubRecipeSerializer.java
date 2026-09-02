@@ -5,6 +5,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -20,7 +21,10 @@ public class PressingTubRecipeSerializer implements RecipeSerializer<PressingTub
     public static final int DEFAULT_FLUID_AMOUNT = IPressingTub.MAX_FLUID_AMOUNT / 8;
 
     private static final MapCodec<PressingTubRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Ingredient.CODEC.fieldOf("ingredient").forGetter(PressingTubRecipe::getIngredient),
+            Ingredient.NON_AIR_HOLDER_SET_CODEC.fieldOf("ingredient").xmap(
+                    Ingredient::of,
+                    i -> HolderSet.direct(i.items().toList())
+            ).forGetter(PressingTubRecipe::getIngredient),
             BuiltInRegistries.FLUID.byNameCodec().fieldOf("fluid").forGetter(PressingTubRecipe::getFluid),
             Codec.INT.optionalFieldOf("fluid_amount", DEFAULT_FLUID_AMOUNT).forGetter(PressingTubRecipe::getFluidAmount)
     ).apply(instance, PressingTubRecipe::new));

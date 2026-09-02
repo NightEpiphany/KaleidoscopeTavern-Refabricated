@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+	"kaleidoscope_tavern:vodka",
+	"kaleidoscope_tavern:mystery_cocktail",
+	"kaleidoscope_tavern:signature_cocktail",
+	"kaleidoscope_tavern:nether_special",
+	"kaleidoscope_tavern:sculk_special"
+  ]
+}

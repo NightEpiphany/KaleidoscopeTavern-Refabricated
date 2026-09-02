@@ -52,6 +52,7 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
                 .instabreak()
                 .sound(SoundType.CROP)
                 .offsetType(OffsetType.XYZ)
+                .dynamicShape()
                 .pushReaction(PushReaction.DESTROY));
         this.registerDefaultState(this.stateDefinition.any().setValue(AGE, 0));
         this.probability = probability;
