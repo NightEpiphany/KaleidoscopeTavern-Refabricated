@@ -51,7 +51,8 @@ public class ShakerItem extends BlockItem {
     }
 
     public ShakerItem(Properties properties) {
-        super(ModBlocks.SHAKER, properties);
+        // 雪克杯携带原料/产物数据组件，任何情况下都不可堆叠（与原版一致）
+        super(ModBlocks.SHAKER, properties.stacksTo(1));
     }
 
     public static ItemStackHandler getStorage(ItemStack stack) {

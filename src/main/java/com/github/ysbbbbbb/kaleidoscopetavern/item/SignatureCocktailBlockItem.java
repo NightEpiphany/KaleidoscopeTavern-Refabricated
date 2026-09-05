@@ -3,6 +3,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.item;
 import com.github.ysbbbbbb.kaleidoscopetavern.datamap.data.DrinkEffectData;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModDataComponents;
 import com.google.common.collect.Lists;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffect;
@@ -11,12 +12,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.item.component.TooltipDisplay;
 import java.util.function.Consumer;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SignatureCocktailBlockItem extends CocktailBlockItem {
@@ -46,6 +49,19 @@ public class SignatureCocktailBlockItem extends CocktailBlockItem {
 
     public static void setColor(ItemStack stack, int color) {
         stack.set(ModDataComponents.SIGNATURE_COCKTAIL_COLOR, color);
+        // 同步写入 CUSTOM_MODEL_DATA，供 items/ 物品模型定义中的 tint 使用
+        CustomModelData customModelData = stack.getOrDefault(DataComponents.CUSTOM_MODEL_DATA, CustomModelData.EMPTY);
+        List<Integer> colors = new ArrayList<>(customModelData.colors());
+        if (colors.isEmpty()) {
+            colors.add(0xFFFFFF);
+        }
+        colors.set(0, color & 0xFFFFFF);
+        stack.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(
+                customModelData.floats(),
+                customModelData.flags(),
+                customModelData.strings(),
+                List.copyOf(colors)
+        ));
     }
 
     @Override

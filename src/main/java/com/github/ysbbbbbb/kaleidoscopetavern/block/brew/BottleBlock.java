@@ -74,7 +74,7 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
     protected @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull BlockHitResult blockHitResult) {
         // 如果是空手，那么可以尝试取回
         if (level instanceof ServerLevel serverLevel) {
-            getDrops(state, serverLevel, pos, null)
+            getDrops(state, serverLevel, pos, level.getBlockEntity(pos))
                     .forEach(stack -> ItemUtils.giveItemToPlayer(player, stack));
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_SUPPRESS_DROPS | Block.UPDATE_ALL);
             level.playSound(null, pos, SoundType.STONE.getPlaceSound(), player.getSoundSource(), 1.0F, 1.0F);

@@ -125,7 +125,8 @@ public final class ShakerRecipe implements Recipe<SimpleInput> {
     private static ChatFormatting getColor(Ingredient ingredient) {
         for (Holder<Item> holder : ingredient.items().toList()) {
             for (var entry : ColorUtils.COCKTAIL_INGREDIENT_COLORS.entrySet()) {
-                if (holder.value().equals(entry.getKey())) {
+                // 检查物品是否在该颜色的原料 tag 中
+                if (holder.is(entry.getKey())) {
                     return entry.getValue();
                 }
             }

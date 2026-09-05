@@ -40,7 +40,8 @@ public class BottleBlockItem extends BlockItem {
     }
 
     public BottleBlockItem(Block block, Properties properties) {
-        super(block, properties);
+        // 与原版一致：上限 16，在构造内强制，避免注册路径绕过
+        super(block, properties.stacksTo(16));
     }
 
     public static ItemStack getMaxLevelDrink(Item item) {

@@ -1,1 +1,23 @@
-{"model":{"type":"minecraft:model","model":"kaleidoscope_tavern:item/shaker_3d"}}
+{
+  "model": {
+    "type": "minecraft:select",
+    "cases": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kaleidoscope_tavern:item/shaker"
+        },
+        "when": [
+          "gui",
+          "ground",
+          "fixed"
+        ]
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "kaleidoscope_tavern:item/shaker_3d"
+    },
+    "property": "minecraft:display_context"
+  }
+}

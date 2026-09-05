@@ -6,12 +6,16 @@ import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ClientSetupEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.CommonModelLoading;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModEntitiesRender;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModParticleFactoryRegistry;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.render.misc.PotionBottleColor;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.render.misc.SignatureCocktailColor;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.create.ponder.init.PonderCompat;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
+import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 
 import static com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks.*;
@@ -22,6 +26,7 @@ public final class ClientRegistry {
         NetworkHandler.Clientside.init();
         CommonModelLoading.init();
         renderType();
+        color();
         ClientSetupEvent.init();
         ModEntitiesRender.init();
         ModFluids.registerFluidRenderers();
@@ -29,6 +34,11 @@ public final class ClientRegistry {
         ShakerAnimation.trigger();
         ShakerOverlay.register();
         modCompatClient();
+    }
+
+    private static void color() {
+        ColorProviderRegistry.BLOCK.register(new SignatureCocktailColor.Block(), SIGNATURE_COCKTAIL);
+        ColorProviderRegistry.BLOCK.register(new PotionBottleColor(), POTION_BOTTLE);
     }
 
     public static void renderType() {

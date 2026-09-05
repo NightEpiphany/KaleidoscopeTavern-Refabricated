@@ -106,16 +106,15 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
         Direction tapFacing = state.getValue(FACING);
         BlockPos sourcePos = pos.relative(tapFacing.getOpposite());
         BlockState sourceState = level.getBlockState(sourcePos);
-        Block sourceBlock = sourceState.getBlock();
 
-        if (!TapBehaviorManager.contains(sourceBlock)) {
+        if (!TapBehaviorManager.contains(sourceState)) {
             this.emptyOpen(level, pos, state);
             return;
         }
 
         BlockPos belowPos = pos.below();
         BlockState belowState = level.getBlockState(belowPos);
-        ITapBehavior behavior = TapBehaviorManager.get(sourceBlock);
+        ITapBehavior behavior = TapBehaviorManager.get(sourceState);
 
         if (behavior.isMatch(level, player, pos, state, sourceState, belowState)) {
             ParticleOptions particle = behavior.onStartExtract(level, player, pos, state, sourceState, belowState);
@@ -159,7 +158,6 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
         Direction tapFacing = state.getValue(FACING);
         BlockPos sourcePos = pos.relative(tapFacing.getOpposite());
         BlockState sourceState = level.getBlockState(sourcePos);
-        Block sourceBlock = sourceState.getBlock();
 
         // 先正常进行关闭
         level.setBlockAndUpdate(pos, state.setValue(OPEN, false));
@@ -170,13 +168,13 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
             tapEntity.setState(DEFAULT_STATE);
         }
 
-        if (!TapBehaviorManager.contains(sourceBlock)) {
+        if (!TapBehaviorManager.contains(sourceState)) {
             return;
         }
 
         BlockPos belowPos = pos.below();
         BlockState belowState = level.getBlockState(belowPos);
-        ITapBehavior behavior = TapBehaviorManager.get(sourceBlock);
+        ITapBehavior behavior = TapBehaviorManager.get(sourceState);
         if (behavior.isMatch(level, null, pos, state, sourceState, belowState)) {
             behavior.onEndExtract(level, pos, state, sourceState, belowState);
         }

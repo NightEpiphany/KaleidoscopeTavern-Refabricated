@@ -61,12 +61,12 @@ public class ShakerRecipeCategory implements IRecipeCategory<RecipeHolder<Shaker
     public void draw(RecipeHolder<ShakerRecipe> holder, @NonNull IRecipeSlotsView recipeSlotsView, @NonNull GuiGraphics guiGraphics, double mouseX, double mouseY) {
         this.bgDraw.draw(guiGraphics);
 
-        // 如果对应的配方是颜色配方，那么渲染一个色块
+        // 如果对应的配方是颜色配方，那么渲染一个色块（x=69 起、宽 5，与贴图方框内部完全重合）
         holder.value().ingredientColors().forEach((index, color) -> {
-            int x = 66;
+            int x = 69;
             int y = 14 + 18 * index;
             int rgba = 0xFF000000 | color.getColor();
-            guiGraphics.fill(x, y, x + 8, y + 16, rgba);
+            guiGraphics.fill(x, y, x + 5, y + 16, rgba);
         });
     }
 

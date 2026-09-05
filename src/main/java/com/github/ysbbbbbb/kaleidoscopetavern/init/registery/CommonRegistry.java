@@ -8,6 +8,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PressingTubBlockE
 import com.github.ysbbbbbb.kaleidoscopetavern.datamap.resources.DrinkEffectDataReloadListener;
 import com.github.ysbbbbbb.kaleidoscopetavern.event.AddFeaturesEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.event.EffectEvent;
+import com.github.ysbbbbbb.kaleidoscopetavern.event.VanillaBottlePlaceEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.game.tap.TapBehaviorManager;
 import com.github.ysbbbbbb.kaleidoscopetavern.game.tap.impl.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
@@ -20,6 +21,9 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+
+import java.util.function.Predicate;
 
 public final class CommonRegistry {
     public static void init() {
@@ -42,11 +46,17 @@ public final class CommonRegistry {
         TapBehaviorManager.register(Blocks.DRAGON_HEAD, new DragonHeadTapBehavior());
         TapBehaviorManager.register(Blocks.DRAGON_WALL_HEAD, new DragonHeadTapBehavior());
         TapBehaviorManager.register(Blocks.MELON, new WatermelonTapBehavior());
+        // 所有官方含水（waterlogged）方块都可以给龙头供水，接水效果与水炼药锅一致
+        TapBehaviorManager.register(
+                state -> state.hasProperty(BlockStateProperties.WATERLOGGED) && state.getValue(BlockStateProperties.WATERLOGGED),
+                new WaterCauldronTapBehavior()
+        );
     }
 
     public static void events() {
         AddFeaturesEvent.addFeatures();
         EffectEvent.register();
+        VanillaBottlePlaceEvent.register();
         PlantGrapeEvent.register();
         LivingChangeTargetEvent.register();
     }

@@ -19,6 +19,7 @@
     "client.EntityRendererDispatcherMixin",
     "client.GameRendererMixin",
     "client.HumanoidMobRendererMixin",
+    "client.HumanoidModelMixin",
     "client.ItemInHandMixin",
     "client.LeftClickMixin",
     "client.PlayerRendererMixin"
