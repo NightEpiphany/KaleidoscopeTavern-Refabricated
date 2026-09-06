@@ -609,6 +609,17 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
         return brewTime;
     }
 
+    /**
+     * 直接将酿造等级提升一级并刷新发酵时间（供外部模组"酿造加速"类功能使用，
+     * 语义与 tick 内自然升级完全一致：等级 +1、brewTime 重置为当前等级时长）。
+     * 调用方需自行检查 isBrewing/isMaxBrewLevel。
+     */
+    public void advanceBrewLevel() {
+        this.brewLevel = Math.min(this.brewLevel + 1, BREWING_FINISHED);
+        this.brewTime = this.getBrewTimeForLevel();
+        this.refresh();
+    }
+
     @Override
     public ItemStackHandler getOutput() {
         return output;

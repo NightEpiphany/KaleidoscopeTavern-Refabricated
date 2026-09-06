@@ -37,12 +37,11 @@ public class MolotovBlockItem extends BottleBlockItem implements ProjectileItem 
     public @NotNull InteractionResult useOn(UseOnContext context) {
         Player player = context.getPlayer();
 
-        // 只有潜行时才放置
-        if (player == null || player.isShiftKeyDown()) {
-            return this.place(new BlockPlaceContext(context));
+        // 右键直接放置（与 1.20.1 原版一致；原版不要求潜行，不潜行时仍可通过蓄力投掷）
+        if (player == null) {
+            return InteractionResult.PASS;
         }
-
-        return InteractionResult.PASS;
+        return this.place(new BlockPlaceContext(context));
     }
 
     @Override

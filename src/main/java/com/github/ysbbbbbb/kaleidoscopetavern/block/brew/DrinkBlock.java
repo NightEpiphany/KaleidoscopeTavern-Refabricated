@@ -4,9 +4,11 @@ import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.DrinkBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.DrinkBlockItem;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.PortHelper;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.VoxelShapeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -42,8 +44,16 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
 
     @SuppressWarnings("unchecked")
     public DrinkBlock(String id, boolean irregular, int maxCount, VoxelShape... shapes) {
-        super(id, irregular);
-        this.id = id;
+        this(PortHelper.createBlockId(id), irregular, maxCount, shapes);
+    }
+
+    /**
+     * 允许外部模组用自己的命名空间注册酒液方块，见 {@link BottleBlock#BottleBlock(ResourceKey, boolean)}。
+     */
+    @SuppressWarnings("unchecked")
+    public DrinkBlock(ResourceKey<Block> blockKey, boolean irregular, int maxCount, VoxelShape... shapes) {
+        super(blockKey, irregular);
+        this.id = blockKey.identifier().getPath();
         this.maxCount = maxCount;
         this.countProperty = IntegerProperty.create("count", 1, maxCount);
         this.shapes = new EnumMap[shapes.length];
@@ -191,6 +201,8 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
         private int maxCount;
         private VoxelShape[] shapes;
         private String id = "";
+        @Nullable
+        private ResourceKey<Block> blockKey = null;
 
         public Builder irregular() {
             this.irregular = true;
@@ -199,6 +211,13 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
 
         public Builder setId(String id) {
             this.id = id;
+            this.blockKey = null;
+            return this;
+        }
+
+        public Builder setId(ResourceKey<Block> blockKey) {
+            this.id = blockKey.identifier().getPath();
+            this.blockKey = blockKey;
             return this;
         }
 
@@ -213,7 +232,9 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
         }
 
         public Block build() {
-            return new DrinkBlock(id, irregular, maxCount, shapes);
+            return this.blockKey != null
+                    ? new DrinkBlock(this.blockKey, irregular, maxCount, shapes)
+                    : new DrinkBlock(id, irregular, maxCount, shapes);
         }
     }
 }
