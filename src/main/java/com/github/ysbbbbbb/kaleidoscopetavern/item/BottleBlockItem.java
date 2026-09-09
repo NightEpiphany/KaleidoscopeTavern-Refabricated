@@ -3,6 +3,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.item;
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IBarrel;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.DrinkBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.datamap.data.DrinkEffectData;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.ColorUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.datamap.resources.DrinkEffectDataReloadListener;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModDataComponents;
 import com.google.common.collect.Lists;
@@ -97,6 +98,15 @@ public class BottleBlockItem extends BlockItem {
     @SuppressWarnings("deprecation")
     @Override
     public void appendHoverText(@NonNull ItemStack stack, @NonNull TooltipContext tooltipContext, @NonNull TooltipDisplay tooltipDisplay, @NonNull Consumer<Component> consumer, @NonNull TooltipFlag tooltipFlag) {
+        // 添加颜色说明（1.21.11 同款：配料色 tag → ChatFormatting → "颜色：XX" 行）
+        ChatFormatting applied = ColorUtils.ITEM_COLOR_CACHE.apply(stack.getItem());
+        if (applied != ChatFormatting.RESET) {
+            String key = "color.kaleidoscope_tavern.%s".formatted(applied.getName());
+            Component text = Component.translatable("color.kaleidoscope_tavern.prefix")
+                    .withStyle(ChatFormatting.GRAY)
+                    .append(Component.translatable(key).withStyle(applied));
+            consumer.accept(text);
+        }
         int brewLevel = getBrewLevel(stack);
         if (0 < brewLevel) {
             Component brewLevelText = Component.translatable("message.kaleidoscope_tavern.barrel.brew_level.%d".formatted(brewLevel));

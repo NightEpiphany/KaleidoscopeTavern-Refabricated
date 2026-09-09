@@ -71,9 +71,10 @@ public class ShakerRecipeCategory implements IRecipeCategory<RecipeHolder<Shaker
         if (rawColor == null) {
             return;
         }
-        int x = 66;
+        // x=69 起、宽 5，与贴图方框内部完全重合（1.21.11 同款；66/8 会偏左且盖过方框边）
+        int x = 69;
         int y = 14 + 18 * index;
-        guiGraphics.fill(x, y, x + 8, y + 16, 0xFF000000 | rawColor);
+        guiGraphics.fill(x, y, x + 5, y + 16, 0xFF000000 | rawColor);
     }
 
     @Override
