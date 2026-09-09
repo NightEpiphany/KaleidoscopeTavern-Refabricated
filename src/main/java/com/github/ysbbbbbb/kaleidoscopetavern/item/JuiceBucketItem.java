@@ -10,9 +10,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.component.Consumables;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.ChatFormatting;
+import net.minecraft.util.Util;
+import net.minecraft.core.registries.BuiltInRegistries;
+import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
@@ -56,6 +62,14 @@ public class JuiceBucketItem extends BucketItem implements IHasContainer {
         if (player.isShiftKeyDown())
             return super.use(level, player, hand);
         return ItemUtils.startUsingInstantly(level, player, hand);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void appendHoverText(@NonNull ItemStack stack, TooltipContext context, @NonNull TooltipDisplay tooltipDisplay, @NonNull Consumer<Component> consumer, @NonNull TooltipFlag flag) {
+        consumer.accept(Component.translatable(
+                Util.makeDescriptionId("tooltip", BuiltInRegistries.ITEM.getKey(this))
+        ).withStyle(ChatFormatting.GRAY));
     }
 
     @Override

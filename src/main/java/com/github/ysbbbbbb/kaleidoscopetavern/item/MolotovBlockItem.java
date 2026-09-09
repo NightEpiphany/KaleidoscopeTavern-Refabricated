@@ -47,30 +47,27 @@ public class MolotovBlockItem extends BottleBlockItem implements ProjectileItem 
 
     @Override
     public boolean releaseUsing(@NonNull ItemStack stack, @NonNull Level level, @NonNull LivingEntity entity, int timeLeft) {
-        if (entity instanceof Player player) {
-            int time = this.getUseDuration(stack, player) - timeLeft;
-            if (time < 10) {
-                return false;
-            } else {
-                player.awardStat(Stats.ITEM_USED.get(this));
-                if (level instanceof ServerLevel serverLevel) {
-                    ThrownMolotovEntity thrownMolotov = new ThrownMolotovEntity(serverLevel, player);
-                    thrownMolotov.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.82F, 1.0F);
-                    serverLevel.addFreshEntity(thrownMolotov);
-                }
-
-                level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                        SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F,
-                        0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
-
-                if (!player.isCreative()) {
-                    stack.shrink(1);
-                }
-                return true;
-            }
-        }else {
+        int time = this.getUseDuration(stack, entity) - timeLeft;
+        if (time < 10) {
             return false;
         }
+        if (level instanceof ServerLevel serverLevel) {
+            ThrownMolotovEntity thrownMolotov = new ThrownMolotovEntity(serverLevel, entity);
+            thrownMolotov.shootFromRotation(entity, entity.getXRot(), entity.getYRot(), 0.0F, 0.8F, 1.0F);
+            serverLevel.addFreshEntity(thrownMolotov);
+        }
+
+        level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F,
+                0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
+
+        if (entity instanceof Player player) {
+            player.awardStat(Stats.ITEM_USED.get(this));
+            if (!player.isCreative()) {
+                stack.shrink(1);
+            }
+        }
+        return true;
     }
 
     @Override

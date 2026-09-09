@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "kaleidoscope_tavern:item/painting_base",
   "textures": {
-    "layer0": "kaleidoscope_tavern:block/deco/painting/david"
+    "texture": "kaleidoscope_tavern:block/deco/painting/david"
   }
 }

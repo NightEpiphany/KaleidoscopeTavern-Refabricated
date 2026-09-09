@@ -5,11 +5,9 @@ import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.SandwichBoardBloc
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.util.RandomSource;
@@ -19,7 +17,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
@@ -58,7 +55,6 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
      * 右键交互，可以变成此变种展板的物品。
      */
     private final List<Item> transformItems;
-    private @Nullable List<String> transformItemNames;
 
     public SandwichBoardBlock(Properties properties, Item... transformItems) {
         super(properties
@@ -76,8 +72,11 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
         this.transformItems.forEach(item -> TRANSFORM_MAP.put(item, this));
     }
 
-    public @Nullable List<String> getTransformItemNames() {
-        return transformItemNames;
+    /**
+     * 供物品侧 tooltip 展示此展板可由哪些花合成
+     */
+    public List<Item> getTransformItems() {
+        return transformItems;
     }
 
     @Override
@@ -225,17 +224,6 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
         int max = RotationSegment.getMaxSegmentIndex() + 1;
         return state.setValue(ROTATION, mirror.mirror(state.getValue(ROTATION), max));
-    }
-
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
-        if (this.transformItemNames == null && !this.transformItems.isEmpty()) {
-            this.transformItemNames = this.transformItems.stream()
-                    .map(Item::getDescriptionId)
-                    .toList();
-        }
-        if (this.transformItemNames != null) {
-            this.transformItemNames.forEach(name -> tooltip.add(Component.translatable(name).withStyle(ChatFormatting.GRAY)));
-        }
     }
 
     @Override

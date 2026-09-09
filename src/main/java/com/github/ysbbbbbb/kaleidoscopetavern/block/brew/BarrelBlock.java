@@ -9,6 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,6 +19,9 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -25,6 +29,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
@@ -41,9 +46,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class BarrelBlock extends BaseEntityBlock {
+public class BarrelBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
     public static final MapCodec<BarrelBlock> CODEC = simpleCodec(BarrelBlock::new);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     /**
      * 对应酒桶的上中下三层
      */
@@ -77,7 +83,21 @@ public class BarrelBlock extends BaseEntityBlock {
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(LAYER, AttachFace.FLOOR)
+                .setValue(WATERLOGGED, false)
                 .setValue(INDEX, 4));
+    }
+
+    @Override
+    public @NotNull FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    protected @NotNull BlockState updateShape(@NotNull BlockState blockState, @NotNull LevelReader levelReader, @NotNull ScheduledTickAccess scheduledTickAccess, @NotNull BlockPos blockPos, @NotNull Direction direction, @NotNull BlockPos blockPos2, @NotNull BlockState blockState2, @NotNull RandomSource randomSource) {
+        if (blockState.getValue(WATERLOGGED)) {
+            scheduledTickAccess.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
+        }
+        return super.updateShape(blockState, levelReader, scheduledTickAccess, blockPos, direction, blockPos2, blockState2, randomSource);
     }
 
     @Override
@@ -171,6 +191,7 @@ public class BarrelBlock extends BaseEntityBlock {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockPos pos = context.getClickedPos();
         Level level = context.getLevel();
+        boolean hasWater = context.getLevel().getFluidState(pos).getType() == Fluids.WATER;
 
         // 需要 3 格高度
         if (pos.getY() > level.getMaxY() - 3) {
@@ -195,6 +216,7 @@ public class BarrelBlock extends BaseEntityBlock {
         Direction facing = context.getHorizontalDirection().getOpposite();
         return this.defaultBlockState()
                 .setValue(FACING, facing)
+                .setValue(WATERLOGGED, hasWater)
                 .setValue(LAYER, AttachFace.FLOOR)
                 .setValue(INDEX, 4);
     }
@@ -216,8 +238,10 @@ public class BarrelBlock extends BaseEntityBlock {
                     }
                     int index = row * 3 + col;
                     BlockPos targetPos = pos.offset(col - 1, y, row - 1);
+                    boolean hasWater = level.getFluidState(targetPos).getType() == Fluids.WATER;
                     level.setBlockAndUpdate(targetPos, this.defaultBlockState()
                             .setValue(FACING, facing)
+                            .setValue(WATERLOGGED, hasWater)
                             .setValue(LAYER, LAYERS[y])
                             .setValue(INDEX, index));
                 }
@@ -328,7 +352,7 @@ public class BarrelBlock extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, LAYER, INDEX);
+        builder.add(FACING, LAYER, INDEX, WATERLOGGED);
     }
 
     @Override

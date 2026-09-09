@@ -49,7 +49,11 @@ public class SitEntity extends Entity {
     protected void defineSynchedData(@NonNull Builder builder) {}
 
     @Override
-    public void readAdditionalSaveData(@NonNull ValueInput nbt) {}
+    public void readAdditionalSaveData(@NonNull ValueInput nbt) {
+        // 坐姿实体不应持久化：如果被意外保存进存档，加载时立即丢弃，避免残留占位
+        // （不能用 EntityType.noSave()，1.21.11 的 startRiding 要求 vehicle 的 EntityType 可序列化）
+        this.discard();
+    }
 
     @Override
     public void addAdditionalSaveData(@NonNull ValueOutput nbt) {}

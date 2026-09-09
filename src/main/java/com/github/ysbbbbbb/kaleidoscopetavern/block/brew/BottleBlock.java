@@ -5,6 +5,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.util.PortHelper;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
@@ -47,6 +48,19 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
                 .setValue(FACING, Direction.NORTH)
                 .setValue(WATERLOGGED, false));
         this.irregular = irregular;
+    }
+
+    /**
+     * 允许外部模组用自己的命名空间注册酒瓶方块：descriptionId 与默认掉落表
+     * 都从 properties.id 派生，因此必须让调用方传入完整 ResourceKey。
+     */
+    public BottleBlock(ResourceKey<Block> blockKey, boolean irregular) {
+        this(Properties.of()
+                .noOcclusion()
+                .instabreak()
+                .pushReaction(PushReaction.DESTROY)
+                .setId(blockKey)
+                .sound(SoundType.GLASS), irregular);
     }
 
     public BottleBlock(String id, boolean irregular) {

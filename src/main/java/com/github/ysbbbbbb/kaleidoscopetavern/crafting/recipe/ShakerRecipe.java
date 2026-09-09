@@ -17,6 +17,10 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeBookCategory;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.Identifier;
+import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -92,7 +96,7 @@ public final class ShakerRecipe implements Recipe<SimpleInput> {
 
     @Override
     public @NotNull RecipeBookCategory recipeBookCategory() {
-        return new RecipeBookCategory();
+        return Registry.register(BuiltInRegistries.RECIPE_BOOK_CATEGORY, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "shaker"), new RecipeBookCategory());
     }
 
     public NonNullList<Ingredient> ingredients() {

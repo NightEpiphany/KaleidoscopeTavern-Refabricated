@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "kaleidoscope_tavern:item/painting_base",
   "textures": {
-    "layer0": "kaleidoscope_tavern:block/deco/painting/girl_with_pearl_earring"
+    "texture": "kaleidoscope_tavern:block/deco/painting/girl_with_pearl_earring"
   }
 }

@@ -68,12 +68,13 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
         BlockState state = level.getBlockState(pos);
         Block self = this.getBlock();
 
+        // 先检查能否添加数量
+        if (player != null && tryIncreaseCount(self, state, level, pos, stack, player)) {
+            return InteractionResult.SUCCESS;
+        }
+
         // 只有潜行时才放置
         if (player == null || player.isShiftKeyDown()) {
-            // 先检查能够添加数量
-            if (player != null && tryIncreaseCount(self, state, level, pos, stack, player)) {
-                return InteractionResult.SUCCESS;
-            }
             return this.place(new BlockPlaceContext(context));
         }
 
@@ -143,11 +144,17 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
         // brew level 从 1 开始，所以要 -1 来获取对应的效果列表
         for (DrinkEffectData.Entry entry : effects.get(brewLevel - 1)) {
             if (!level.isClientSide() && level.random.nextFloat() < entry.probability()) {
-                // json 里的持续时间是秒，但是内部游戏是 tick，需要转化
-                int duration = entry.duration() * 20;
+                var effect = entry.effect().value();
                 int amplifier = entry.amplifier();
-                MobEffectInstance instance = new MobEffectInstance(entry.effect(), duration, amplifier);
-                entity.addEffect(instance);
+                if (effect.isInstantenous()) {
+                    // 瞬时效果直接触发，不通过 addEffect
+                    effect.applyInstantenousEffect((net.minecraft.server.level.ServerLevel) level, entity, entity, entity, amplifier, 1.0);
+                } else {
+                    // json 里的持续时间是秒，但是内部游戏是 tick，需要转化
+                    int duration = entry.duration() * 20;
+                    MobEffectInstance instance = new MobEffectInstance(entry.effect(), duration, amplifier);
+                    entity.addEffect(instance);
+                }
             }
         }
     }

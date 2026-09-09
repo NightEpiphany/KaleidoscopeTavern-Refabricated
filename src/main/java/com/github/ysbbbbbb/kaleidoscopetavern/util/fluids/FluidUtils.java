@@ -150,7 +150,8 @@ public class FluidUtils {
     }
 
     public static boolean isFluidContainer(ItemStack stack) {
-        if (stack.isEmpty()) {
+        // 禁用瓶装液体，药水不应该被当成流体容器
+        if (stack.isEmpty() || stack.is(Items.POTION)) {
             return false;
         }
         ContainerItemContext context = ContainerItemContext.withConstant(stack);

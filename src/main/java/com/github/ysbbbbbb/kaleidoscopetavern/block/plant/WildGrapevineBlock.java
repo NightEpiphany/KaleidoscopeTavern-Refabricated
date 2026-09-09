@@ -13,30 +13,37 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.GrowingPlantHeadBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
 import static com.github.ysbbbbbb.kaleidoscopetavern.util.PortHelper.getSlotForHand;
 
-public class WildGrapevineBlock extends GrowingPlantHeadBlock implements BonemealableBlock {
+public class WildGrapevineBlock extends GrowingPlantHeadBlock implements BonemealableBlock, SimpleWaterloggedBlock {
     public static final MapCodec<WildGrapevineBlock> CODEC = simpleCodec(WildGrapevineBlock::new);
     /**
      * 被剪刀修剪过后，无法再随机生长了，直到被重新种植
      */
     public static BooleanProperty SHEARED = BooleanProperty.create("sheared");
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 16, 15);
 
@@ -49,7 +56,22 @@ public class WildGrapevineBlock extends GrowingPlantHeadBlock implements Bonemea
                 .pushReaction(PushReaction.DESTROY), Direction.DOWN, SHAPE, false, 0.15);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(AGE, 0)
+                .setValue(WATERLOGGED, false)
                 .setValue(SHEARED, false));
+    }
+
+    @Override
+    public @NotNull FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
+        BlockState stateForPlacement = super.getStateForPlacement(context);
+        if (stateForPlacement == null)
+            return null;
+        boolean hasWater = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
+        return stateForPlacement.setValue(WATERLOGGED, hasWater);
     }
 
     @Override
@@ -71,7 +93,7 @@ public class WildGrapevineBlock extends GrowingPlantHeadBlock implements Bonemea
     @Override
     protected void createBlockStateDefinition(StateDefinition.@NonNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(SHEARED);
+        builder.add(SHEARED, WATERLOGGED);
     }
 
     @Override

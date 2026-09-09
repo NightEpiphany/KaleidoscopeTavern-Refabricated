@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.ITapBehavior;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.ITrellis;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.TapBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.game.tap.TapBehaviorManager;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
@@ -12,6 +13,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -100,6 +102,20 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
+    }
+
+    @Override
+    public boolean canSurvive(@NotNull BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
+        Direction direction = blockState.getValue(FACING);
+        BlockPos blockPosBase = blockPos.relative(direction.getOpposite());
+        BlockState blockStateBase = levelReader.getBlockState(blockPosBase);
+        return
+                blockStateBase.isFaceSturdy(levelReader, blockPos, direction)
+                        || blockStateBase.is(BlockTags.LEAVES)
+                        || blockStateBase.getBlock() instanceof AbstractCauldronBlock
+                        || blockStateBase.getBlock() instanceof ITrellis
+                        || blockStateBase.is(Blocks.DRAGON_WALL_HEAD)
+                        || blockStateBase.is(Blocks.DRAGON_HEAD);
     }
 
     private void tryOpen(BlockState state, Level level, BlockPos pos, @Nullable Player player) {
@@ -224,6 +240,9 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
     protected @NonNull BlockState updateShape(@NonNull BlockState blockState, @NonNull LevelReader levelReader, @NonNull ScheduledTickAccess scheduledTickAccess, @NonNull BlockPos blockPos, @NonNull Direction direction, @NonNull BlockPos blockPos2, @NonNull BlockState blockState2, @NonNull RandomSource randomSource) {
         if (blockState.getValue(WATERLOGGED)) {
             scheduledTickAccess.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
+        }
+        if (!blockState.canSurvive(levelReader, blockPos)) {
+            return Blocks.AIR.defaultBlockState();
         }
         return super.updateShape(blockState, levelReader, scheduledTickAccess, blockPos, direction, blockPos2, blockState2, randomSource);
     }

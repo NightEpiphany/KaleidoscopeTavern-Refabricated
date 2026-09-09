@@ -23,7 +23,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -34,10 +37,11 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
-public class BarCabinetBlock extends BaseEntityBlock {
+public class BarCabinetBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
     public static final MapCodec<BarCabinetBlock> CODEC = simpleCodec(BarCabinetBlock::new);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<PositionType> POSITION = EnumProperty.create("position", PositionType.class);
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public BarCabinetBlock(Properties properties) {
         super(properties
@@ -48,7 +52,13 @@ public class BarCabinetBlock extends BaseEntityBlock {
                 .ignitedByLava());
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
-                .setValue(POSITION, PositionType.SINGLE));
+                .setValue(POSITION, PositionType.SINGLE)
+                .setValue(WATERLOGGED, false));
+    }
+
+    @Override
+    public @NotNull FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
@@ -183,6 +193,9 @@ public class BarCabinetBlock extends BaseEntityBlock {
 
     @Override
     protected @NonNull BlockState updateShape(BlockState state, @NonNull LevelReader levelReader, @NonNull ScheduledTickAccess scheduledTickAccess, @NonNull BlockPos blockPos, @NonNull Direction direction, @NonNull BlockPos blockPos2, @NonNull BlockState blockState2, @NonNull RandomSource randomSource) {
+        if (state.getValue(WATERLOGGED)) {
+            scheduledTickAccess.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
+        }
         Direction self = state.getValue(FACING);
         Direction left = self.getClockWise();
         Direction right = self.getCounterClockWise();
@@ -249,12 +262,13 @@ public class BarCabinetBlock extends BaseEntityBlock {
 
         return this.defaultBlockState()
                 .setValue(FACING, opposite)
-                .setValue(POSITION, position);
+                .setValue(POSITION, position)
+                .setValue(WATERLOGGED, context.getLevel().getFluidState(pos).getType() == Fluids.WATER);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, POSITION);
+        builder.add(FACING, POSITION, WATERLOGGED);
     }
 
     @Override

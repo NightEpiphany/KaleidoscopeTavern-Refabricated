@@ -32,7 +32,7 @@ public class ShakerRecipeSerializer implements RecipeSerializer<ShakerRecipe> {
             ),
             ItemStack.CODEC.fieldOf("result").forGetter(ShakerRecipe::result)
     ).apply(instance, (ingredients, result) -> new ShakerRecipe(
-            ingredients.stream().filter(s -> !s.isBound() || s.size() > 0).map(Ingredient::of).collect(Collectors.toCollection(NonNullList::create)),
+            ingredients.stream().filter(s -> !s.isBound() || s.size() > 0).limit(MAX_INGREDIENTS).map(Ingredient::of).collect(Collectors.toCollection(NonNullList::create)),
             result,
             Int2ObjectMaps.emptyMap()
     )));
