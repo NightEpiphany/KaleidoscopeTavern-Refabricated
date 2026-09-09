@@ -47,6 +47,10 @@ public class ColorUtils {
         return TextColor.WHITE;
     });
 
+    public static int mixColors(List<TextColor> colors) {
+        return mixColors(colors.toArray(new TextColor[0]));
+    }
+
     /** ChatFormatting 版颜色映射（1.21.11 同款语义，供物品 tooltip 颜色行使用；26.2 ChatFormatting 已无 getColor/getName） */
     public static final Map<TagKey<Item>, ChatFormatting> CHAT_FORMATTING_COLORS = Util.make(Maps.newHashMap(), m -> {
         m.put(TagMod.COCKTAIL_INGREDIENT_BLACK, ChatFormatting.BLACK);
@@ -76,10 +80,6 @@ public class ColorUtils {
         }
         return ChatFormatting.RESET;
     });
-
-    public static int mixColors(List<TextColor> colors) {
-        return mixColors(colors.toArray(new TextColor[0]));
-    }
 
     public static int mixColors(TextColor... colors) {
         if (colors == null || colors.length == 0) {
