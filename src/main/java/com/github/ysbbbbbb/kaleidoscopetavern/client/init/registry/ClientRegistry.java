@@ -129,7 +129,15 @@ public final class ClientRegistry {
                 CYAN_BAR_STOOL,
                 MAGENTA_BAR_STOOL,
                 GRAY_BAR_STOOL,
-                LIGHT_GRAY_BAR_STOOL
+                LIGHT_GRAY_BAR_STOOL,
+                SAKURA_INCENSE,
+                PINE_INCENSE,
+                GINKGO_INCENSE,
+                SPORE_INCENSE,
+                CATNIP_INCENSE,
+                SNOW_INCENSE,
+                BUTTERFLY_INCENSE,
+                FIREFLY_INCENSE
         );
     }
 
