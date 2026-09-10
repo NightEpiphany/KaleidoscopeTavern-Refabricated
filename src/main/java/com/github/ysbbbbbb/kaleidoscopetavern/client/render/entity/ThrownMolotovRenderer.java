@@ -27,12 +27,12 @@ public class ThrownMolotovRenderer extends EntityRenderer<ThrownMolotovEntity, T
     }
 
     @Override
-    public ThrownMolotovEntityRenderState createRenderState() {
+    public @NonNull ThrownMolotovEntityRenderState createRenderState() {
         return new ThrownMolotovEntityRenderState();
     }
 
     @Override
-    public void extractRenderState(ThrownMolotovEntity entity, ThrownMolotovEntityRenderState entityRenderState, float f) {
+    public void extractRenderState(@NonNull ThrownMolotovEntity entity, @NonNull ThrownMolotovEntityRenderState entityRenderState, float f) {
         super.extractRenderState(entity, entityRenderState, f);
         entityRenderState.partialTicks = f;
         entityRenderState.tickCount = entity.tickCount;
@@ -49,8 +49,8 @@ public class ThrownMolotovRenderer extends EntityRenderer<ThrownMolotovEntity, T
         // 飞行时旋转
         float rotation = (entityRenderState.tickCount + entityRenderState.partialTicks) * 20.0F;
         poseStack.translate(0.5, 0.5, 0.5);
-        poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
-        poseStack.mulPose(Axis.XP.rotationDegrees(rotation * 0.7F));
+        poseStack.rotateDegrees(Axis.YP, rotation);
+        poseStack.rotateDegrees(Axis.XP, rotation * 0.7F);
         poseStack.translate(-0.5, -0.5, -0.5);
 
         entityRenderState.bottleModel.submit(

@@ -48,14 +48,14 @@ public class ShakerBlockEntityRender implements BlockEntityRenderer<ShakerBlockE
                        @NonNull SubmitNodeCollector submitNodeCollector, @NonNull CameraRenderState cameraRenderState) {
         poseStack.pushPose();
         poseStack.translate(0.5, 1.5, 0.5);
-        poseStack.mulPose(Axis.ZN.rotationDegrees(180));
-        poseStack.mulPose(Axis.YN.rotationDegrees(180));
+        poseStack.rotateDegrees(Axis.ZN, 180);
+        poseStack.rotateDegrees(Axis.YN, 180);
 
         ShakerModel.State state = new ShakerModel.State(renderState.animationAge, renderState.put);
         this.model.resetPose();
         this.model.setupAnim(state);
         RenderType renderType = RenderTypes.entityCutout(TEXTURE);
-        submitNodeCollector.submitModel(this.model, state, poseStack, renderType, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0, null);
+        submitNodeCollector.submitModel(this.model, state, poseStack, renderType, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
     }
 }

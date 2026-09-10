@@ -138,8 +138,8 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
         Identifier texture = TEXTURE_CACHE.apply(blockEntityRenderState.color);
         poseStack.pushPose();
         poseStack.translate(0.5, 1.5, 0.5);
-        poseStack.mulPose(Axis.ZN.rotationDegrees(180.0F));
-        poseStack.mulPose(Axis.YN.rotationDegrees(180.0F - renderRot));
+        poseStack.rotateDegrees(Axis.ZN, 180.0F);
+        poseStack.rotateDegrees(Axis.YN, 180.0F - renderRot);
         BarStoolBodyModel.State state = new BarStoolBodyModel.State();
         submitNodeCollector.submitModel(
                 this.model,
@@ -148,8 +148,7 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
                 RenderTypes.entityCutout(texture),
                 blockEntityRenderState.lightCoords,
                 OverlayTexture.NO_OVERLAY,
-                0,
-                null
+                0
         );
         poseStack.popPose();
     }

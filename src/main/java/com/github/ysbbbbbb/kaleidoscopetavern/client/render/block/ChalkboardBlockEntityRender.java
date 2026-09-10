@@ -2,7 +2,6 @@ package com.github.ysbbbbbb.kaleidoscopetavern.client.render.block;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.ChalkboardBlock;
-import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.SandwichBoardBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.ChalkboardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.model.deco.LargeChalkboardModel;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.model.deco.SmallChalkboardModel;
@@ -12,7 +11,6 @@ import com.mojang.math.Axis;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
@@ -65,13 +63,13 @@ public class ChalkboardBlockEntityRender extends TextBlockEntityRender<Chalkboar
         poseStack.pushPose();
 
         poseStack.translate(0.5, 1.5, 0.5);
-        poseStack.mulPose(Axis.ZN.rotationDegrees(180));
-        poseStack.mulPose(Axis.YN.rotationDegrees(180 - textBlockRenderState.facing.get2DDataValue() * 90));
+        poseStack.rotateDegrees(Axis.ZN, 180);
+        poseStack.rotateDegrees(Axis.YN, 180 - textBlockRenderState.facing.get2DDataValue() * 90);
 
         if (textBlockRenderState.large) {
-            submitNodeCollector.submitModel(large, new SmallChalkboardModel.State(), poseStack, RenderTypes.entitySolid(LARGE_TEXTURE), textBlockRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0, null);
+            submitNodeCollector.submitModel(large, new SmallChalkboardModel.State(), poseStack, RenderTypes.entitySolid(LARGE_TEXTURE), textBlockRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         }else {
-            submitNodeCollector.submitModel(small, new SmallChalkboardModel.State(), poseStack, RenderTypes.entitySolid(SMALL_TEXTURE), textBlockRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0, null);
+            submitNodeCollector.submitModel(small, new SmallChalkboardModel.State(), poseStack, RenderTypes.entitySolid(SMALL_TEXTURE), textBlockRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         }
         poseStack.popPose();
     }
@@ -90,7 +88,7 @@ public class ChalkboardBlockEntityRender extends TextBlockEntityRender<Chalkboar
             poseStack.translate(0.5, 1.535, 0.92);
         }
 
-        poseStack.mulPose(Axis.YN.rotationDegrees(facing.get2DDataValue() * 90));
+        poseStack.rotateDegrees(Axis.YN, facing.get2DDataValue() * 90);
 
         int maxWidth = textBlockRenderState.large ? 232 : 63;
         if (StringUtils.isNotBlank(textBlockRenderState.text))

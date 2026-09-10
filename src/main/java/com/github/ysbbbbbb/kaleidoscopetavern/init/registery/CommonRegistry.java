@@ -15,7 +15,6 @@ import com.github.ysbbbbbb.kaleidoscopetavern.game.tap.impl.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
-import net.fabricmc.fabric.api.registry.FuelValueEvents;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.resources.Identifier;
@@ -31,7 +30,6 @@ public final class CommonRegistry {
         storageRegister();
         events();
         addTapBehavior();
-        fuelRegistry();
         modCompat();
     }
 
@@ -55,10 +53,8 @@ public final class CommonRegistry {
         LivingChangeTargetEvent.register();
     }
 
+    @Deprecated(since = "26.3", forRemoval = true)
     public static void fuelRegistry() {
-        FuelValueEvents.BUILD.register((builder, context) -> {
-            builder.add(ModItems.GRAPEVINE, context.baseSmeltTime());
-        });
     }
 
     public static void dispenseRegister() {

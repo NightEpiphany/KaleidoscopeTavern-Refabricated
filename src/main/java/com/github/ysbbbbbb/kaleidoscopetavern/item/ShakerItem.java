@@ -65,7 +65,7 @@ public class ShakerItem extends BlockItem {
     public static ItemStackHandler getStorage(ItemStack stack) {
         ItemStackHandler handler = new ItemStackHandler(STORAGE_SIZE);
         List<ItemStack> contents = stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY)
-                .allItemsCopyStream()
+                .itemCopies()
                 .toList();
         for (int i = 0; i < Math.min(handler.getSlots(), contents.size()); i++) {
             handler.setStackInSlot(i, contents.get(i));

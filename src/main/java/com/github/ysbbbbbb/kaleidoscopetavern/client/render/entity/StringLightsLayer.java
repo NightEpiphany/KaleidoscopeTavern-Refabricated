@@ -34,7 +34,7 @@ public class StringLightsLayer<S extends HumanoidRenderState, M extends Humanoid
             poseStack.pushPose();
             humanoidModel.body.translateAndRotate(poseStack);
             poseStack.translate(0f, -0.1875f, -0.4375f);
-            poseStack.mulPose(Axis.YP.rotationDegrees(180f));
+            poseStack.rotateDegrees(Axis.YP, 180f);
             poseStack.scale(-0.625f, -0.625f, 0.625f);
             itemModelResolver.updateForTopItem(itemStackRenderState, stack, ItemDisplayContext.HEAD, null, null, 0);
             itemStackRenderState.submit(poseStack, submitNodeCollector, i, OverlayTexture.NO_OVERLAY, 0);

@@ -61,7 +61,7 @@ public class BarCabinetBlockEntityRender implements BlockEntityRenderer<BarCabin
             if (!blockEntityRenderState.leftModel.isEmpty()) {
                 poseStack.pushPose();
                 poseStack.translate(0.5, 0, 0.5);
-                poseStack.mulPose(Axis.YP.rotationDegrees(angle));
+                poseStack.rotateDegrees(Axis.YP, angle);
                 poseStack.translate(0, 0.0625, 0);
                 poseStack.scale(scale, scale, scale);
                 poseStack.translate(-0.5, 0, -0.5);
@@ -78,7 +78,7 @@ public class BarCabinetBlockEntityRender implements BlockEntityRenderer<BarCabin
             if (!blockEntityRenderState.leftModel.isEmpty()) {
                 poseStack.pushPose();
                 poseStack.translate(0.5, 0, 0.5);
-                poseStack.mulPose(Axis.YP.rotationDegrees(angle));
+                poseStack.rotateDegrees(Axis.YP, angle);
                 poseStack.translate(blockEntityRenderState.facing.getAxis() == Direction.Axis.Z ? 0.25 : -0.25, 0.0625, 0);
                 poseStack.scale(scale, scale, scale);
                 poseStack.translate(-0.5, 0, -0.5);
@@ -95,7 +95,7 @@ public class BarCabinetBlockEntityRender implements BlockEntityRenderer<BarCabin
             if (!blockEntityRenderState.rightModel.isEmpty()) {
                 poseStack.pushPose();
                 poseStack.translate(0.5, 0, 0.5);
-                poseStack.mulPose(Axis.YP.rotationDegrees(angle));
+                poseStack.rotateDegrees(Axis.YP, angle);
                 poseStack.translate(blockEntityRenderState.facing.getAxis() == Direction.Axis.Z ? -0.25 : 0.25, 0.0625, 0);
                 poseStack.scale(scale, scale, scale);
                 poseStack.translate(-0.5, 0, -0.5);

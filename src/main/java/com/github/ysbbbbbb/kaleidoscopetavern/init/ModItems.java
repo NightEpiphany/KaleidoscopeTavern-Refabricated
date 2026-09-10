@@ -10,6 +10,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -128,7 +129,7 @@ public final class ModItems {
     public static final Item GOLD_GRAPE = registerItem("gold_grape", p -> new TooltipItem(p.food(ModFoods.GRAPE), "tooltip.kaleidoscope_tavern.gold_grape"));
     public static final Item GREEN_GRAPE = registerItem("green_grape", p -> new TooltipItem(p.food(ModFoods.GRAPE), "tooltip.kaleidoscope_tavern.green_grape"));
     // 野生葡萄藤
-    public static final Item GRAPEVINE = registerItem("grapevine", GrapevineItem::new);
+    public static final Item GRAPEVINE = registerItem("grapevine", s -> new GrapevineItem(s.cookingFuel(ContextIntProviders.COOKING_TIME_BAMBOO)));
     // 黑板
     public static final Item CHALKBOARD = registerItem("chalkboard", p -> new BlockItem(ModBlocks.CHALKBOARD, p.useBlockDescriptionPrefix()));
     public static final Item BELL_PENDANT_LAMP = registerItem("bell_pendant_lamp", p -> new BlockItem(ModBlocks.BELL_PENDANT_LAMP, p.useBlockDescriptionPrefix()));

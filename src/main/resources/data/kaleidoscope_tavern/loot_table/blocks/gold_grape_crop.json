@@ -3,48 +3,47 @@
   "pools": [
     {
       "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
       "entries": [
         {
           "type": "minecraft:item",
           "name": "kaleidoscope_tavern:gold_grape"
         }
       ],
-      "functions": [
-        {
-          "add": false,
-          "count": {
-            "type": "minecraft:uniform",
-            "max": 2.0,
-            "min": 1.0
-          },
-          "function": "minecraft:set_count"
-        }
-      ],
-      "rolls": 1.0
+      "rolls": 1.0,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "modifier": {
+        "add": false,
+        "count": {
+          "type": "minecraft:uniform",
+          "max": 2.0,
+          "min": 1.0
+        },
+        "type": "minecraft:set_count"
+      }
     },
     {
       "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "chance": 0.3,
-          "condition": "minecraft:random_chance"
-        },
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
       "entries": [
         {
           "type": "minecraft:item",
           "name": "kaleidoscope_tavern:green_grape"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1.0,
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:random_chance",
+            "chance": 0.3
+          },
+          {
+            "type": "minecraft:survives_explosion"
+          }
+        ]
+      }
     }
   ],
   "random_sequence": "kaleidoscope_tavern:blocks/gold_grape_crop"

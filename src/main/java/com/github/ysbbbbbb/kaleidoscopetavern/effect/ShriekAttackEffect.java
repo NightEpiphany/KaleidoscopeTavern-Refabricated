@@ -108,7 +108,7 @@ public class ShriekAttackEffect extends BaseEffect {
                     VERTICAL_SPEED,
                     horizComponent.z * HORIZONTAL_SPEED
             ));
-            target.hurtMarked = true;
+            target.syncVelocity = true;
         }
 
         // 发送音波粒子效果

@@ -74,7 +74,7 @@ public abstract class StorageBlockEntityRender<T extends StorageBlockEntity> imp
     protected void applyFacingRotation(Direction direction, PoseStack poseStack) {
         float angle = 180 - direction.get2DDataValue() * 90F;
         poseStack.translate(0.5, 0, 0.5);
-        poseStack.mulPose(Axis.YP.rotationDegrees(angle));
+        poseStack.rotateDegrees(Axis.YP, angle);
         poseStack.translate(-0.5, 0, -0.5);
     }
 
@@ -86,8 +86,8 @@ public abstract class StorageBlockEntityRender<T extends StorageBlockEntity> imp
 
         poseStack.pushPose();
         poseStack.translate(entry.x, entry.y, entry.z);
-        poseStack.mulPose(Axis.YP.rotationDegrees(entry.yRot));
-        poseStack.mulPose(Axis.XP.rotationDegrees(entry.xRot));
+        poseStack.rotateDegrees(Axis.YP, entry.yRot);
+        poseStack.rotateDegrees(Axis.XP, entry.xRot);
         poseStack.scale(entry.scale, entry.scale, entry.scale);
         poseStack.translate(-0.5, 0, -0.5);
         entry.model.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);

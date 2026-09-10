@@ -2,30 +2,30 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "bonus_rolls": 0,
-      "condition": {
-        "type": "minecraft:survives_explosion"
-      },
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "kaleidoscope_tavern:trellis"
         }
       ],
-      "rolls": 1
-    },
-    {
-      "bonus_rolls": 0,
+      "rolls": 1.0,
       "condition": {
         "type": "minecraft:survives_explosion"
-      },
+      }
+    },
+    {
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "kaleidoscope_tavern:grapevine"
         }
       ],
-      "rolls": 1
+      "rolls": 1.0,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
   ],
   "random_sequence": "kaleidoscope_tavern:blocks/grapevine_trellis"

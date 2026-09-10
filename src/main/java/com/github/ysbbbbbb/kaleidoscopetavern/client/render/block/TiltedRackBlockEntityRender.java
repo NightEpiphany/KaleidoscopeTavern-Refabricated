@@ -44,7 +44,7 @@ public class TiltedRackBlockEntityRender extends StorageBlockEntityRender<Tilted
         poseStack.pushPose();
         poseStack.scale(entry.scale, entry.scale, entry.scale);
         poseStack.translate(entry.x, entry.y, entry.z);
-        poseStack.mulPose(Axis.XP.rotationDegrees(entry.xRot));
+        poseStack.rotateDegrees(Axis.XP, entry.xRot);
         entry.model.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
     }

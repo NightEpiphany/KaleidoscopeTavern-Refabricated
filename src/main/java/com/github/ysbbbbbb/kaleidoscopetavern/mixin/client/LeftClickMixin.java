@@ -20,7 +20,7 @@ public class LeftClickMixin {
     @Nullable
     public LocalPlayer player;
 
-    @Inject(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;)V", shift = At.Shift.AFTER))
+    @Inject(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/component/SwingAnimation;Z)Z", shift = At.Shift.AFTER))
     private void kaleidoscope_tavern$attack(CallbackInfoReturnable<Boolean> cir) {
         PlayerLeftClickEvent event = new PlayerLeftClickEvent(this.player, InteractionHand.MAIN_HAND);
         event.post();

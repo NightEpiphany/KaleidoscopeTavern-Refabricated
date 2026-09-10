@@ -68,14 +68,14 @@ public class PressingTubBlockEntityRender implements BlockEntityRenderer<Pressin
             if (blockEntityRenderState.tilt) {
                 poseStack.pushPose();
                 poseStack.translate(0.5, 0, 0.5);
-                poseStack.mulPose(Axis.YN.rotationDegrees(180 - blockEntityRenderState.facing.get2DDataValue() * 90));
+                poseStack.rotateDegrees(Axis.YN, 180 - blockEntityRenderState.facing.get2DDataValue() * 90);
                 poseStack.translate(-0.5, 0, -0.5);
 
                 if (blockEntityRenderState.facing.getAxis() == Direction.Axis.X) {
-                    poseStack.mulPose(Axis.XP.rotationDegrees(45));
+                    poseStack.rotateDegrees(Axis.XP, 45);
                     poseStack.translate(0, 0.5f, -0.5);
                 } else {
-                    poseStack.mulPose(Axis.XN.rotationDegrees(45));
+                    poseStack.rotateDegrees(Axis.XN, 45);
                     poseStack.translate(0, -0.25f, 0.25);
                 }
             }
@@ -92,10 +92,10 @@ public class PressingTubBlockEntityRender implements BlockEntityRenderer<Pressin
 
                 poseStack.translate(0.5f + x, 0.2f + y, 0.5f + z);
                 poseStack.scale(0.5f, 0.5f, 0.5f);
-                poseStack.mulPose(Axis.XN.rotationDegrees(90));
+                poseStack.rotateDegrees(Axis.XN, 90);
 
-                poseStack.mulPose(Axis.YN.rotationDegrees(yRot));
-                poseStack.mulPose(Axis.ZN.rotationDegrees(zRot));
+                poseStack.rotateDegrees(Axis.YN, yRot);
+                poseStack.rotateDegrees(Axis.ZN, zRot);
 
                 blockEntityRenderState.itemState.submit(poseStack, submitNodeCollector, blockEntityRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
                 poseStack.popPose();

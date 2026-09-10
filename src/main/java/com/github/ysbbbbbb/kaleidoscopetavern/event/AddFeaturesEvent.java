@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.event;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.mixin.TreeFeatureAccessor;
 import com.github.ysbbbbbb.kaleidoscopetavern.worldgen.WildGrapevineDecorator;
 import com.google.common.collect.ImmutableList;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -7,24 +8,23 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 
 public class AddFeaturesEvent {
     public static void addFeatures() {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> applyWildGrapevineDecorators(server.registryAccess()
-                .lookupOrThrow(Registries.CONFIGURED_FEATURE)));
+                .lookupOrThrow(Registries.FEATURE)));
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, manager, success) -> {
             if (!success) {
                 return;
             }
-            applyWildGrapevineDecorators(server.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE));
+            applyWildGrapevineDecorators(server.registryAccess().lookupOrThrow(Registries.FEATURE));
         });
     }
 
-    private static void applyWildGrapevineDecorators(HolderLookup.RegistryLookup<ConfiguredFeature<?, ?>> registryLookup) {
+    private static void applyWildGrapevineDecorators(HolderLookup.RegistryLookup<Feature> registryLookup) {
         addWildGrapevineTreeDeco(registryLookup, TreeFeatures.SUPER_BIRCH_BEES_0002, 0.002f, 3, 3);
         addWildGrapevineTreeDeco(registryLookup, TreeFeatures.SUPER_BIRCH_BEES, 1f, 1, 3);
 
@@ -46,27 +46,26 @@ public class AddFeaturesEvent {
     }
 
     private static void addWildGrapevineTreeDeco(
-            HolderLookup.RegistryLookup<ConfiguredFeature<?, ?>> registryLookup,
-            ResourceKey<ConfiguredFeature<?, ?>> id,
+            HolderLookup.RegistryLookup<Feature> registryLookup,
+            ResourceKey<Feature> id,
             float probability,
             int maxVineCount,
             int vineChainLength
     ) {
         var holder = registryLookup.get(id).orElse(null);
-        if (holder == null) {
+        if (holder == null || !(holder.value() instanceof TreeFeature treeFeature)) {
             return;
         }
-        ConfiguredFeature<?, ?> configuredFeature = holder.value();
-        FeatureConfiguration config = configuredFeature.config();
-        if (config instanceof TreeConfiguration treeConfiguration) {
-            if (treeConfiguration.decorators.stream().anyMatch(decorator -> decorator instanceof WildGrapevineDecorator)) {
-                return;
-            }
-            // 因为原 list 是 ImmutableList，所以只能复制一份新的 list 出来添加装饰器
-            treeConfiguration.decorators = ImmutableList.<TreeDecorator>builder()
-                    .addAll(treeConfiguration.decorators)
-                    .add(new WildGrapevineDecorator(probability, maxVineCount, vineChainLength))
-                    .build();
+        var decorators = treeFeature.decorators();
+        if (decorators.stream().anyMatch(decorator -> decorator instanceof WildGrapevineDecorator)) {
+            return;
         }
+        // 26.3 将树配置合并进 TreeFeature；保留注册实例，只替换不可变装饰器列表。
+        ((TreeFeatureAccessor) (Object) treeFeature).kaleidoscopeTavern$setDecorators(
+                ImmutableList.<TreeDecorator>builderWithExpectedSize(decorators.size() + 1)
+                        .addAll(decorators)
+                        .add(new WildGrapevineDecorator(probability, maxVineCount, vineChainLength))
+                        .build()
+        );
     }
 }

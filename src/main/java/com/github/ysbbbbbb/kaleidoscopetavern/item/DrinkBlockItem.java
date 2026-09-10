@@ -102,11 +102,11 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
     }
 
     @Override
-    protected boolean updateCustomBlockEntityTag(@NonNull BlockPos pos, Level level, @Nullable Player player, @NonNull ItemStack stack, @NonNull BlockState state) {
-        if (level.getBlockEntity(pos) instanceof DrinkBlockEntity be && be.addItem(stack)) {
+    public @org.jspecify.annotations.Nullable BlockPlaceContext updatePlacementContext(@NonNull BlockPlaceContext context) {
+        if (context.getLevel().getBlockEntity(context.getClickedPos()) instanceof DrinkBlockEntity be && be.addItem(context.getItemInHand())) {
             be.refresh();
         }
-        return super.updateCustomBlockEntityTag(pos, level, player, stack, state);
+        return super.updatePlacementContext(context);
     }
 
     @Override

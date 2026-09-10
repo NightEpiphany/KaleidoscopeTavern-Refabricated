@@ -42,8 +42,8 @@ public class SandwichBlockEntityRender extends TextBlockEntityRender<SandwichBoa
         poseStack.pushPose();
         poseStack.translate(0.5 + xOffset, 1.06, 0.5 + zOffset);
 
-        poseStack.mulPose(new Quaternionf().rotateAxis((float) Math.toRadians(22.5f), tiltAxisX, 0.0f, tiltAxisZ));
-        poseStack.mulPose(Axis.YN.rotationDegrees(angle));
+        poseStack.rotate(new Quaternionf().rotateAxis((float) Math.toRadians(22.5f), tiltAxisX, 0.0f, tiltAxisZ));
+        poseStack.rotateDegrees(Axis.YN, angle);
 
         int maxWidth = 55;
         if (StringUtils.isNotBlank(textBlockRenderState.text))

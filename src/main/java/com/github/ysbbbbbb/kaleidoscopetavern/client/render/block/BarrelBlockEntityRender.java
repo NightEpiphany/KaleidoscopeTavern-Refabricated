@@ -76,8 +76,8 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
 
         poseStack.pushPose();
         poseStack.translate(0.5, 1.5, 0.5);
-        poseStack.mulPose(Axis.ZN.rotationDegrees(180));
-        poseStack.mulPose(Axis.YN.rotationDegrees(180 - barrel.facing.get2DDataValue() * 90));
+        poseStack.rotateDegrees(Axis.ZN, 180);
+        poseStack.rotateDegrees(Axis.YN, 180 - barrel.facing.get2DDataValue() * 90);
         BarrelModel.State state = new BarrelModel.State(barrel.isOpen);
         this.model.setupAnim(state);
         RenderType renderType = RenderTypes.entityCutout(LARGE_TEXTURE);
@@ -88,8 +88,7 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
                 renderType,
                 barrel.lightCoords,
                 OverlayTexture.NO_OVERLAY,
-                0,
-                null
+                0
         );
         poseStack.popPose();
     }
@@ -126,9 +125,9 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
 
                     poseStack.translate(0.5f + x, 2.7f + y, 0.5f + z);
                     poseStack.scale(0.5f, 0.5f, 0.5f);
-                    poseStack.mulPose(Axis.XN.rotationDegrees(90));
-                    poseStack.mulPose(Axis.YN.rotationDegrees(yRot));
-                    poseStack.mulPose(Axis.ZN.rotationDegrees(zRot));
+                    poseStack.rotateDegrees(Axis.XN, 90);
+                    poseStack.rotateDegrees(Axis.YN, yRot);
+                    poseStack.rotateDegrees(Axis.ZN, zRot);
                     item.itemState.submit(poseStack, submitNodeCollector, barrel.lightCoords, OverlayTexture.NO_OVERLAY, 0);
                     poseStack.popPose();
                     globalIndex++;

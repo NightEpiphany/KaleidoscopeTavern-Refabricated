@@ -67,7 +67,7 @@ public class GlasswareHolderBlockEntityRender implements BlockEntityRenderer<Gla
             poseStack.pushPose();
             poseStack.translate(-0.25, 0.76, 0.75);
             poseStack.translate(0.5 * (entry.slot % 2), 0, 0.5 * (entry.slot / 2));
-            poseStack.mulPose(Axis.XN.rotationDegrees(180));
+            poseStack.rotateDegrees(Axis.XN, 180);
             entry.model.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }

@@ -29,7 +29,7 @@ public class StringLightTrinketRenderer implements TrinketRenderer {
                 poseStack.pushPose();
                 humanoidModel.body.translateAndRotate(poseStack);
                 poseStack.translate(0f, -0.1875f, -0.4375f);
-                poseStack.mulPose(Axis.YP.rotationDegrees(180f));
+                poseStack.rotateDegrees(Axis.YP, 180f);
                 poseStack.scale(-0.625f, -0.625f, 0.625f);
                 Minecraft.getInstance().getItemModelResolver().updateForTopItem(itemStackRenderState, stack, ItemDisplayContext.HEAD, null, null, 0);
                 itemStackRenderState.submit(poseStack, submit, light, OverlayTexture.NO_OVERLAY, 0);

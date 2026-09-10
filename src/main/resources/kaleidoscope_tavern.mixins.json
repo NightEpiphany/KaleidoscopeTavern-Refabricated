@@ -8,7 +8,8 @@
     "LivingEntityMixin",
     "MobMixin",
     "PlayerMixin",
-    "RedStoneWireBlockMixin"
+    "RedStoneWireBlockMixin",
+    "TreeFeatureAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
