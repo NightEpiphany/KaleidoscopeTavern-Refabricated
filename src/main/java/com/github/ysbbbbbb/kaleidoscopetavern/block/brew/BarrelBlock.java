@@ -3,7 +3,6 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.BarrelBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.FluidUtils;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -42,7 +41,6 @@ import java.util.List;
 import java.util.Set;
 
 public class BarrelBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
-    public static final MapCodec<BarrelBlock> CODEC = simpleCodec(BarrelBlock::new);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     /**
      * 对应酒桶的上中下三层
@@ -73,7 +71,7 @@ public class BarrelBlock extends BaseEntityBlock implements SimpleWaterloggedBlo
                 .strength(2.5F)
                 .sound(SoundType.WOOD)
                 .noOcclusion()
-                .pushReaction(PushReaction.BLOCK)
+                .pushReaction(PushReaction.IMMOVEABLE)
                 .ignitedByLava());
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
@@ -187,7 +185,7 @@ public class BarrelBlock extends BaseEntityBlock implements SimpleWaterloggedBlo
             return null;
         }
         return createTickerHelper(blockEntityType, ModBlocks.BARREL_BE,
-                (levelIn, pos, stateIn, barrel) -> barrel.tick(levelIn));
+                (levelIn, _, _, barrel) -> barrel.tick(levelIn));
     }
 
     @Override
@@ -399,10 +397,5 @@ public class BarrelBlock extends BaseEntityBlock implements SimpleWaterloggedBlo
     @Override
     public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 }

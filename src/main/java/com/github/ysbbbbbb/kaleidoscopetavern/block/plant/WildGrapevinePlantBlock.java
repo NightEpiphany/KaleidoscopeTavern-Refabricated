@@ -1,7 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.plant;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -25,7 +24,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
 public class WildGrapevinePlantBlock extends GrowingPlantBodyBlock implements BonemealableBlock, SimpleWaterloggedBlock {
-    public static final MapCodec<WildGrapevinePlantBlock> CODEC = simpleCodec(WildGrapevinePlantBlock::new);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 16, 15);
@@ -35,7 +33,7 @@ public class WildGrapevinePlantBlock extends GrowingPlantBodyBlock implements Bo
                 .noCollision()
                 .instabreak()
                 .sound(SoundType.CAVE_VINES)
-                .pushReaction(PushReaction.DESTROY), Direction.DOWN, SHAPE, false);
+                .pushReaction(PushReaction.POPPED), Direction.DOWN, SHAPE, false);
         this.registerDefaultState(
                 this.stateDefinition.any()
                         .setValue(WATERLOGGED, false));
@@ -100,16 +98,16 @@ public class WildGrapevinePlantBlock extends GrowingPlantBodyBlock implements Bo
     }
 
     @Override
-    public boolean isValidBonemealTarget(@NonNull LevelReader level, @NonNull BlockPos pos, BlockState state) {
+    public boolean isValidBonemealTarget(
+            @NonNull LevelReader level,
+            @NonNull BlockPos pos,
+            @NonNull BlockState state,
+            @NonNull BonemealSource source
+    ) {
         GrowingPlantHeadBlock headBlock = this.getHeadBlock();
         return BlockUtil.getTopConnectedBlock(level, pos, state.getBlock(), this.growthDirection, headBlock).map(headPos -> {
             BlockState blockState = level.getBlockState(headPos);
             return blockState.is(headBlock) && !blockState.getValue(WildGrapevineBlock.SHEARED);
         }).orElse(false);
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends GrowingPlantBodyBlock> codec() {
-        return CODEC;
     }
 }

@@ -20,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
 public class BarCounterBlock extends HorizontalDirectionalBlock implements IConnectionBlock {
-    public static final MapCodec<BarCounterBlock> CODEC = simpleCodec(BarCounterBlock::new);
 
     public BarCounterBlock(Properties properties) {
         super(properties
@@ -60,10 +59,5 @@ public class BarCounterBlock extends HorizontalDirectionalBlock implements IConn
         return this.defaultBlockState()
                 .setValue(FACING, direction)
                 .setValue(CONNECTION, connectionType);
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 }

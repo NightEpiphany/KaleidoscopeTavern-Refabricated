@@ -42,7 +42,6 @@ import java.util.List;
 public class GlasswareHolderBlock extends HorizontalDirectionalBlock implements EntityBlock, SimpleWaterloggedBlock {
     public static final VoxelShape NORTH_SOUTH_SHAPE = Block.box(0, 11, 1, 16, 16, 15);
     public static final VoxelShape EAST_WEST_SHAPE = Block.box(1, 11, 0, 15, 16, 16);
-    private static final MapCodec<GlasswareHolderBlock> CODEC = simpleCodec(GlasswareHolderBlock::new);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public GlasswareHolderBlock(Properties properties) {
@@ -203,10 +202,5 @@ public class GlasswareHolderBlock extends HorizontalDirectionalBlock implements 
             case NORTH, SOUTH -> NORTH_SOUTH_SHAPE;
             default -> EAST_WEST_SHAPE;
         };
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 }

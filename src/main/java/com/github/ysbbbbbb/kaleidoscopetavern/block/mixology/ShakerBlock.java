@@ -6,7 +6,6 @@ import com.github.ysbbbbbb.kaleidoscopetavern.item.ShakerItem;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.neo.ItemStackHandler;
 import com.google.common.collect.Lists;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -46,14 +45,13 @@ import java.util.List;
 import static com.github.ysbbbbbb.kaleidoscopetavern.init.tag.TagMod.COCKTAIL_INGREDIENT;
 
 public class ShakerBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
-    public static final MapCodec<ShakerBlock> CODEC = simpleCodec(ShakerBlock::new);
     private static final VoxelShape SHAPE = Block.box(4, 0, 4, 12, 16, 12);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public ShakerBlock(Properties properties) {
         super(properties
                 .noOcclusion()
                 .instabreak()
-                .pushReaction(PushReaction.DESTROY)
+                .pushReaction(PushReaction.POPPED)
                 .sound(SoundType.LANTERN)
         );
         this.registerDefaultState(
@@ -177,10 +175,5 @@ public class ShakerBlock extends Block implements EntityBlock, SimpleWaterlogged
     @Override
     public @NotNull VoxelShape getShape(@NonNull BlockState pState, @NonNull BlockGetter pLevel, @NonNull BlockPos pPos, @NonNull CollisionContext pContext) {
         return SHAPE;
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends Block> codec() {
-        return CODEC;
     }
 }

@@ -4,7 +4,6 @@ import com.github.ysbbbbbb.kaleidoscopetavern.api.client.IModelModifyRotationAft
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.SandwichBoardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
 import com.google.common.collect.Maps;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,7 +43,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, IModelModifyRotationAfterBake<IntegerProperty> {
-    public static final MapCodec<SandwichBoardBlock> CODEC = simpleCodec(SandwichBoardBlock::new);
     public static final Map<Item, SandwichBoardBlock> TRANSFORM_MAP = Maps.newHashMap();
 
     public static final IntegerProperty ROTATION = BlockStateProperties.ROTATION_16;
@@ -238,11 +236,6 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
         if (this.transformItemNames != null) {
             this.transformItemNames.forEach(name -> tooltip.add(Component.translatable(name).withStyle(ChatFormatting.GRAY)));
         }
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override

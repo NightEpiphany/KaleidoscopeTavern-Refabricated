@@ -3,7 +3,6 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.AbstractStorageBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.HolderBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.tag.TagMod;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -19,7 +18,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -41,7 +39,6 @@ public class HolderBlock extends AbstractStorageBlock implements SimpleWaterlogg
     public static final VoxelShape SOUTH_SHAPE = Block.box(5, 0, 2, 11, 16, 14);
     public static final VoxelShape EAST_SHAPE = Block.box(2, 0, 5, 14, 16, 11);
     public static final VoxelShape WEST_SHAPE = Block.box(2, 0, 5, 14, 16, 11);
-    private static final MapCodec<HolderBlock> CODEC = simpleCodec(HolderBlock::new);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public HolderBlock(Properties properties) {
@@ -151,10 +148,5 @@ public class HolderBlock extends AbstractStorageBlock implements SimpleWaterlogg
             case WEST -> WEST_SHAPE;
             default -> NORTH_SHAPE;
         };
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 }

@@ -58,7 +58,7 @@ public class GrapeCropBlock extends Block implements BonemealableBlock, SimpleWa
                 .instabreak()
                 .sound(SoundType.CROP)
                 .offsetType(OffsetType.XYZ)
-                .pushReaction(PushReaction.DESTROY));
+                .pushReaction(PushReaction.POPPED));
         this.registerDefaultState(
                 this.stateDefinition.any()
                         .setValue(AGE, 0)
@@ -151,17 +151,33 @@ public class GrapeCropBlock extends Block implements BonemealableBlock, SimpleWa
     }
 
     @Override
-    public boolean isValidBonemealTarget(@NonNull LevelReader level, @NonNull BlockPos pos, @NonNull BlockState state) {
+    public boolean isValidBonemealTarget(
+            @NonNull LevelReader level,
+            @NonNull BlockPos pos,
+            @NonNull BlockState state,
+            @NonNull BonemealSource source
+    ) {
         return !this.isMaxAge(state);
     }
 
     @Override
-    public boolean isBonemealSuccess(@NonNull Level level, @NonNull RandomSource random, @NonNull BlockPos pos, @NonNull BlockState state) {
+    public boolean isBonemealSuccess(
+            @NonNull Level level,
+            @NonNull RandomSource random,
+            @NonNull BlockPos pos,
+            @NonNull BlockState state,
+            @NonNull BonemealSource source
+    ) {
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, @NonNull BlockPos pos, BlockState state) {
+    public void performBonemeal(
+            @NonNull ServerLevel level,
+            @NonNull RandomSource random,
+            @NonNull BlockPos pos,
+            @NonNull BlockState state,
+            @NonNull BonemealSource source) {
         int newAge = Math.min(state.getValue(AGE) + random.nextInt(1, 3), MAX_AGE);
         level.setBlockAndUpdate(pos, state.setValue(AGE, newAge));
     }

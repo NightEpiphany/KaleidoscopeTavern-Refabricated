@@ -66,13 +66,13 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock, ITrel
         boolean waxed = state.getValue(WAXED);
         if (waxed && player.getItemInHand(hand).is(ItemTags.AXES)) {
             level.setBlockAndUpdate(pos, state.setValue(WAXED, false));
-            level.playSound(player, pos, SoundEvents.AXE_WAX_OFF, SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.playSound(player, pos, SoundEvents.AXE_WAX_OFF.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
             level.levelEvent(player, LevelEvent.PARTICLES_WAX_OFF, pos, 0);
             return InteractionResult.SUCCESS;
         } else if (!waxed && player.getItemInHand(hand).is(Items.HONEYCOMB)) {
             level.setBlockAndUpdate(pos, state.setValue(WAXED, true));
             level.playSound(player, pos, SoundEvents.HONEYCOMB_WAX_ON, SoundSource.BLOCKS, 1.0F, 1.0F);
-            level.levelEvent(player, LevelEvent.PARTICLES_AND_SOUND_WAX_ON, pos, 0);
+            level.levelEvent(player, LevelEvent.PARTICLES_WAX_ON, pos, 0);
             return InteractionResult.SUCCESS;
         }
         // 玩家手持的是葡萄藤

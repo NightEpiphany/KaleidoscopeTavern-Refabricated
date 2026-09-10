@@ -19,10 +19,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -65,7 +62,7 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
                 .sound(SoundType.WOOD)
                 .randomTicks()
                 .noOcclusion()
-                .pushReaction(PushReaction.DESTROY)
+                .pushReaction(PushReaction.POPPED)
                 .ignitedByLava());
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(TYPE, TrellisType.SINGLE)
@@ -233,17 +230,33 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public boolean isValidBonemealTarget(@NonNull LevelReader level, @NonNull BlockPos pos, @NonNull BlockState state) {
+    public boolean isValidBonemealTarget(
+            @NonNull LevelReader level,
+            @NonNull BlockPos pos,
+            @NonNull BlockState state,
+            @NonNull BonemealSource source
+    ) {
         return this.canGrow(level, pos, state);
     }
 
     @Override
-    public boolean isBonemealSuccess(@NonNull Level level, @NonNull RandomSource random, @NonNull BlockPos pos, @NonNull BlockState state) {
+    public boolean isBonemealSuccess(
+            @NonNull Level level,
+            @NonNull RandomSource random,
+            @NonNull BlockPos pos,
+            @NonNull BlockState state,
+            @NonNull BonemealSource source
+    ) {
         return true;
     }
 
     @Override
-    public void performBonemeal(@NonNull ServerLevel level, @NonNull RandomSource random, @NonNull BlockPos pos, @NonNull BlockState state) {
+    public void performBonemeal(
+            @NonNull ServerLevel level,
+            @NonNull RandomSource random,
+            @NonNull BlockPos pos,
+            @NonNull BlockState state,
+            @NonNull BonemealSource source) {
         this.doGrow(level, pos, state);
     }
 

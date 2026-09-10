@@ -1,7 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.plant;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -35,7 +34,6 @@ import org.jspecify.annotations.NonNull;
 import static com.github.ysbbbbbb.kaleidoscopetavern.util.PortHelper.getSlotForHand;
 
 public class WildGrapevineBlock extends GrowingPlantHeadBlock implements BonemealableBlock, SimpleWaterloggedBlock {
-    public static final MapCodec<WildGrapevineBlock> CODEC = simpleCodec(WildGrapevineBlock::new);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     /**
      * 被剪刀修剪过后，无法再随机生长了，直到被重新种植
@@ -50,7 +48,7 @@ public class WildGrapevineBlock extends GrowingPlantHeadBlock implements Bonemea
                 .noCollision()
                 .instabreak()
                 .sound(SoundType.CAVE_VINES)
-                .pushReaction(PushReaction.DESTROY), Direction.DOWN, SHAPE, false, 0.15);
+                .pushReaction(PushReaction.POPPED), Direction.DOWN, SHAPE, false, 0.15);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(AGE, 0)
                 .setValue(WATERLOGGED, false)
@@ -127,11 +125,6 @@ public class WildGrapevineBlock extends GrowingPlantHeadBlock implements Bonemea
     }
 
     @Override
-    protected @NotNull MapCodec<? extends GrowingPlantHeadBlock> codec() {
-        return CODEC;
-    }
-
-    @Override
     public void randomTick(BlockState state, @NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull RandomSource random) {
         // 如果被剪刀修剪过了，就不再随机生长了，直到被重新种植
         if (state.getValue(SHEARED)) {
@@ -141,9 +134,14 @@ public class WildGrapevineBlock extends GrowingPlantHeadBlock implements Bonemea
     }
 
     @Override
-    public boolean isValidBonemealTarget(@NonNull LevelReader level, @NonNull BlockPos pos, BlockState state) {
+    public boolean isValidBonemealTarget(
+            @NonNull LevelReader level,
+            @NonNull BlockPos pos,
+            @NonNull BlockState state,
+            @NonNull BonemealSource source
+    ) {
         // 只有当没有被剪刀修剪过，才可以使用骨粉生长
-        return !state.getValue(SHEARED) && super.isValidBonemealTarget(level, pos, state);
+        return !state.getValue(SHEARED) && super.isValidBonemealTarget(level, pos, state, source);
     }
 
     @Override

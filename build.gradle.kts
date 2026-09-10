@@ -38,9 +38,9 @@ loom {
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft("com.mojang:minecraft:${providers.gradleProperty("minecraft_version").get()}")
-	implementation ("maven.modrinth:create-fly:${providers.gradleProperty("create_version").get()}")
+	compileOnly ("maven.modrinth:create-fly:${providers.gradleProperty("create_version").get()}")
 	implementation("net.fabricmc:fabric-loader:${providers.gradleProperty("loader_version").get()}")
-	implementation("maven.modrinth:jade:${providers.gradleProperty("jade_version").get()}")
+	compileOnly("maven.modrinth:jade:${providers.gradleProperty("jade_version").get()}")
 	compileOnly("me.shedaniel:RoughlyEnoughItems-fabric:${providers.gradleProperty("rei_version").get()}")
 	compileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${providers.gradleProperty("rei_version").get()}")
 	compileOnly ("me.shedaniel.cloth:cloth-config-fabric:26.2.155")
@@ -51,9 +51,9 @@ dependencies {
 		exclude(group = "net.fabricmc.fabric-api")
 		exclude(group = "eu.pb4")
 	}
-	implementation ("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${providers.gradleProperty("forge_config_api_version").get()}")
-	implementation("mezz.jei:jei-${providers.gradleProperty("jei_version").get()}")
-	implementation("eu.pb4:trinkets:${providers.gradleProperty("trinkets_version").get()}")
+	compileOnly ("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${providers.gradleProperty("forge_config_api_version").get()}")
+	compileOnly("mezz.jei:jei-${providers.gradleProperty("jei_version").get()}")
+	compileOnly("eu.pb4:trinkets:${providers.gradleProperty("trinkets_version").get()}")
 }
 
 tasks.processResources {

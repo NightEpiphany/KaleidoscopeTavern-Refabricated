@@ -3,7 +3,6 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.AbstractStorageBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TiltedRackBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.tag.TagMod;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -18,7 +17,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,7 +38,7 @@ public class TiltedRackBlock extends AbstractStorageBlock implements SimpleWater
     public static final VoxelShape SOUTH_SHAPE = Block.box(0, 0, 1, 16, 14, 11);
     public static final VoxelShape EAST_SHAPE = Block.box(1, 0, 0, 11, 14, 16);
     public static final VoxelShape WEST_SHAPE = Block.box(5, 0, 0, 15, 14, 16);
-    private static final MapCodec<TiltedRackBlock> CODEC = simpleCodec(TiltedRackBlock::new);
+
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public TiltedRackBlock(Properties properties) {
@@ -148,10 +146,5 @@ public class TiltedRackBlock extends AbstractStorageBlock implements SimpleWater
             case WEST -> WEST_SHAPE;
             default -> NORTH_SHAPE;
         };
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 }

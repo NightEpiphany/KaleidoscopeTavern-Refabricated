@@ -1,6 +1,5 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -28,7 +27,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class StepladderBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
-    public static final MapCodec<StepladderBlock> CODEC = simpleCodec(StepladderBlock::new);
 
     public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -176,10 +174,5 @@ public class StepladderBlock extends HorizontalDirectionalBlock implements Simpl
                 default -> DOWN_NORTH;
             };
         };
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 }

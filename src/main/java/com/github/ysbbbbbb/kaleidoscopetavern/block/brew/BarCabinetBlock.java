@@ -4,7 +4,6 @@ import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.PositionType;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.BarCabinetBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.tag.TagMod;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -38,7 +37,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 
 public class BarCabinetBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
-    public static final MapCodec<BarCabinetBlock> CODEC = simpleCodec(BarCabinetBlock::new);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<PositionType> POSITION = EnumProperty.create("position", PositionType.class);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -292,11 +290,6 @@ public class BarCabinetBlock extends BaseEntityBlock implements SimpleWaterlogge
     @Nullable
     public BlockEntity newBlockEntity(@NonNull BlockPos pos, @NonNull BlockState state) {
         return new BarCabinetBlockEntity(pos, state);
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override

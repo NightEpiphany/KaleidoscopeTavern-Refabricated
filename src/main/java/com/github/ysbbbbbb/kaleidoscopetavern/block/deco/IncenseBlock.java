@@ -2,11 +2,9 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.IncenseBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -45,9 +43,7 @@ import static net.minecraft.sounds.SoundEvents.STONE_BUTTON_CLICK_ON;
 
 public class IncenseBlock extends HorizontalDirectionalBlock implements EntityBlock, SimpleWaterloggedBlock {
     private static final VoxelShape SHAPE = Block.box(5, 0, 5, 11, 7, 11);
-    private static final MapCodec<IncenseBlock> CODEC = simpleCodec(p -> new IncenseBlock(
-            p, () -> ParticleTypes.CHERRY_LEAVES, () -> ParticleTypes.CHERRY_LEAVES
-    ));
+
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -85,7 +81,7 @@ public class IncenseBlock extends HorizontalDirectionalBlock implements EntityBl
         super(properties
                 .instabreak()
                 .noOcclusion()
-                .pushReaction(PushReaction.DESTROY)
+                .pushReaction(PushReaction.POPPED)
                 .sound(SoundType.DECORATED_POT));
 
         this.smallParticle = smallParticle;
@@ -237,10 +233,5 @@ public class IncenseBlock extends HorizontalDirectionalBlock implements EntityBl
     @Override
     public @Nullable BlockEntity newBlockEntity(@NonNull BlockPos pPos, @NonNull BlockState pState) {
         return new IncenseBlockEntity(pPos, pState);
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 }

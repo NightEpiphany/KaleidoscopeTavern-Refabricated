@@ -1,10 +1,8 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 
 import com.google.common.collect.Maps;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -30,10 +28,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class StringLightsBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
-    public static final MapCodec<StringLightsBlock> CODEC = simpleCodec(p -> new StringLightsBlock(p, Items.DYE.white()));
     public static final Map<Item, StringLightsBlock> TRANSFORM_MAP = Maps.newHashMap();
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -52,7 +48,7 @@ public class StringLightsBlock extends HorizontalDirectionalBlock implements Sim
                 .strength(0.8F)
                 .sound(SoundType.CHAIN)
                 .noCollision()
-                .lightLevel(s -> 15));
+                .lightLevel(_ -> 15));
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(WATERLOGGED, false));
@@ -123,10 +119,5 @@ public class StringLightsBlock extends HorizontalDirectionalBlock implements Sim
             case WEST -> WEST_SHAPE;
             default -> NORTH_SHAPE;
         };
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 }

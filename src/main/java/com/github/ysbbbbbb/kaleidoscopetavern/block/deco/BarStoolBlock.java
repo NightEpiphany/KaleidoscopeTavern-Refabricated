@@ -4,8 +4,6 @@ import com.github.ysbbbbbb.kaleidoscopetavern.api.entity.ISittable;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.BarStoolBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.entity.SitEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -32,12 +30,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jspecify.annotations.NonNull;
 
 public class BarStoolBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, ISittable {
-    public static final MapCodec<BarStoolBlock> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
-            DyeColor.CODEC.fieldOf("color").forGetter((o) -> o.color), propertiesCodec()
-    ).apply(builder, (dye, properties) -> new BarStoolBlock(properties, dye)));
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private final DyeColor color;
@@ -149,11 +143,6 @@ public class BarStoolBlock extends BaseEntityBlock implements SimpleWaterloggedB
     @Override
     public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.MODEL;
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override

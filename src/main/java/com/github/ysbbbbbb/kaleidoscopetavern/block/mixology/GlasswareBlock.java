@@ -2,7 +2,6 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.mixology;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.client.IModelModifyRotationAfterBake;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -35,7 +34,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
 public class GlasswareBlock extends Block implements SimpleWaterloggedBlock, IModelModifyRotationAfterBake<IntegerProperty> {
-    public static final MapCodec<GlasswareBlock> CODEC = simpleCodec(GlasswareBlock::new);
     public static final IntegerProperty ROTATION = BlockStateProperties.ROTATION_16;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -52,7 +50,7 @@ public class GlasswareBlock extends Block implements SimpleWaterloggedBlock, IMo
         this(Properties.of()
                 .noOcclusion()
                 .instabreak()
-                .pushReaction(PushReaction.DESTROY)
+                .pushReaction(PushReaction.POPPED)
                 .sound(SoundType.GLASS));
     }
 
@@ -139,10 +137,5 @@ public class GlasswareBlock extends Block implements SimpleWaterloggedBlock, IMo
     @Override
     public IntegerProperty getRotationProperty() {
         return ROTATION;
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends Block> codec() {
-        return CODEC;
     }
 }

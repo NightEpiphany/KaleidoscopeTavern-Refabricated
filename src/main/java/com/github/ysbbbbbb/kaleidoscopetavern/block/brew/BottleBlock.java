@@ -2,7 +2,6 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.PortHelper;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -30,7 +29,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.Objects;
 
 public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
-    public static final MapCodec<BottleBlock> CODEC = simpleCodec(BottleBlock::simpleBottle);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final VoxelShape SHAPE = Block.box(5, 0, 5, 11, 14, 11);
     public static final VoxelShape SIMPLE_BOTTLE_SHAPE = Block.box(5, 0, 5, 11, 10, 11);
@@ -54,7 +52,7 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
         super(Properties.of()
                 .noOcclusion()
                 .instabreak()
-                .pushReaction(PushReaction.DESTROY)
+                .pushReaction(PushReaction.POPPED)
                 .setId(PortHelper.createBlockId(id))
                 .sound(SoundType.GLASS));
         this.registerDefaultState(this.stateDefinition.any()
@@ -71,7 +69,7 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
         super(properties
                 .noOcclusion()
                 .instabreak()
-                .pushReaction(PushReaction.DESTROY)
+                .pushReaction(PushReaction.POPPED)
                 .sound(SoundType.GLASS));
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
@@ -79,6 +77,7 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
     }
 
 
+    @SuppressWarnings("unused")
     @Deprecated(forRemoval = true)
     public BottleBlock(Properties properties, boolean irregular) {
         this(properties, null);
@@ -157,10 +156,5 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
     @Deprecated(forRemoval = true)
     public boolean irregular() {
         return this.irregular;
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 }

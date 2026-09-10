@@ -5,7 +5,6 @@ import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.TapBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.game.tap.TapBehaviorManager;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.VoxelShapeUtils;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -49,7 +48,6 @@ import java.util.EnumMap;
 import static com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.TapBlockEntity.*;
 
 public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
-    public static final MapCodec<TapBlock> CODEC = simpleCodec(TapBlock::new);
 
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -301,11 +299,6 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
     @Override
     public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
 }

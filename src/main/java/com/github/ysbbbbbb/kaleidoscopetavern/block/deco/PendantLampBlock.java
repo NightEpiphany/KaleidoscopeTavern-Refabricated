@@ -1,6 +1,5 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -40,7 +39,6 @@ public class PendantLampBlock extends HorizontalDirectionalBlock implements Simp
     public static final VoxelShape LOWER_NORTH_SOUTH_SHAPE = Block.box(1, 1, 5, 15, 16, 11);
     public static final VoxelShape LOWER_EAST_WEST_SHAPE = Block.box(5, 1, 1, 11, 16, 15);
 
-    private static final MapCodec<PendantLampBlock> CODEC = simpleCodec(PendantLampBlock::new);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public PendantLampBlock(Properties properties) {
         super(properties
@@ -145,10 +143,5 @@ public class PendantLampBlock extends HorizontalDirectionalBlock implements Simp
             case NORTH, SOUTH -> isLower ? LOWER_NORTH_SOUTH_SHAPE : UPPER_NORTH_SOUTH_SHAPE;
             default -> isLower ? LOWER_EAST_WEST_SHAPE : UPPER_EAST_WEST_SHAPE;
         };
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
     }
 }
