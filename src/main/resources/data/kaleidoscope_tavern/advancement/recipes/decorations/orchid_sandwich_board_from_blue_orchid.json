@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:orchid_sandwich_board_from_blue_orchid"
+        "recipes": [
+          "kaleidoscope_tavern:orchid_sandwich_board_from_blue_orchid"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

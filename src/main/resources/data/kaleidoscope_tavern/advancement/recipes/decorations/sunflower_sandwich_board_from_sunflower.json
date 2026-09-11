@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:sunflower_sandwich_board_from_sunflower"
+        "recipes": [
+          "kaleidoscope_tavern:sunflower_sandwich_board_from_sunflower"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

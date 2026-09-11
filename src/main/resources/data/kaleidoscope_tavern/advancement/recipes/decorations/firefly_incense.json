@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:firefly_incense"
+        "recipes": [
+          "kaleidoscope_tavern:firefly_incense"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

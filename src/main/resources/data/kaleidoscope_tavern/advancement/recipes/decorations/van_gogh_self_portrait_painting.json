@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:van_gogh_self_portrait_painting"
+        "recipes": [
+          "kaleidoscope_tavern:van_gogh_self_portrait_painting"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

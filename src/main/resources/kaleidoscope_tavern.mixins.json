@@ -19,11 +19,12 @@
   },
   "client": [
     "client.EntityRendererDispatcherMixin",
-    "client.GameRendererMixin",
     "client.HumanoidMobRendererMixin",
     "client.HumanoidModelMixin",
     "client.ItemInHandMixin",
     "client.LeftClickMixin",
+    "client.LevelExtractorMixin",
+    "client.LocalPlayerMixin",
     "client.PlayerRendererMixin"
   ]
 }

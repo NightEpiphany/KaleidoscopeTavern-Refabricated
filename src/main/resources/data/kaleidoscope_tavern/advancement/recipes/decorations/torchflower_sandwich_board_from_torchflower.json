@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:torchflower_sandwich_board_from_torchflower"
+        "recipes": [
+          "kaleidoscope_tavern:torchflower_sandwich_board_from_torchflower"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

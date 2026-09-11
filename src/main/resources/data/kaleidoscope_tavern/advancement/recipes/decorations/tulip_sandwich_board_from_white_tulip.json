@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:tulip_sandwich_board_from_white_tulip"
+        "recipes": [
+          "kaleidoscope_tavern:tulip_sandwich_board_from_white_tulip"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

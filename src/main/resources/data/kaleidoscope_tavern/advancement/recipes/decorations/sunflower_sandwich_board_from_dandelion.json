@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:sunflower_sandwich_board_from_dandelion"
+        "recipes": [
+          "kaleidoscope_tavern:sunflower_sandwich_board_from_dandelion"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

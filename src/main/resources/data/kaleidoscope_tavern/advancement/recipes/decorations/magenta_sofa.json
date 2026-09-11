@@ -3,7 +3,9 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:magenta_sofa"
+        "recipes": [
+          "kaleidoscope_tavern:magenta_sofa"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     },

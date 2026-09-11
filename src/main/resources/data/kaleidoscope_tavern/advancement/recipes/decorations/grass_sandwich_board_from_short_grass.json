@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:grass_sandwich_board_from_short_grass"
+        "recipes": [
+          "kaleidoscope_tavern:grass_sandwich_board_from_short_grass"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

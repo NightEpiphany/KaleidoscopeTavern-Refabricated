@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:pressing_tub"
+        "recipes": [
+          "kaleidoscope_tavern:pressing_tub"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

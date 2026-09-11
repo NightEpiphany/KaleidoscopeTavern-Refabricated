@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:master_marisa_painting"
+        "recipes": [
+          "kaleidoscope_tavern:master_marisa_painting"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

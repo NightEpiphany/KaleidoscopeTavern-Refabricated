@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:night_epiphany_painting"
+        "recipes": [
+          "kaleidoscope_tavern:night_epiphany_painting"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

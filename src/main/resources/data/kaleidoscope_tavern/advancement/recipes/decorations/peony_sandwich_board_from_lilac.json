@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:peony_sandwich_board_from_lilac"
+        "recipes": [
+          "kaleidoscope_tavern:peony_sandwich_board_from_lilac"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

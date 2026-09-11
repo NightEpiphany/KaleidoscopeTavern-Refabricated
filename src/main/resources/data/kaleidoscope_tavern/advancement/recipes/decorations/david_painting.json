@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:david_painting"
+        "recipes": [
+          "kaleidoscope_tavern:david_painting"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:holder"
+        "recipes": [
+          "kaleidoscope_tavern:holder"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:cornflower_sandwich_board_from_cornflower"
+        "recipes": [
+          "kaleidoscope_tavern:cornflower_sandwich_board_from_cornflower"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

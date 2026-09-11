@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:blue_pendant_lamp"
+        "recipes": [
+          "kaleidoscope_tavern:blue_pendant_lamp"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

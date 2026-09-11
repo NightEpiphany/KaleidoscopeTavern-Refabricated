@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:string_lights_black"
+        "recipes": [
+          "kaleidoscope_tavern:string_lights_black"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:allium_sandwich_board_from_allium"
+        "recipes": [
+          "kaleidoscope_tavern:allium_sandwich_board_from_allium"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

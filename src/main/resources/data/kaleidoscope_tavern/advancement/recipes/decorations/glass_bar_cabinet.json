@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:glass_bar_cabinet"
+        "recipes": [
+          "kaleidoscope_tavern:glass_bar_cabinet"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

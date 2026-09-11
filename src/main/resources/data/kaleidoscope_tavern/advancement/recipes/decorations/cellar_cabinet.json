@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:cellar_cabinet"
+        "recipes": [
+          "kaleidoscope_tavern:cellar_cabinet"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

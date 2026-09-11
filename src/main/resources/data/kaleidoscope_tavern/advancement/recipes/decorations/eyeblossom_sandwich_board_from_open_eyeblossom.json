@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:eyeblossom_sandwich_board_from_open_eyeblossom"
+        "recipes": [
+          "kaleidoscope_tavern:eyeblossom_sandwich_board_from_open_eyeblossom"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

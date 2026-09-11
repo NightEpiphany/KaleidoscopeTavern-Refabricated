@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:circular_rack"
+        "recipes": [
+          "kaleidoscope_tavern:circular_rack"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

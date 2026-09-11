@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:poppy_sandwich_board_from_rose_bush"
+        "recipes": [
+          "kaleidoscope_tavern:poppy_sandwich_board_from_rose_bush"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

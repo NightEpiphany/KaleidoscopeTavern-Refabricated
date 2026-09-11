@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:poppy_sandwich_board_from_poppy"
+        "recipes": [
+          "kaleidoscope_tavern:poppy_sandwich_board_from_poppy"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

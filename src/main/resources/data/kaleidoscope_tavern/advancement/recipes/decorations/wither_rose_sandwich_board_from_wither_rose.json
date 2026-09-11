@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:wither_rose_sandwich_board_from_wither_rose"
+        "recipes": [
+          "kaleidoscope_tavern:wither_rose_sandwich_board_from_wither_rose"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

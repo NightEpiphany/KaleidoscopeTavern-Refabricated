@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:catnip_incense"
+        "recipes": [
+          "kaleidoscope_tavern:catnip_incense"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:stepladder"
+        "recipes": [
+          "kaleidoscope_tavern:stepladder"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

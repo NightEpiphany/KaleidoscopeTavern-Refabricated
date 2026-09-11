@@ -7,7 +7,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.effect.MobEffects;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,8 +15,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Environment(EnvType.CLIENT)
-@Mixin(GameRenderer.class)
-public class GameRendererMixin {
+@Mixin(LocalPlayer.class)
+public class LocalPlayerMixin {
     @Unique
     private static final float TIPSY_NAUSEA_FACTOR = 0.18F;
 
@@ -26,14 +25,14 @@ public class GameRendererMixin {
 
     @Shadow
     @Final
-    private Minecraft minecraft;
+    protected Minecraft minecraft;
 
-    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getEffectBlendFactor(Lnet/minecraft/core/Holder;F)F"))
+    @ModifyExpressionValue(method = "tickSpinningEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getEffectBlendFactor(Lnet/minecraft/core/Holder;F)F"))
     private float includeTipsyInSpinningTick(float nauseaIntensity) {
         return Math.max(nauseaIntensity, this.getTipsySpinningIntensity(1.0F));
     }
 
-    @ModifyExpressionValue(method = "tick", at = @At(value = "CONSTANT", args = "floatValue=7.0F"))
+    @ModifyExpressionValue(method = "tickSpinningEffect", at = @At(value = "CONSTANT", args = "floatValue=7.0F"))
     private float slowTipsySpinningSpeed(float nauseaSpinningSpeed) {
         LocalPlayer player = this.minecraft.player;
         if (player == null) {
@@ -45,12 +44,7 @@ public class GameRendererMixin {
         return tipsyIntensity > nauseaIntensity ? TIPSY_SPINNING_SPEED : nauseaSpinningSpeed;
     }
 
-    @ModifyExpressionValue(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getEffectBlendFactor(Lnet/minecraft/core/Holder;F)F"))
-    private float includeTipsyInSpinningRender(float nauseaIntensity, DeltaTracker deltaTracker) {
-        float partialTicks = deltaTracker.getGameTimeDeltaPartialTick(false);
-        return Math.max(nauseaIntensity, this.getTipsySpinningIntensity(partialTicks));
-    }
-
+    @SuppressWarnings("all")
     @Unique
     private float getTipsySpinningIntensity(float partialTicks) {
         LocalPlayer player = this.minecraft.player;

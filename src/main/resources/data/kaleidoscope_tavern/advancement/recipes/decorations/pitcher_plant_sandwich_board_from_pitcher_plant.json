@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:pitcher_plant_sandwich_board_from_pitcher_plant"
+        "recipes": [
+          "kaleidoscope_tavern:pitcher_plant_sandwich_board_from_pitcher_plant"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

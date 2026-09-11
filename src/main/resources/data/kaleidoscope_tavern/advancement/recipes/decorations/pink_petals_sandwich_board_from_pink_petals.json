@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:pink_petals_sandwich_board_from_pink_petals"
+        "recipes": [
+          "kaleidoscope_tavern:pink_petals_sandwich_board_from_pink_petals"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

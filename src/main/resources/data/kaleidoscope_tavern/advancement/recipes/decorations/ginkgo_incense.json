@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:ginkgo_incense"
+        "recipes": [
+          "kaleidoscope_tavern:ginkgo_incense"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

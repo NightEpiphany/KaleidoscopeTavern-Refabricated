@@ -3,7 +3,9 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:lime_sofa"
+        "recipes": [
+          "kaleidoscope_tavern:lime_sofa"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     },

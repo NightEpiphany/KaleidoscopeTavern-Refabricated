@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:son_of_man_painting"
+        "recipes": [
+          "kaleidoscope_tavern:son_of_man_painting"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }

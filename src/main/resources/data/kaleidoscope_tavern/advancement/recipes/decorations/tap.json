@@ -13,7 +13,9 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "kaleidoscope_tavern:tap"
+        "recipes": [
+          "kaleidoscope_tavern:tap"
+        ]
       },
       "trigger": "minecraft:recipe_unlocked"
     }
