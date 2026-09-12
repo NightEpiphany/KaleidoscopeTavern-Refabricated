@@ -11,4 +11,7 @@ pluginManagement {
 	plugins {
 		id("net.fabricmc.fabric-loom") version providers.gradleProperty("loom_version")
 	}
+
+	// Title for the project
+	rootProject.name = "KT-26.2-fabric"
 }
