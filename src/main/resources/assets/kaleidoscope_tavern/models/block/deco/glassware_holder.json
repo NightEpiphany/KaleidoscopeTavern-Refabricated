@@ -23,7 +23,7 @@
 		{
 			"from": [0, 12.9, 1],
 			"to": [16, 12.9, 15],
-			"shade": false,
+			"shade_direction_override": "up",
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 1.9, 5]},
 			"faces": {
 				"down": {"uv": [4, 4, 8, 7.5], "texture": "#2"}

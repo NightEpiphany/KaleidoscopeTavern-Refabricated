@@ -35,7 +35,17 @@ loom {
 	accessWidenerPath = file("src/main/resources/kaleidoscope_tavern.accessWidener")
 }
 
+fabricApi.configureTests {
+	createSourceSet = true
+	modId = "kaleidoscope_tavern_render_test"
+	enableGameTests = false
+	enableClientGameTests = true
+	clearRunDirectory = false
+}
+
 dependencies {
+	testImplementation("org.junit.jupiter:junit-jupiter:5.14.2")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.14.2")
 	// To change the versions see the gradle.properties file
 	minecraft("com.mojang:minecraft:${providers.gradleProperty("minecraft_version").get()}")
 	compileOnly ("maven.modrinth:create-fly:${providers.gradleProperty("create_version").get()}")
@@ -67,6 +77,12 @@ tasks.processResources {
 
 tasks.withType<JavaCompile>().configureEach {
 	options.release = 25
+}
+
+tasks.test {
+	useJUnitPlatform()
+	workingDir = layout.buildDirectory.dir("test-run").get().asFile
+	doFirst { workingDir.mkdirs() }
 }
 
 java {

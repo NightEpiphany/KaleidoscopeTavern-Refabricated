@@ -87,7 +87,7 @@
 		{
 			"from": [0, 2.7724, 5.34486],
 			"to": [16, 23.7724, 5.34486],
-			"shade": false,
+			"shade_direction_override": "up",
 			"rotation": {"angle": 22.5, "axis": "x", "origin": [8, 13.7724, 6.71986]},
 			"faces": {
 				"north": {"uv": [0, 0, 8, 10.5], "texture": "#layer1"},

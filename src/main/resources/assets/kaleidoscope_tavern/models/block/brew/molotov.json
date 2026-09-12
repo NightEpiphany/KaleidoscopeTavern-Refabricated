@@ -103,7 +103,7 @@
 		{
 			"from": [7, 2, 6],
 			"to": [9, 10, 7],
-			"shade": false,
+			"shade_direction_override": "up",
 			"rotation": {"angle": 0, "axis": "y", "origin": [7, 0, 6]},
 			"faces": {
 				"north": {"uv": [10, 6, 12, 14], "texture": "#0"},
@@ -117,7 +117,7 @@
 		{
 			"from": [6, 2, 7],
 			"to": [7, 10, 9],
-			"shade": false,
+			"shade_direction_override": "up",
 			"rotation": {"angle": 0, "axis": "y", "origin": [7, 0, 6]},
 			"faces": {
 				"north": {"uv": [12, 6, 13, 14], "texture": "#0"},
@@ -131,7 +131,7 @@
 		{
 			"from": [9, 2, 7],
 			"to": [10, 10, 9],
-			"shade": false,
+			"shade_direction_override": "up",
 			"rotation": {"angle": 0, "axis": "y", "origin": [7, 0, 6]},
 			"faces": {
 				"north": {"uv": [9, 6, 10, 14], "texture": "#0"},
@@ -145,7 +145,7 @@
 		{
 			"from": [7, 2, 9],
 			"to": [9, 10, 10],
-			"shade": false,
+			"shade_direction_override": "up",
 			"rotation": {"angle": 0, "axis": "y", "origin": [7, 0, 6]},
 			"faces": {
 				"north": {"uv": [10, 6, 12, 14], "texture": "#0"},
@@ -162,7 +162,7 @@
 			"name": "bone",
 			"origin": [0, 0, 0],
 			"color": 0,
-			"shade": false,
+			"shade_direction_override": "up",
 			"children": [0]
 		},
 		1,

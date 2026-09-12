@@ -67,7 +67,7 @@
 			"name": "bone",
 			"origin": [0, 0, 0],
 			"color": 0,
-			"shade": false,
+			"shade_direction_override": "up",
 			"children": [0, 1, 2, 3]
 		}
 	]

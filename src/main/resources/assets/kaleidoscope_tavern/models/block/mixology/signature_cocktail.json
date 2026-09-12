@@ -11,7 +11,7 @@
 		{
 			"from": [10.5, 5.6, 5.5],
 			"to": [5.5, 9.6, 10.5],
-			"shade": false,
+			"shade_direction_override": "up",
 			"rotation": {"angle": 0, "axis": "y", "origin": [13, 7.6, 8]},
 			"faces": {
 				"north": {"uv": [10, 14, 12.5, 16], "texture": "#1", "tintindex": 0},
@@ -23,7 +23,7 @@
 		{
 			"from": [5.5, 9.6, 5.5],
 			"to": [10.5, 9.6, 10.5],
-			"shade": false,
+			"shade_direction_override": "up",
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.6, 8]},
 			"faces": {
 				"north": {"uv": [10, 14, 12.5, 16], "texture": "#1", "tintindex": 0},
@@ -37,7 +37,7 @@
 		{
 			"from": [5.5, 5.6, 5.5],
 			"to": [10.5, 5.6, 10.5],
-			"shade": false,
+			"shade_direction_override": "up",
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.6, 8]},
 			"faces": {
 				"north": {"uv": [10, 14, 12.5, 16], "texture": "#1", "tintindex": 0},
@@ -77,7 +77,7 @@
 		{
 			"from": [11, 5, 5],
 			"to": [5, 10.05, 11],
-			"shade": false,
+			"shade_direction_override": "up",
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.525, 8]},
 			"faces": {
 				"north": {"uv": [4, 0, 7, 2.525], "texture": "#1", "tintindex": 0},
@@ -141,7 +141,7 @@
 		{
 			"from": [5, 5, 5],
 			"to": [11, 5, 11],
-			"shade": false,
+			"shade_direction_override": "up",
 			"rotation": {"angle": 0, "axis": "y", "origin": [12, 4, 6]},
 			"faces": {
 				"up": {"uv": [8, 0, 11, 3], "texture": "#1", "tintindex": 0},
@@ -177,7 +177,7 @@
 		{
 			"from": [5.54472, 5.65, 7.86899],
 			"to": [10.54472, 9.4, 7.86899],
-			"shade": false,
+			"shade_direction_override": "up",
 			"rotation": {"angle": -45, "axis": "y", "origin": [7.94472, 7.65, 7.86899], "rescale": true},
 			"faces": {
 				"north": {"uv": [5.5, 6, 8, 8], "texture": "#1", "tintindex": 0},
@@ -187,7 +187,7 @@
 		{
 			"from": [8.04472, 5.65, 5.51041],
 			"to": [8.04472, 9.4, 10.51041],
-			"shade": false,
+			"shade_direction_override": "up",
 			"rotation": {"angle": -45, "axis": "y", "origin": [8.04472, 7.65, 7.96899], "rescale": true},
 			"faces": {
 				"east": {"uv": [5.5, 6, 8, 8], "texture": "#1", "tintindex": 0},
