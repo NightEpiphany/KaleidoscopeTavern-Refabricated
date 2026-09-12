@@ -1,21 +1,21 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.datagen.recipe;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.PackOutput;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemInstance;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 
 import java.util.Arrays;
-import java.util.concurrent.CompletableFuture;
 
 public abstract class ModRecipeProvider extends RecipeProvider {
-    public ModRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super((HolderLookup.Provider) output, (RecipeOutput) registries);
+    public ModRecipeProvider(final BootstrapContext<Recipe<?>> recipeOutput, final BootstrapContext<Advancement> advancementOutput) {
+        super(recipeOutput, advancementOutput);
     }
 
         public Identifier modLoc(String path) {

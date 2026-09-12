@@ -3,15 +3,14 @@ package com.github.ysbbbbbb.kaleidoscopetavern.datagen.recipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.datagen.builder.ShakerBuilder;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.tag.TagMod;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.PackOutput;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.data.recipes.RecipeOutput;
-
-import java.util.concurrent.CompletableFuture;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.world.item.crafting.Recipe;
 
 public class ShakerRecipeProvider extends ModRecipeProvider {
-    public ShakerRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(output, registries);
+    public ShakerRecipeProvider(final BootstrapContext<Recipe<?>> recipeOutput, final BootstrapContext<Advancement> advancementOutput) {
+        super(recipeOutput, advancementOutput);
     }
 
     @Override

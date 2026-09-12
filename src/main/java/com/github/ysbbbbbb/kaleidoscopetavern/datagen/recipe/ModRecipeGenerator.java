@@ -1,23 +1,23 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.datagen.recipe;
 
 import com.google.common.collect.Lists;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.PackOutput;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.world.item.crafting.Recipe;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public class ModRecipeGenerator extends ModRecipeProvider {
     private final List<ModRecipeProvider> providers = Lists.newArrayList();
 
-    public ModRecipeGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(output, registries);
-        providers.add(new PressingTubRecipeProvider(output, registries));
-        providers.add(new BarrelRecipeProvider(output, registries));
-        providers.add(new ShapedRecipeProvider(output, registries));
-        providers.add(new ShapelessRecipeProvider(output, registries));
-        providers.add(new ShakerRecipeProvider(output, registries));
+    public ModRecipeGenerator(final BootstrapContext<Recipe<?>> recipeOutput, final BootstrapContext<Advancement> advancementOutput) {
+        super(recipeOutput, advancementOutput);
+        providers.add(new PressingTubRecipeProvider(recipeOutput, advancementOutput));
+        providers.add(new BarrelRecipeProvider(recipeOutput, advancementOutput));
+        providers.add(new ShapedRecipeProvider(recipeOutput, advancementOutput));
+        providers.add(new ShapelessRecipeProvider(recipeOutput, advancementOutput));
+        providers.add(new ShakerRecipeProvider(recipeOutput, advancementOutput));
     }
 
     @Override
