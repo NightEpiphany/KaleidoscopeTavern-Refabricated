@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.event;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PotionBottleBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.config.ConfigGetter;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -18,7 +19,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-import static com.github.ysbbbbbb.kaleidoscopetavern.config.GeneralConfig.*;
 import static com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks.*;
 
 public class VanillaBottlePlaceEvent {
@@ -77,21 +77,21 @@ public class VanillaBottlePlaceEvent {
         if (stack.is(Items.POTION)) {
             var potion = stack.get(DataComponents.POTION_CONTENTS);
             if (potion == null || potion.is(Potions.WATER)) {
-                return new Placement(WATER_BOTTLE, WATER_BOTTLE_PLACEMENT.get(), false);
+                return new Placement(WATER_BOTTLE, ConfigGetter.getWaterBottlePlacement(), false);
             }
-            return new Placement(POTION_BOTTLE, POTION_BOTTLE_PLACEMENT.get(), true);
+            return new Placement(POTION_BOTTLE, ConfigGetter.getPotionBottlePlacement(), true);
         }
 
         if (stack.is(Items.HONEY_BOTTLE)) {
-            return new Placement(HONEY_BOTTLE, HONEY_BOTTLE_PLACEMENT.get(), false);
+            return new Placement(HONEY_BOTTLE, ConfigGetter.getHoneyBottlePlacement(), false);
         }
 
         if (stack.is(Items.DRAGON_BREATH)) {
-            return new Placement(DRAGON_BREATH_BOTTLE, DRAGON_BREATH_BOTTLE_PLACEMENT.get(), false);
+            return new Placement(DRAGON_BREATH_BOTTLE, ConfigGetter.getDragonBreathBottlePlacement(), false);
         }
 
         if (stack.is(Items.EXPERIENCE_BOTTLE)) {
-            return new Placement(XP_BOTTLE, EXPERIENCE_BOTTLE_PLACEMENT.get(), false);
+            return new Placement(XP_BOTTLE, ConfigGetter.getExperienceBottlePlacement(), false);
         }
 
         return null;

@@ -76,7 +76,7 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     public GrapevineTrellisBlock(Properties properties) {
         this(
                 properties,
-                (state, level, pos, random) -> 0.25F,
+                (_, _, _, _) -> 0.25F,
                 ModBlocks.GRAPE_CROP::defaultBlockState
         );
     }

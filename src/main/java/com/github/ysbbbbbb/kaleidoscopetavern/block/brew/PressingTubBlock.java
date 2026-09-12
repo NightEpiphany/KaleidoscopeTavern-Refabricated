@@ -56,22 +56,22 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
     public static final VoxelShape TILTED_SHAPE_NORTH = Shapes.or(
             Block.box(0, 0, 0, 16, 8, 8),
             Block.box(0, 4, 4, 16, 12, 12),
-            Block.box(0, 8, 8, 16, 16, 16)
+            Block.box(0, 8, 8, 16, 15, 16)
     );
     public static final VoxelShape TILTED_SHAPE_SOUTH = Shapes.or(
             Block.box(0, 0, 8, 16, 8, 16),
             Block.box(0, 4, 4, 16, 12, 12),
-            Block.box(0, 8, 0, 16, 16, 8)
+            Block.box(0, 8, 0, 16, 15, 8)
     );
     public static final VoxelShape TILTED_SHAPE_WEST = Shapes.or(
             Block.box(0, 0, 0, 8, 8, 16),
             Block.box(4, 4, 0, 12, 12, 16),
-            Block.box(8, 8, 0, 16, 16, 16)
+            Block.box(8, 8, 0, 16, 15, 16)
     );
     public static final VoxelShape TILTED_SHAPE_EAST = Shapes.or(
             Block.box(8, 0, 0, 16, 8, 16),
             Block.box(4, 4, 0, 12, 12, 16),
-            Block.box(0, 8, 0, 8, 16, 16)
+            Block.box(0, 8, 0, 8, 15, 16)
     );
 
     public PressingTubBlock(Properties p) {
