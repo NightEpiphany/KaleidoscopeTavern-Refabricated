@@ -33,7 +33,7 @@
 		"kaleidoscope_tavern.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.18",
+		"fabricloader": ">=0.19.3",
 		"minecraft": "~26.3-",
 		"java": ">=25",
 		"fabric-api": ">=0.160"
