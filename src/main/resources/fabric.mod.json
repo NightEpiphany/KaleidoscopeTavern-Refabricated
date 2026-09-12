@@ -36,13 +36,13 @@
 		"fabricloader": ">=0.18",
 		"minecraft": "~26.1",
 		"java": ">=25",
-		"fabric-api": ">=0.151",
-		"forgeconfigapiport": "*"
+		"fabric-api": ">=0.151"
 	},
 	"breaks": {
 		"rrv": "<8.0.0"
 	},
 	"suggests": {
+		"forgeconfigapiport": "*",
 		"trinkets_updated": "*"
 	}
 }

@@ -1,23 +1,26 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.config;
 
+import fuzs.forgeconfigapiport.fabric.api.v5.ConfigRegistry;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-public class GeneralConfig {
+import static com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern.MOD_ID;
+
+public final class GeneralConfig {
 
     // 不能压汁的物品受到挤压时,是否掉出盆外
-    public static ModConfigSpec.BooleanValue PRESSING_TUB_DROP_CONTENTS_ON_NON_JUICEABLE;
-
+    static ModConfigSpec.BooleanValue PRESSING_TUB_DROP_CONTENTS_ON_NON_JUICEABLE;
     // 是否禁用龙头的无限熔岩
-    public static ModConfigSpec.BooleanValue INFINITE_LAVA_FROM_TAP;
+    static ModConfigSpec.BooleanValue INFINITE_LAVA_FROM_TAP;
 
     // 是否允许潜行右键放置各种原版的瓶子
-    public static ModConfigSpec.BooleanValue WATER_BOTTLE_PLACEMENT;
-    public static ModConfigSpec.BooleanValue HONEY_BOTTLE_PLACEMENT;
-    public static ModConfigSpec.BooleanValue POTION_BOTTLE_PLACEMENT;
-    public static ModConfigSpec.BooleanValue DRAGON_BREATH_BOTTLE_PLACEMENT;
-    public static ModConfigSpec.BooleanValue EXPERIENCE_BOTTLE_PLACEMENT;
+    static ModConfigSpec.BooleanValue WATER_BOTTLE_PLACEMENT;
+    static ModConfigSpec.BooleanValue HONEY_BOTTLE_PLACEMENT;
+    static ModConfigSpec.BooleanValue POTION_BOTTLE_PLACEMENT;
+    static ModConfigSpec.BooleanValue DRAGON_BREATH_BOTTLE_PLACEMENT;
+    static ModConfigSpec.BooleanValue EXPERIENCE_BOTTLE_PLACEMENT;
 
-    public static ModConfigSpec init() {
+    public static ModConfigSpec initConfig() {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
         general(builder);
         bottle(builder);
@@ -55,5 +58,9 @@ public class GeneralConfig {
         EXPERIENCE_BOTTLE_PLACEMENT = builder.define("ExperienceBottle", true);
 
         builder.pop();
+    }
+
+    public static void init() {
+        ConfigRegistry.INSTANCE.register(MOD_ID, ModConfig.Type.COMMON, GeneralConfig.initConfig());
     }
 }

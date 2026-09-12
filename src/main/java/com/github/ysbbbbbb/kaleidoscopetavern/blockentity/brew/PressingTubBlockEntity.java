@@ -2,6 +2,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IPressingTub;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.config.ConfigGetter;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
@@ -48,8 +49,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
 import java.util.function.Supplier;
-
-import static com.github.ysbbbbbb.kaleidoscopetavern.config.GeneralConfig.PRESSING_TUB_DROP_CONTENTS_ON_NON_JUICEABLE;
 
 public class PressingTubBlockEntity extends BaseBlockEntity implements IPressingTub, Container, SidedStorageBlockEntity {
     private final RecipeManager.CachedCheck<SingleRecipeInput, PressingTubRecipe> quickCheck = RecipeManager.createCheck(ModRecipes.PRESSING_TUB_RECIPE);
@@ -160,7 +159,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
                 if (!fluidInTub.isBlank() && !fluidVariant.equals(fluidInTub)) {
                     playFailPressEffect(stack);
                     // 丢出内容物并刷新状态
-                    if (PRESSING_TUB_DROP_CONTENTS_ON_NON_JUICEABLE.get() && this.dropContents()) {
+                    if (ConfigGetter.getPressingTubDropContentsOnNonJuiceable() && this.dropContents()) {
                         this.refresh();
                     }
                     return false;
@@ -198,7 +197,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
             }).orElseGet(() -> {
                 playFailPressEffect(stack);
                 // 没有找到配方，丢出内容物并刷新状态
-                if (PRESSING_TUB_DROP_CONTENTS_ON_NON_JUICEABLE.get() && this.dropContents()) {
+                if (ConfigGetter.getPressingTubDropContentsOnNonJuiceable() && this.dropContents()) {
                     this.refresh();
                 }
                 return false;
