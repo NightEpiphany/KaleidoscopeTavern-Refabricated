@@ -274,7 +274,7 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
         }
         return this.defaultBlockState()
                 .setValue(FACING, clickedFace)
-                .setValue(WATERLOGGED, context.getLevel().isWaterAt(pos));
+                .setValue(WATERLOGGED, context.getLevel().getFluidState(pos).is(Fluids.WATER));
     }
 
     @Override
