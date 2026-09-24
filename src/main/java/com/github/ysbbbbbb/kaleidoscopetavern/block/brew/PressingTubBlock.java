@@ -190,7 +190,7 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
         return this.defaultBlockState()
                 .setValue(FACING, clickedFace)
                 .setValue(TILT, isTilting)
-                .setValue(WATERLOGGED, context.getLevel().isWaterAt(context.getClickedPos()));
+                .setValue(WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).is(Fluids.WATER));
     }
 
     @Override

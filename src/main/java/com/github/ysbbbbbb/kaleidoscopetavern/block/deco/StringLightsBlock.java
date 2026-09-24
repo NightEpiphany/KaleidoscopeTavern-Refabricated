@@ -103,7 +103,7 @@ public class StringLightsBlock extends HorizontalDirectionalBlock implements Sim
         if (clickedFace.getAxis().isVertical()) {
             clickedFace = context.getHorizontalDirection().getOpposite();
         }
-        boolean waterLogged = context.getLevel().isWaterAt(context.getClickedPos());
+        boolean waterLogged = context.getLevel().getFluidState(context.getClickedPos()).is(Fluids.WATER);
         return this.defaultBlockState()
                 .setValue(FACING, clickedFace)
                 .setValue(WATERLOGGED, waterLogged);

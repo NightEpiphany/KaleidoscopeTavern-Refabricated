@@ -174,7 +174,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
             return this.defaultBlockState()
                     .setValue(ROTATION, rotation)
                     .setValue(HALF, Half.BOTTOM)
-                    .setValue(WATERLOGGED, level.isWaterAt(pos));
+                    .setValue(WATERLOGGED, level.getFluidState(pos).is(Fluids.WATER));
         }
         return null;
     }
@@ -183,7 +183,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         BlockPos above = pos.above();
         BlockState blockState = state.setValue(HALF, Half.TOP)
-                .setValue(WATERLOGGED, level.isWaterAt(above));
+                .setValue(WATERLOGGED, level.getFluidState(above).is(Fluids.WATER));
         level.setBlockAndUpdate(above, blockState);
     }
 
