@@ -125,7 +125,7 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock, ITrel
 
         return this.defaultBlockState()
                 .setValue(TYPE, type)
-                .setValue(WATERLOGGED, level.isWaterAt(pos));
+                .setValue(WATERLOGGED, level.getFluidState(pos).is(Fluids.WATER));
     }
 
     @Override

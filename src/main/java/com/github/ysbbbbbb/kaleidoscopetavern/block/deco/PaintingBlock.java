@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -101,7 +102,7 @@ public class PaintingBlock extends HorizontalDirectionalBlock implements SimpleW
             Direction horizontalDirection = context.getHorizontalDirection();
             clickedFace = clickedFace == Direction.UP ? horizontalDirection.getOpposite() : horizontalDirection;
         }
-        boolean waterLogged = context.getLevel().isWaterAt(context.getClickedPos());
+        boolean waterLogged = context.getLevel().getFluidState(context.getClickedPos()).is(FluidTags.WATER);
         return this.defaultBlockState()
                 .setValue(FACING, clickedFace)
                 .setValue(ATTACH_FACE, attachFace)

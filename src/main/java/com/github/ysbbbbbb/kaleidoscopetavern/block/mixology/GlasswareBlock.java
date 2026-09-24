@@ -79,7 +79,7 @@ public class GlasswareBlock extends Block implements SimpleWaterloggedBlock, IMo
     @Override
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        boolean isWaterAt = context.getLevel().isWaterAt(context.getClickedPos());
+        boolean isWaterAt = context.getLevel().getFluidState(context.getClickedPos()).is(Fluids.WATER);
         int rotation = RotationSegment.convertToSegment(context.getRotation());
         return this.defaultBlockState()
                 .setValue(ROTATION, rotation)
