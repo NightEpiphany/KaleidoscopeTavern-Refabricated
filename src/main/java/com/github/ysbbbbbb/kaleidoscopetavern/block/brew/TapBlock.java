@@ -74,18 +74,6 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
     }
 
     @Override
-    public boolean canSurvive(@NotNull BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
-        Direction direction = blockState.getValue(FACING);
-        BlockPos blockPosBase = blockPos.relative(direction.getOpposite());
-        BlockState blockStateBase = levelReader.getBlockState(blockPosBase);
-        return
-                blockStateBase.isFaceSturdy(levelReader, blockPos, direction)
-                        || blockStateBase.getBlock() instanceof AbstractCauldronBlock
-                        || blockStateBase.is(Blocks.DRAGON_WALL_HEAD)
-                        || blockStateBase.is(Blocks.DRAGON_HEAD);
-    }
-
-    @Override
     protected void neighborChanged(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Block block, @Nullable Orientation orientation, boolean isMoving) {
         boolean hasSignal = level.hasNeighborSignal(pos) || level.hasNeighborSignal(pos.above());
         boolean triggered = state.getValue(TRIGGERED);
@@ -249,7 +237,27 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
     }
 
     @Override
-    protected @NonNull BlockState updateShape(@NonNull BlockState blockState, @NonNull LevelReader levelReader, @NonNull ScheduledTickAccess scheduledTickAccess, @NonNull BlockPos blockPos, @NonNull Direction direction, @NonNull BlockPos neighbourPos, @NonNull BlockState neighbourState, @NonNull RandomSource randomSource) {
+    public boolean canSurvive(@NotNull BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
+        Direction direction = blockState.getValue(FACING);
+        BlockPos blockPosBase = blockPos.relative(direction.getOpposite());
+        BlockState blockStateBase = levelReader.getBlockState(blockPosBase);
+        return
+                blockStateBase.isFaceSturdy(levelReader, blockPos, direction)
+                        || blockStateBase.getBlock() instanceof AbstractCauldronBlock
+                        || blockStateBase.is(Blocks.DRAGON_WALL_HEAD)
+                        || blockStateBase.is(Blocks.DRAGON_HEAD);
+    }
+
+    @Override
+    protected @NonNull BlockState updateShape(
+            @NonNull BlockState blockState,
+            @NonNull LevelReader levelReader,
+            @NonNull ScheduledTickAccess scheduledTickAccess,
+            @NonNull BlockPos blockPos,
+            @NonNull Direction direction,
+            @NonNull BlockPos neighbourPos,
+            @NonNull BlockState neighbourState,
+            @NonNull RandomSource randomSource) {
         if (blockState.getValue(WATERLOGGED)) {
             scheduledTickAccess.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
         }
@@ -266,7 +274,7 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
         }
         return this.defaultBlockState()
                 .setValue(FACING, clickedFace)
-                .setValue(WATERLOGGED, context.getLevel().isWaterAt(pos));
+                .setValue(WATERLOGGED, context.getLevel().getFluidState(pos).is(Fluids.WATER));
     }
 
     @Override

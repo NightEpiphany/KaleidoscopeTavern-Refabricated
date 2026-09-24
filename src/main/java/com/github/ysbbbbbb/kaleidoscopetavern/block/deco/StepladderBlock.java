@@ -132,7 +132,7 @@ public class StepladderBlock extends HorizontalDirectionalBlock implements Simpl
             return this.defaultBlockState()
                     .setValue(FACING, context.getHorizontalDirection().getOpposite())
                     .setValue(HALF, Half.BOTTOM)
-                    .setValue(WATERLOGGED, level.isWaterAt(pos));
+                    .setValue(WATERLOGGED, level.getFluidState(pos).is(Fluids.WATER));
         }
         return null;
     }
@@ -141,7 +141,7 @@ public class StepladderBlock extends HorizontalDirectionalBlock implements Simpl
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, @NonNull ItemStack stack) {
         BlockPos above = pos.above();
         BlockState blockState = state.setValue(HALF, Half.TOP)
-                .setValue(WATERLOGGED, level.isWaterAt(above));
+                .setValue(WATERLOGGED, level.getFluidState(above).is(Fluids.WATER));
         level.setBlockAndUpdate(above, blockState);
     }
 
