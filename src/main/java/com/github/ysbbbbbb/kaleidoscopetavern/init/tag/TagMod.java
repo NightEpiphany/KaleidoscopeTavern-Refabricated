@@ -8,6 +8,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 
 public interface TagMod {
     /**
@@ -83,6 +84,10 @@ public interface TagMod {
      */
     TagKey<Item> COCKTAIL_INGREDIENT = itemTag("cocktail_ingredient");
     /**
+     * 标注了这个模组涵盖的所有可流动流体
+     */
+    TagKey<Fluid> JUICE = fluidTag("juice");
+    /**
      * 鸡尾酒原料颜色分类
      */
     TagKey<Item> COCKTAIL_INGREDIENT_BLACK = itemTag("cocktail_ingredient_black");
@@ -112,6 +117,10 @@ public interface TagMod {
 
     static TagKey<Block> blockTag(String name) {
         return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, name));
+    }
+
+    static TagKey<Fluid> fluidTag(String name) {
+        return TagKey.create(Registries.FLUID, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, name));
     }
 
     static TagKey<EntityType<?>> entityTag(String name) {

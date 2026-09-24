@@ -95,7 +95,7 @@ public class PaintingBlock extends HorizontalDirectionalBlock implements SimpleW
             Direction horizontalDirection = context.getHorizontalDirection();
             clickedFace = clickedFace == Direction.UP ? horizontalDirection.getOpposite() : horizontalDirection;
         }
-        boolean waterLogged = context.getLevel().isWaterAt(context.getClickedPos());
+        boolean waterLogged = context.getLevel().getFluidState(context.getClickedPos()).is(Fluids.WATER);
         return this.defaultBlockState()
                 .setValue(FACING, clickedFace)
                 .setValue(ATTACH_FACE, attachFace)
