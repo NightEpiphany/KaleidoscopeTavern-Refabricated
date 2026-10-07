@@ -75,8 +75,9 @@ dependencies {
 	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:base:2.3.15+1.20.1"))
 	//implementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 	modImplementation "maven.modrinth:jade:${project.jade_version}"
-	modCompileOnlyApi("mezz.jei:jei-${project.minecraft_version}-fabric-api:15.20.0.132")
-	modImplementation("mezz.jei:jei-${project.minecraft_version}-fabric:15.20.0.132")
+	modImplementation("mezz.jei:jei-${project.minecraft_version}-fabric:${project.jei_version}")
+	// Mezz config
+	modImplementation "maven.modrinth:7tEfOcA7:SYfAcmwJ"
 	//modCompileOnly "dev.emi:emi-fabric:1.1.24+1.20.1:api"
 	//modCompileOnly "dev.emi:emi-fabric:1.1.24+1.20.1"
 	modCompileOnly "maven.modrinth:emi:${emi_version}"
