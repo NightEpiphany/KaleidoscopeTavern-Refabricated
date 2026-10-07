@@ -1,7 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.ConnectionType;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -10,12 +9,11 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
@@ -26,7 +24,7 @@ public class BarCounterBlock extends HorizontalDirectionalBlock implements IConn
                 .mapColor(MapColor.COLOR_BLACK)
                 .instrument(NoteBlockInstrument.GUITAR)
                 .strength(0.8F)
-                .sound(SoundType.WOOD)
+                .sound(BlockSoundSets.WOOD)
                 .ignitedByLava());
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)

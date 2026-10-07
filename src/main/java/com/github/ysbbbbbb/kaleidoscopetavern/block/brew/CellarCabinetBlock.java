@@ -18,8 +18,8 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -38,7 +38,7 @@ public class CellarCabinetBlock extends AbstractStorageBlock implements SimpleWa
     public CellarCabinetBlock(Properties properties) {
         super(properties.mapColor(MapColor.WOOD)
                 .strength(2.5F)
-                .sound(SoundType.WOOD)
+                .sound(BlockSoundSets.WOOD)
                 .noOcclusion()
                 .ignitedByLava());
         this.registerDefaultState(this.stateDefinition.any()

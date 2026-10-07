@@ -64,7 +64,7 @@ public class BottleBlockItem extends BlockItem {
     }
 
     public static int clampBrewLevel(int brewLevel) {
-        return Mth.clamp(brewLevel, IBarrel.BREWING_NOT_STARTED, IBarrel.BREWING_FINISHED);
+        return Math.clamp(brewLevel, IBarrel.BREWING_NOT_STARTED, IBarrel.BREWING_FINISHED);
     }
 
     public static boolean isValidForShaker(ItemStack stack) {

@@ -4,7 +4,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.entity.ThrownMolotovEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
@@ -17,7 +17,7 @@ public class MolotovBlock extends BottleBlock {
                 .instabreak()
                 .lightLevel(_ -> 14)
                 .pushReaction(PushReaction.POPPED)
-                .sound(SoundType.GLASS));
+                .sound(BlockSoundSets.GLASS));
     }
 
     @Override

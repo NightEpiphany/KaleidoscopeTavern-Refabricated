@@ -8,6 +8,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
@@ -40,7 +41,7 @@ public class PaintingBlock extends HorizontalDirectionalBlock implements SimpleW
                 .mapColor(MapColor.WOOD)
                 .instrument(NoteBlockInstrument.HAT)
                 .strength(0.8F)
-                .sound(SoundType.WOOD)
+                .sound(BlockSoundSets.WOOD)
                 .noOcclusion());
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)

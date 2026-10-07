@@ -13,6 +13,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -43,10 +45,10 @@ public class StringLightsBlock extends HorizontalDirectionalBlock implements Sim
 
     public StringLightsBlock(Properties properties, @Nullable Item dyeItem) {
         super(properties
-                .mapColor(DyeColor.WHITE)
+                .mapColor(MapColor.TERRACOTTA_WHITE)
                 .instrument(NoteBlockInstrument.HAT)
                 .strength(0.8F)
-                .sound(SoundType.CHAIN)
+                .sound(BlockSoundSets.CHAIN)
                 .noCollision()
                 .lightLevel(_ -> 15));
         this.registerDefaultState(this.stateDefinition.any()

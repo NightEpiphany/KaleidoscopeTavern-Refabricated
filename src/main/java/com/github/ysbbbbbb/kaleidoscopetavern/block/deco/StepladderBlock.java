@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
@@ -76,7 +77,7 @@ public class StepladderBlock extends HorizontalDirectionalBlock implements Simpl
                 .mapColor(MapColor.WOOD)
                 .instrument(NoteBlockInstrument.GUITAR)
                 .strength(0.8F)
-                .sound(SoundType.WOOD)
+                .sound(BlockSoundSets.WOOD)
                 .noOcclusion()
                 .ignitedByLava());
         this.registerDefaultState(this.stateDefinition.any()

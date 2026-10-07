@@ -12,7 +12,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -68,7 +68,7 @@ public class SofaBlock extends HorizontalDirectionalBlock implements SimpleWater
                 .mapColor(MapColor.WOOL)
                 .instrument(NoteBlockInstrument.GUITAR)
                 .strength(0.8F)
-                .sound(SoundType.WOOL)
+                .sound(BlockSoundSets.WOOL)
                 .noOcclusion()
                 .ignitedByLava());
         this.registerDefaultState(this.stateDefinition.any()

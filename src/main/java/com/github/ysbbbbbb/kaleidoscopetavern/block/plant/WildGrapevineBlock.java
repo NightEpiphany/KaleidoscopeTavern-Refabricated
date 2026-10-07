@@ -17,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -47,7 +48,7 @@ public class WildGrapevineBlock extends GrowingPlantHeadBlock implements Bonemea
                 .randomTicks()
                 .noCollision()
                 .instabreak()
-                .sound(SoundType.CAVE_VINES)
+                .sound(BlockSoundSets.CAVE_VINES)
                 .pushReaction(PushReaction.POPPED), Direction.DOWN, SHAPE, false, 0.15);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(AGE, 0)

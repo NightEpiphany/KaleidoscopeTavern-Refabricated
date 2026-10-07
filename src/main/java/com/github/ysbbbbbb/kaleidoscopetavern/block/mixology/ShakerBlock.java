@@ -24,6 +24,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -52,7 +53,7 @@ public class ShakerBlock extends Block implements EntityBlock, SimpleWaterlogged
                 .noOcclusion()
                 .instabreak()
                 .pushReaction(PushReaction.POPPED)
-                .sound(SoundType.LANTERN)
+                .sound(BlockSoundSets.LANTERN)
         );
         this.registerDefaultState(
                 this.stateDefinition.any()
@@ -124,10 +125,10 @@ public class ShakerBlock extends Block implements EntityBlock, SimpleWaterlogged
         ItemStack itemInHand = player.getItemInHand(hand);
         // 绌烘墜鍙栦笅
         if (itemInHand.isEmpty() && level instanceof ServerLevel serverLevel) {
-            getDrops(state, serverLevel, pos, shaker)
+            getDrops(state, serverLevel, pos, shaker, player, stack)
                     .forEach(s -> ItemUtils.giveItemToPlayer(player, s));
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_SUPPRESS_DROPS | Block.UPDATE_ALL);
-            level.playSound(null, pos, SoundEvents.LANTERN_BREAK, SoundSource.BLOCKS);
+            level.playSound(null, pos, SoundEvents.LANTERN_BREAK.value(), SoundSource.BLOCKS);
             return InteractionResult.SUCCESS;
         }
 

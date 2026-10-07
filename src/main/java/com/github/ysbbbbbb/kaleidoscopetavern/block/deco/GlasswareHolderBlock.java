@@ -20,6 +20,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -48,7 +49,7 @@ public class GlasswareHolderBlock extends HorizontalDirectionalBlock implements 
         super(properties
                 .mapColor(MapColor.METAL)
                 .strength(0.8F)
-                .sound(SoundType.METAL)
+                .sound(BlockSoundSets.METAL)
                 .lightLevel(_ -> 8)
                 .noOcclusion());
         this.registerDefaultState(this.stateDefinition.any()
@@ -121,7 +122,7 @@ public class GlasswareHolderBlock extends HorizontalDirectionalBlock implements 
             ItemStack extracted = items.extractItem(slot, 1, false);
             player.setItemInHand(InteractionHand.MAIN_HAND, extracted);
             be.refresh();
-            level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_PLACE, SoundSource.BLOCKS);
+            level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_PLACE.value(), SoundSource.BLOCKS);
         }
 
         return InteractionResult.SUCCESS;
@@ -142,7 +143,7 @@ public class GlasswareHolderBlock extends HorizontalDirectionalBlock implements 
                 itemInHand.shrink(1);
             }
             be.refresh();
-            level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_PLACE, SoundSource.BLOCKS);
+            level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_PLACE.value(), SoundSource.BLOCKS);
         }
 
         return InteractionResult.SUCCESS;

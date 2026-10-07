@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.util.RandomSource;
@@ -23,6 +24,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
@@ -63,7 +65,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
                 .mapColor(MapColor.WOOD)
                 .instrument(NoteBlockInstrument.GUITAR)
                 .strength(0.8F)
-                .sound(SoundType.WOOD)
+                .sound(BlockSoundSets.WOOD)
                 .noOcclusion()
                 .ignitedByLava());
         this.registerDefaultState(this.stateDefinition.any()
@@ -107,7 +109,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
                     be.refresh();
                 }
 
-                level.playSound(null, pos, SoundType.GRASS.getPlaceSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.playSound(null, pos, SoundEvents.GRASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
                 if (!player.isCreative()) {
                     player.getItemInHand(hand).shrink(1);
                 }

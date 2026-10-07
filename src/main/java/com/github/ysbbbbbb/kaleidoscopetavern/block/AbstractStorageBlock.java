@@ -27,8 +27,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -57,7 +57,7 @@ public abstract class AbstractStorageBlock extends HorizontalDirectionalBlock im
         super(Properties.of()
                 .mapColor(MapColor.WOOD)
                 .strength(2.5F)
-                .sound(SoundType.WOOD)
+                .sound(BlockSoundSets.WOOD)
                 .noOcclusion()
                 .ignitedByLava());
     }
@@ -153,7 +153,7 @@ public abstract class AbstractStorageBlock extends HorizontalDirectionalBlock im
             items.setStackInSlot(clickedSlot, handItem.split(1));
             storage.refresh();
 
-            level.playSound(null, pos, SoundEvents.STONE_PLACE, SoundSource.BLOCKS);
+            level.playSound(null, pos, SoundEvents.STONE_PLACE.value(), SoundSource.BLOCKS);
             return InteractionResult.SUCCESS;
         }
 

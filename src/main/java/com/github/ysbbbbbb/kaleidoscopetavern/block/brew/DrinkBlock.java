@@ -109,7 +109,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
             }
 
             ItemUtils.giveItemToPlayer(player, removeItem);
-            level.playSound(null, pos, SoundEvents.GLASS_PLACE, SoundSource.BLOCKS);
+            level.playSound(null, pos, SoundEvents.GLASS_PLACE.value(), SoundSource.BLOCKS);
 
             int count = state.getValue(this.countProperty);
             if (count > 1) {

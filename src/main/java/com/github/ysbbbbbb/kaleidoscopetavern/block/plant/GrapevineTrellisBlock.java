@@ -20,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -59,7 +60,7 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
                 .mapColor(MapColor.WOOD)
                 .instrument(NoteBlockInstrument.GUITAR)
                 .strength(0.8F)
-                .sound(SoundType.WOOD)
+                .sound(BlockSoundSets.WOOD)
                 .randomTicks()
                 .noOcclusion()
                 .pushReaction(PushReaction.POPPED)

@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -44,7 +45,7 @@ public class PendantLampBlock extends HorizontalDirectionalBlock implements Simp
         super(properties
                 .mapColor(MapColor.METAL)
                 .strength(0.8F)
-                .sound(SoundType.CHAIN)
+                .sound(BlockSoundSets.CHAIN)
                 .lightLevel(state -> state.getValue(HALF) == DoubleBlockHalf.UPPER ? 0 : 13)
                 .noOcclusion()
                 .noCollision()

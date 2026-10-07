@@ -14,4 +14,4 @@ pluginManagement {
 }
 
 // Title for the project
-rootProject.name = "KT-26.3-fabric"
+rootProject.name = "KT-26.4-fabric"

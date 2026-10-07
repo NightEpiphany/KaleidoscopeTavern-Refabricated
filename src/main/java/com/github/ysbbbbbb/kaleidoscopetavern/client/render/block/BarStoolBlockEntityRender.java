@@ -67,11 +67,11 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
 
     private static float smoothPassengerRotation(float currentRot, float targetRot, float angularVelocity) {
         float velocityAbs = Math.abs(angularVelocity);
-        float smoothFactor = Mth.clamp(MIN_SMOOTH_FACTOR + velocityAbs * SENSITIVITY_SCALE, MIN_SMOOTH_FACTOR, MAX_SMOOTH_FACTOR);
+        float smoothFactor = Math.clamp(MIN_SMOOTH_FACTOR + velocityAbs * SENSITIVITY_SCALE, MIN_SMOOTH_FACTOR, MAX_SMOOTH_FACTOR);
         float lerped = Mth.rotLerp(smoothFactor, currentRot, targetRot);
         float rawStep = Mth.wrapDegrees(lerped - currentRot);
         float maxStep = PASSENGER_MIN_STEP + velocityAbs * PASSENGER_STEP_SCALE;
-        float clampedStep = Mth.clamp(rawStep, -maxStep, maxStep);
+        float clampedStep = Math.clamp(rawStep, -maxStep, maxStep);
         return Mth.wrapDegrees(currentRot + clampedStep);
     }
 

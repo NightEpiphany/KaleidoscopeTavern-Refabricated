@@ -3,6 +3,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.client.render.block;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.SandwichBoardBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.render.renderstate.TextBlockEntityRenderState;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.PortHelper;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.TextAlignment;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
@@ -87,7 +88,7 @@ public abstract class TextBlockEntityRender<T extends TextBlockEntity, M extends
         boolean hasOutline;
         int light;
         if (textBlockRenderState.glowing) {
-            textColor = textBlockRenderState.color.getTextColor();
+            textColor = PortHelper.getTextColor(textBlockRenderState.color);
             hasOutline = this.isOutlineVisible(textBlockRenderState.blockPos, textColor);
             light = 0xf000f0;
         } else {
@@ -137,8 +138,8 @@ public abstract class TextBlockEntityRender<T extends TextBlockEntity, M extends
     }
 
     protected int getDarkColor(DyeColor color, boolean isGlowing) {
-        int textColor = color.getTextColor();
-        if (textColor == DyeColor.BLACK.getTextColor() && isGlowing) {
+        int textColor = PortHelper.getTextColor(color);
+        if (textColor == PortHelper.getTextColor(DyeColor.BLACK) && isGlowing) {
             return 0xff_f0ebcc;
         }
         double darknessFactor = 0.6;
@@ -149,7 +150,7 @@ public abstract class TextBlockEntityRender<T extends TextBlockEntity, M extends
     }
 
     protected boolean isOutlineVisible(BlockPos blockPos, int textColor) {
-        if (textColor == DyeColor.BLACK.getTextColor()) {
+        if (textColor == PortHelper.getTextColor(DyeColor.BLACK)) {
             return true;
         }
         Minecraft mc = Minecraft.getInstance();

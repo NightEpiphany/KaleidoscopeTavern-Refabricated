@@ -5,13 +5,16 @@ import com.github.ysbbbbbb.kaleidoscopetavern.util.PortHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -54,7 +57,7 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
                 .instabreak()
                 .pushReaction(PushReaction.POPPED)
                 .setId(PortHelper.createBlockId(id))
-                .sound(SoundType.GLASS));
+                .sound(BlockSoundSets.GLASS));
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(WATERLOGGED, false));
@@ -70,7 +73,7 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
                 .noOcclusion()
                 .instabreak()
                 .pushReaction(PushReaction.POPPED)
-                .sound(SoundType.GLASS));
+                .sound(BlockSoundSets.GLASS));
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(WATERLOGGED, false));
@@ -91,10 +94,10 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
     protected @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull BlockHitResult blockHitResult) {
         // 如果是空手，那么可以尝试取回
         if (level instanceof ServerLevel serverLevel) {
-            getDrops(state, serverLevel, pos, level.getBlockEntity(pos))
+            getDrops(state, serverLevel, pos, level.getBlockEntity(pos), player, ItemStack.EMPTY)
                     .forEach(stack -> ItemUtils.giveItemToPlayer(player, stack));
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_SUPPRESS_DROPS | Block.UPDATE_ALL);
-            level.playSound(null, pos, SoundType.STONE.getPlaceSound(), player.getSoundSource(), 1.0F, 1.0F);
+            level.playSound(null, pos, SoundEvents.STONE_BREAK, player.getSoundSource(), 1.0F, 1.0F);
         }
         return InteractionResult.SUCCESS;
     }

@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.AttachFace;
@@ -60,7 +61,7 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
         super(properties
                 .mapColor(MapColor.METAL)
                 .strength(0.8F)
-                .sound(SoundType.METAL));
+                .sound(BlockSoundSets.METAL));
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(OPEN, false)

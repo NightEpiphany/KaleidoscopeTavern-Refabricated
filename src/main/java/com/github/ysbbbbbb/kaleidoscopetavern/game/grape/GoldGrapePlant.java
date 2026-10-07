@@ -27,7 +27,7 @@ public final class GoldGrapePlant {
                     .defaultBlockState()
                     .setValue(TrellisBlock.WATERLOGGED, state.getValue(TrellisBlock.WATERLOGGED));
             level.setBlockAndUpdate(pos, plantedState);
-            level.playSound(null, pos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS);
+            level.playSound(null, pos, SoundEvents.CROP_PLANTED.value(), SoundSource.BLOCKS);
             if (!player.isCreative()) {
                 itemInHand.shrink(1);
             }

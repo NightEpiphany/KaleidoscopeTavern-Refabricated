@@ -21,8 +21,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
@@ -227,7 +227,7 @@ public final class ModBlocks {
             .mapColor(MapColor.WOOD)
             .instrument(NoteBlockInstrument.GUITAR)
             .strength(0.8F)
-            .sound(SoundType.WOOD)
+            .sound(BlockSoundSets.WOOD)
             .ignitedByLava());
 
     // 酒

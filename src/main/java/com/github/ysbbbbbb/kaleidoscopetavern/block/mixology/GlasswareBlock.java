@@ -5,6 +5,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -51,21 +53,20 @@ public class GlasswareBlock extends Block implements SimpleWaterloggedBlock, IMo
                 .noOcclusion()
                 .instabreak()
                 .pushReaction(PushReaction.POPPED)
-                .sound(SoundType.GLASS));
+                .sound(BlockSoundSets.GLASS));
     }
 
     @Override
     protected @NotNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
                                                    Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
-        // 濡傛灉鏄┖鎵嬶紝閭ｄ箞鍙互灏濊瘯鍙栧洖
         if (!player.getItemInHand(hand).isEmpty()) {
             return InteractionResult.PASS;
         }
         if (level instanceof ServerLevel serverLevel) {
-            getDrops(state, serverLevel, pos, level.getBlockEntity(pos))
+            getDrops(state, serverLevel, pos, level.getBlockEntity(pos), player, stack)
                     .forEach(s -> ItemUtils.giveItemToPlayer(player, s));
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_SUPPRESS_DROPS | Block.UPDATE_ALL);
-            level.playSound(null, pos, SoundType.STONE.getPlaceSound(), player.getSoundSource(), 1.0F, 1.0F);
+            level.playSound(null, pos, SoundEvents.STONE_PLACE, player.getSoundSource(), 1.0F, 1.0F);
         }
         return InteractionResult.SUCCESS;
     }

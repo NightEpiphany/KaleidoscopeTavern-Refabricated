@@ -43,7 +43,7 @@ public class RenderUtils {
     public static void renderFluid(Fluid fluid, BlockAndTintGetter level, BlockPos pos, PoseStack poseStack, SubmitNodeCollector collector, int light, int size, float y) {
         TextureAtlasSprite sprite = getStillFluidSprite(fluid);
         int color = getFluidColor(level, pos, fluid);
-        renderSurface(poseStack, collector, sprite, color, light, Mth.clamp(size, 1, 16), y);
+        renderSurface(poseStack, collector, sprite, color, light, Math.clamp(size, 1, 16), y);
     }
 
     public static void renderWaterFluid(BlockAndTintGetter level, BlockPos pos, Fluid fluid, PoseStack poseStack, SubmitNodeCollector collector, int light, int size, float y) {

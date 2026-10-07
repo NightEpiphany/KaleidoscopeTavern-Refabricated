@@ -12,7 +12,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -33,7 +32,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -86,13 +84,12 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
 
     private boolean tryIncreaseCount(Block self, BlockState state, Level level, BlockPos pos, ItemStack stack, Player player) {
         if (self instanceof DrinkBlock drink && state.is(self) && drink.tryIncreaseCount(level, pos, state, stack)) {
-            SoundType soundType = state.getSoundType();
-            SoundEvent sound = this.getPlaceSound(state);
-            level.playSound(
+            var soundType = state.getSounds(level);
+            soundType.placeSound().ifPresent(sound -> level.playSound(
                     player, pos, sound, SoundSource.BLOCKS,
-                    (soundType.getVolume() + 1) / 2f,
-                    soundType.getPitch() * 0.8f
-            );
+                    (soundType.volume() + 1) / 2f,
+                    soundType.pitch() * 0.8f
+            ));
             if (!player.isCreative()) {
                 stack.shrink(1);
             }
