@@ -106,7 +106,11 @@ public class BottleBlockItem extends BlockItem {
         ChatFormatting applied = ColorUtils.ITEM_COLOR_CACHE.apply(stack.getItem());
         if (applied != ChatFormatting.RESET) {
             String key = "color.kaleidoscope_tavern.%s".formatted(applied.getName());
-            tooltip.add(Component.translatable(key).withStyle(applied));
+            // 统一为「颜色：X」格式（与 WorldLiquor 新色 tooltip 一致）
+            tooltip.add(
+                Component.translatable("color.kaleidoscope_tavern.prefix").withStyle(ChatFormatting.GRAY)
+                    .append(Component.translatable(key).withStyle(applied))
+            );
         }
         int brewLevel = getBrewLevel(stack);
         if (0 < brewLevel) {
