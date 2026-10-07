@@ -60,7 +60,9 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:21.1.6"
 	modImplementation "maven.modrinth:jade:${project.jade_version}"
-	modCompileOnlyApi("mezz.jei:jei-${project.minecraft_version}-fabric-api:19.27.0.340")
+	modImplementation("mezz.jei:jei-${project.minecraft_version}-fabric:${project.jei_version}")
+	// Mezz config
+	modImplementation "maven.modrinth:7tEfOcA7:Q5Yns1Qe"
 	modCompileOnly "maven.modrinth:emi:${emi_version}"
 	modImplementation "maven.modrinth:5aaWibi9:JagCscwi"
 	modImplementation "maven.modrinth:dragonlib:jxxpeecT"
@@ -70,7 +72,7 @@ dependencies {
 	// REI API for Fabric Loom
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:16.0.799"
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:16.0.799"
-	modRuntimeOnly "maven.modrinth:rei:16.0.799+fabric-fabric,1.21.1"
+	modCompileOnly "maven.modrinth:rei:16.0.799+fabric-fabric,1.21.1"
 	modImplementation files('libs/cardinal-components-base-6.1.0.jar')
 	modImplementation files('libs/cardinal-components-entity-6.1.0.jar')
 	// Fabric API. This is technically optional, but you probably want it anyway.
