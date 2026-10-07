@@ -7,7 +7,7 @@
 ![Fabric](https://img.shields.io/badge/Fabric-1.20.1%20|%201.21.1|%201.21.11|%2026.x-orange) 
 ![License](https://img.shields.io/badge/License-BSD%20|%20CC%20BY--NC--SA%204.0-blue)
 
-*   This is the **unofficial fabric port** for [**Kaleidoscope Tavern mod**](https://modrinth.com/mod/kaleidoscopetavern), currently supports 1.20.1, 1.21.1, 1.21.11, 26.1.2.
+*   This is the **unofficial fabric port** for [**Kaleidoscope Tavern mod**](https://modrinth.com/mod/kaleidoscopetavern), currently supports 1.20.1, 1.21.1, 1.21.11, 26.1.2, 26.2, 26.3, 26.4.
 *   **The official team need to devote their full vigor in forge & neoforge development, so fabric branch will be maintained by the unofficial fans.**
 
 ## Introduction
