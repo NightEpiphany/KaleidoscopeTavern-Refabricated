@@ -23,19 +23,17 @@
 		"jei_mod_plugin": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.jei.ModJeiPlugin"],
 		"rei_client": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.ModREIClientPlugin"],
 		"rei_common": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.ModREICommonPlugin"],
-		"rrv": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.ModRRVPlugin"]
+		"rrv": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.ModRRVCommonPlugin"],
+		"rrv_client": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.ModRRVPlugin"]
 	},
 	"mixins": [
 		"kaleidoscope_tavern.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.18",
+		"fabricloader": ">=0.19.3",
 		"minecraft": "~1.21.11",
 		"java": ">=21",
 		"fabric-api": "*",
 		"forgeconfigapiport": "*"
-	},
-	"suggests": {
-		"jei": "*"
 	}
 }
