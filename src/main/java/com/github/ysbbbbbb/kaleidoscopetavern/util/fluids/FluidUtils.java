@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.base.SingleItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -33,8 +34,7 @@ public class FluidUtils {
         if (bucket.isEmpty() || handler == null) {
             return false;
         }
-        ItemStack copy = bucket.copyWithCount(1);
-        ContainerItemContext context = ContainerItemContext.withConstant(copy);
+        ContainerItemContext context = mutableContext(bucket);
         Storage<FluidVariant> itemStorage = context.find(FluidStorage.ITEM);
         if (itemStorage == null) {
             return false;
@@ -65,12 +65,11 @@ public class FluidUtils {
             transaction.commit();
         }
 
-        ItemVariant resultVariant = context.getItemVariant();
-        ItemStack result = resultVariant.toStack((int) Math.min(Integer.MAX_VALUE, context.getAmount()));
+        ItemStack result = resultStack(context);
         if (!(user instanceof Player player) || !player.isCreative()) {
             bucket.shrink(1);
         }
-        ItemUtils.getItemToLivingEntity(user, onConsumed(result));
+        ItemUtils.getItemToLivingEntity(user, result);
         SoundEvent sound = FluidVariantAttributes.getEmptySound(resource);
         if (sound != null) {
             user.playSound(sound);
@@ -80,10 +79,12 @@ public class FluidUtils {
 
     /**
      * 消耗流体后的 ItemStack
+     * <p>这个方法对于注册了FluidStorage.ITEM的物品会产生返还歧义，故不再使用</p>
      *
      * @param stack 消耗前的 ItemStack
      * @return 消耗后的 ItemStack
      */
+    @Deprecated(forRemoval = true, since = "1.2.0.12")
     public static ItemStack onConsumed(ItemStack stack) {
         if (isFluidContainer(stack) && !stack.is(Items.BUCKET)) {
             return Items.BUCKET.getDefaultInstance();
@@ -106,8 +107,7 @@ public class FluidUtils {
         if (bucket.isEmpty() || handler == null) {
             return false;
         }
-        ItemStack copy = bucket.copyWithCount(1);
-        ContainerItemContext context = ContainerItemContext.withConstant(copy);
+        ContainerItemContext context = mutableContext(bucket);
         Storage<FluidVariant> itemStorage = context.find(FluidStorage.ITEM);
         if (itemStorage == null) {
             return false;
@@ -138,10 +138,11 @@ public class FluidUtils {
             transaction.commit();
         }
 
+        ItemStack result = resultStack(context);
         if (!(user instanceof Player player) || !player.isCreative()) {
             bucket.shrink(1);
         }
-        ItemUtils.getItemToLivingEntity(user, resource.getFluid().getBucket().getDefaultInstance());
+        ItemUtils.getItemToLivingEntity(user, result);
         SoundEvent sound = FluidVariantAttributes.getFillSound(resource);
         if (sound != null) {
             user.playSound(sound);
@@ -158,7 +159,24 @@ public class FluidUtils {
         return context.find(FluidStorage.ITEM) != null;
     }
 
-    private static long toTransferAmount(int milliBuckets) {
+    private static ContainerItemContext mutableContext(ItemStack stack) {
+        SingleItemStorage slot = new SingleItemStorage() {
+            @Override
+            protected long getCapacity(ItemVariant variant) {
+                return 1;
+            }
+        };
+        slot.variant = ItemVariant.of(stack.copyWithCount(1));
+        slot.amount = 1;
+        return ContainerItemContext.ofSingleSlot(slot);
+    }
+
+    private static ItemStack resultStack(ContainerItemContext context) {
+        ItemVariant variant = context.getItemVariant();
+        return variant.isBlank() ? ItemStack.EMPTY : variant.toStack((int) context.getAmount());
+    }
+
+    static long toTransferAmount(int milliBuckets) {
         if (milliBuckets <= 0) {
             return 0;
         }
@@ -183,3 +201,4 @@ public class FluidUtils {
         return 0;
     }
 }
+
