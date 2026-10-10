@@ -1,13 +1,15 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.mixin;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.api.entity.PlayerExtraData;
 import com.github.ysbbbbbb.kaleidoscopetavern.api.event.PlayerTickEvents;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricTrackedDataRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -25,13 +27,16 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerExtraDat
     }
 
     @Unique
+    private static final Identifier PERSISTENT_DATA_ID = Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "persistent_data");
+
+    @Unique
     private static final EntityDataSerializer<CompoundTag> COMPOUND_TAG_SERIALIZER =
             EntityDataSerializer.forValueType(ByteBufCodecs.COMPOUND_TAG);
 
     static {
         // 1.21.11 的 EntityDataSerializers 已移除预定义的 COMPOUND_TAG，必须手动注册，
         // 否则 SynchedEntityData 序列化玩家数据时报 "Unregistered serializer"。
-        EntityDataSerializers.registerSerializer(COMPOUND_TAG_SERIALIZER);
+        FabricTrackedDataRegistry.register(PERSISTENT_DATA_ID, COMPOUND_TAG_SERIALIZER);
     }
 
     @SuppressWarnings("all")
