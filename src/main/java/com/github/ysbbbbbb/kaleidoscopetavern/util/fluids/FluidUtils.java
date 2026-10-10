@@ -84,7 +84,7 @@ public class FluidUtils {
      * @param stack 消耗前的 ItemStack
      * @return 消耗后的 ItemStack
      */
-    @Deprecated(forRemoval = true, since = "1.2.0.12")
+    @Deprecated(forRemoval = true, since = "1.2.0.6")
     public static ItemStack onConsumed(ItemStack stack) {
         if (isFluidContainer(stack) && !stack.is(Items.BUCKET)) {
             return Items.BUCKET.getDefaultInstance();
