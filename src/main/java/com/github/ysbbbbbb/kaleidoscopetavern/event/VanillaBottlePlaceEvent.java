@@ -66,7 +66,7 @@ public class VanillaBottlePlaceEvent {
             be.setPotionStack(stack);
         }
 
-        level.playSound(null, placePos, SoundEvents.GLASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+        SoundEvents.GLASS.placeSound().ifPresent(sound -> level.playSound(null, placePos, sound, SoundSource.BLOCKS, 1.0F, 1.0F));
         if (!player.getAbilities().instabuild) {
             stack.shrink(1);
         }

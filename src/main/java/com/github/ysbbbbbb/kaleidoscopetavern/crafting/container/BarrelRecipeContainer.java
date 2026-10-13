@@ -39,7 +39,7 @@ public class BarrelRecipeContainer implements RecipeInput {
      */
     @Override
     public boolean isEmpty() {
-        return this.fluid.isSame(Fluids.EMPTY) && this.itemsIsEmpty();
+        return this.fluid == Fluids.EMPTY && this.itemsIsEmpty();
     }
 
     public Fluid getFluid() {

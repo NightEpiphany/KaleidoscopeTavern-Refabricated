@@ -47,10 +47,10 @@ public record BarrelRecipe(
         boolean emptyIngredients = effectiveIngredients.isEmpty();
         // 如果全为空
         if (emptyIngredients) {
-            return container.getFluid().isSame(this.fluid) && container.itemsIsEmpty();
+            return container.getFluid() == this.fluid && container.itemsIsEmpty();
         }
         // 否则匹配输入的流体和物品
-        return container.getFluid().isSame(this.fluid)
+        return container.getFluid() == this.fluid
                && container.hasUnitCount(INGREDIENT_UNIT_COUNT)
                && RecipeMatcher.findMatches(nonEmptyInputs, effectiveIngredients) != null;
     }

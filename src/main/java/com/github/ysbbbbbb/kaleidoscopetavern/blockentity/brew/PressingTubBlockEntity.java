@@ -221,14 +221,15 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
      */
     private void playSuccessPressEffect(@Nullable ItemStack stack) {
         if (this.level instanceof ServerLevel serverLevel) {
-            this.level.playSound(null,
-                    worldPosition.getX() + 0.5,
-                    worldPosition.getY() + 0.5,
-                    worldPosition.getZ() + 0.5,
-                    SoundEvents.SLIME_BLOCK_FALL,
-                    SoundSource.BLOCKS,
-                    0.5F + this.level.getRandom().nextFloat(),
-                    this.level.getRandom().nextFloat() * 0.3F + 0.7F);
+            SoundEvents.SLIME_BLOCK.fallSound().ifPresent(sound ->
+                    this.level.playSound(null,
+                            worldPosition.getX() + 0.5,
+                            worldPosition.getY() + 0.5,
+                            worldPosition.getZ() + 0.5,
+                            sound,
+                            SoundSource.BLOCKS,
+                            0.5F + this.level.getRandom().nextFloat(),
+                            this.level.getRandom().nextFloat() * 0.3F + 0.7F));
 
             if (stack == null) {
                 serverLevel.sendParticles(ParticleTypes.RAIN,
@@ -252,14 +253,15 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
      */
     private void playFailPressEffect(@Nullable ItemStack stack) {
         if (this.level instanceof ServerLevel serverLevel) {
-            this.level.playSound(null,
-                    worldPosition.getX() + 0.5,
-                    worldPosition.getY() + 0.5,
-                    worldPosition.getZ() + 0.5,
-                    SoundEvents.WOOD_FALL,
-                    SoundSource.BLOCKS,
-                    0.5F + this.level.getRandom().nextFloat(),
-                    this.level.getRandom().nextFloat() * 0.3F + 0.7F);
+            SoundEvents.WOOD.fallSound().ifPresent(sound ->
+                    this.level.playSound(null,
+                            worldPosition.getX() + 0.5,
+                            worldPosition.getY() + 0.5,
+                            worldPosition.getZ() + 0.5,
+                            sound,
+                            SoundSource.BLOCKS,
+                            0.5F + this.level.getRandom().nextFloat(),
+                            this.level.getRandom().nextFloat() * 0.3F + 0.7F));
 
             if (stack == null) {
                 BlockState state = ModBlocks.PRESSING_TUB.defaultBlockState();
@@ -285,14 +287,15 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
      */
     private void playFinishedPressEffect() {
         if (this.level instanceof ServerLevel serverLevel) {
-            this.level.playSound(null,
-                    worldPosition.getX() + 0.5,
-                    worldPosition.getY() + 0.5,
-                    worldPosition.getZ() + 0.5,
-                    SoundEvents.HONEY_BLOCK_HIT,
-                    SoundSource.BLOCKS,
-                    0.5F + this.level.getRandom().nextFloat(),
-                    this.level.getRandom().nextFloat() * 0.3F + 0.7F);
+            SoundEvents.HONEY_BLOCK.hitSound().ifPresent(sound ->
+                    this.level.playSound(null,
+                            worldPosition.getX() + 0.5,
+                            worldPosition.getY() + 0.5,
+                            worldPosition.getZ() + 0.5,
+                            sound,
+                            SoundSource.BLOCKS,
+                            0.5F + this.level.getRandom().nextFloat(),
+                            this.level.getRandom().nextFloat() * 0.3F + 0.7F));
 
             serverLevel.sendParticles(ParticleTypes.RAIN,
                     worldPosition.getX() + 0.5,

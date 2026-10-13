@@ -108,8 +108,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
                     be.loadAdditional(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), tag));
                     be.refresh();
                 }
-
-                level.playSound(null, pos, SoundEvents.GRASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                SoundEvents.GRASS.placeSound().ifPresent(sound -> level.playSound(null, pos, sound, SoundSource.BLOCKS, 1.0F, 1.0F));
                 if (!player.isCreative()) {
                     player.getItemInHand(hand).shrink(1);
                 }
@@ -202,7 +201,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
 
     @Override
     public @NotNull FluidState getFluidState(BlockState state) {
-        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource() : super.getFluidState(state);
     }
 
     @Override

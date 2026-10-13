@@ -57,7 +57,7 @@ public class BarCabinetBlock extends BaseEntityBlock implements SimpleWaterlogge
 
     @Override
     public @NotNull FluidState getFluidState(BlockState state) {
-        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource() : super.getFluidState(state);
     }
 
     @Override
@@ -81,8 +81,8 @@ public class BarCabinetBlock extends BaseEntityBlock implements SimpleWaterlogge
         if (level.getBlockEntity(pos) instanceof BarCabinetBlockEntity barCabinet
             && this.onClick(barCabinet, player, stack, isLeftSide)) {
             float pitch = stack.isEmpty() ? level.getRandom().nextFloat() * 0.2F + 0.8F : level.getRandom().nextFloat() * 0.2F + 0.2F;
-            level.playSound(null, pos, SoundEvents.GLASS_PLACE, SoundSource.BLOCKS,
-                    level.getRandom().nextFloat() * 0.2F + 0.8F, pitch);
+            SoundEvents.GLASS.placeSound().ifPresent(sound -> level.playSound(null, pos, sound, SoundSource.BLOCKS,
+                    level.getRandom().nextFloat() * 0.2F + 0.8F, pitch));
             return InteractionResult.SUCCESS;
         }
 

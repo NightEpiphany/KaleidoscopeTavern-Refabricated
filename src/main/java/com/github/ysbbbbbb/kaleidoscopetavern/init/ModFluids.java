@@ -26,131 +26,78 @@ import org.jspecify.annotations.NonNull;
 
 public final class ModFluids {
 
-    public static final FlowingFluid GRAPE_JUICE = new JuiceFluid.Still(
-            () -> ModFluids.FLOWING_GRAPE_JUICE,
-            () -> ModFluids.GRAPE_JUICE,
-            () -> ModItems.GRAPE_BUCKET,
-            () -> ModFluids.GRAPE_JUICE_BLOCK
-    );
-    public static final FlowingFluid FLOWING_GRAPE_JUICE = new JuiceFluid.Flowing(
-            () -> ModFluids.FLOWING_GRAPE_JUICE,
-            () -> ModFluids.GRAPE_JUICE,
+    public static final FlowingFluid GRAPE_JUICE = new JuiceFluid(
             () -> ModItems.GRAPE_BUCKET,
             () -> ModFluids.GRAPE_JUICE_BLOCK
     );
     public static final LiquidBlock GRAPE_JUICE_BLOCK = new LiquidBlock(GRAPE_JUICE, BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).setId(PortHelper.createBlockId("grape_juice")));
 
-    public static final FlowingFluid ICE_GRAPE_JUICE = new JuiceFluid.Still(
-            () -> ModFluids.FLOWING_ICE_GRAPE_JUICE,
-            () -> ModFluids.ICE_GRAPE_JUICE,
-            () -> ModItems.ICE_GRAPE_BUCKET,
-            () -> ModFluids.ICE_GRAPE_JUICE_BLOCK
-    );
-    public static final FlowingFluid FLOWING_ICE_GRAPE_JUICE = new JuiceFluid.Flowing(
-            () -> ModFluids.FLOWING_ICE_GRAPE_JUICE,
-            () -> ModFluids.ICE_GRAPE_JUICE,
+    public static final FlowingFluid ICE_GRAPE_JUICE = new JuiceFluid(
             () -> ModItems.ICE_GRAPE_BUCKET,
             () -> ModFluids.ICE_GRAPE_JUICE_BLOCK
     );
     public static final LiquidBlock ICE_GRAPE_JUICE_BLOCK = new LiquidBlock(ICE_GRAPE_JUICE, BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).setId(PortHelper.createBlockId("ice_grape_juice")));
 
-    public static final FlowingFluid GOLD_GRAPE_JUICE = new JuiceFluid.Still(
-            () -> ModFluids.FLOWING_GOLD_GRAPE_JUICE,
-            () -> ModFluids.GOLD_GRAPE_JUICE,
-            () -> ModItems.GOLD_GRAPE_BUCKET,
-            () -> ModFluids.GOLD_GRAPE_JUICE_BLOCK
-    );
-    public static final FlowingFluid FLOWING_GOLD_GRAPE_JUICE = new JuiceFluid.Flowing(
-            () -> ModFluids.FLOWING_GOLD_GRAPE_JUICE,
-            () -> ModFluids.GOLD_GRAPE_JUICE,
+    public static final FlowingFluid GOLD_GRAPE_JUICE = new JuiceFluid(
             () -> ModItems.GOLD_GRAPE_BUCKET,
             () -> ModFluids.GOLD_GRAPE_JUICE_BLOCK
     );
     public static final LiquidBlock GOLD_GRAPE_JUICE_BLOCK = new LiquidBlock(GOLD_GRAPE_JUICE, BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).setId(PortHelper.createBlockId("gold_grape_juice")));
 
-    public static final FlowingFluid GREEN_GRAPE_JUICE = new JuiceFluid.Still(
-            () -> ModFluids.FLOWING_GREEN_GRAPE_JUICE,
-            () -> ModFluids.GREEN_GRAPE_JUICE,
-            () -> ModItems.GREEN_GRAPE_BUCKET,
-            () -> ModFluids.GREEN_GRAPE_JUICE_BLOCK
-    );
-    public static final FlowingFluid FLOWING_GREEN_GRAPE_JUICE = new JuiceFluid.Flowing(
-            () -> ModFluids.FLOWING_GREEN_GRAPE_JUICE,
-            () -> ModFluids.GREEN_GRAPE_JUICE,
+    public static final FlowingFluid GREEN_GRAPE_JUICE = new JuiceFluid(
             () -> ModItems.GREEN_GRAPE_BUCKET,
             () -> ModFluids.GREEN_GRAPE_JUICE_BLOCK
     );
     public static final LiquidBlock GREEN_GRAPE_JUICE_BLOCK = new LiquidBlock(GREEN_GRAPE_JUICE, BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).setId(PortHelper.createBlockId("green_grape_juice")));
 
-    public static final FlowingFluid SWEET_BERRIES_JUICE = new JuiceFluid.Still(
-            () -> ModFluids.FLOWING_SWEET_BERRIES_JUICE,
-            () -> ModFluids.SWEET_BERRIES_JUICE,
-            () -> ModItems.SWEET_BERRIES_BUCKET,
-            () -> ModFluids.SWEET_BERRIES_JUICE_BLOCK
-    );
-    public static final FlowingFluid FLOWING_SWEET_BERRIES_JUICE = new JuiceFluid.Flowing(
-            () -> ModFluids.FLOWING_SWEET_BERRIES_JUICE,
-            () -> ModFluids.SWEET_BERRIES_JUICE,
+    public static final FlowingFluid SWEET_BERRIES_JUICE = new JuiceFluid(
             () -> ModItems.SWEET_BERRIES_BUCKET,
             () -> ModFluids.SWEET_BERRIES_JUICE_BLOCK
     );
     public static final LiquidBlock SWEET_BERRIES_JUICE_BLOCK = new LiquidBlock(SWEET_BERRIES_JUICE, BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).setId(PortHelper.createBlockId("sweet_berries_juice")));
 
-    public static final FlowingFluid GLOW_BERRIES_JUICE = new JuiceFluid.Still(
-            () -> ModFluids.FLOWING_GLOW_BERRIES_JUICE,
-            () -> ModFluids.GLOW_BERRIES_JUICE,
-            () -> ModItems.GLOW_BERRIES_BUCKET,
-            () -> ModFluids.GLOW_BERRIES_JUICE_BLOCK
-    );
-    public static final FlowingFluid FLOWING_GLOW_BERRIES_JUICE = new JuiceFluid.Flowing(
-            () -> ModFluids.FLOWING_GLOW_BERRIES_JUICE,
-            () -> ModFluids.GLOW_BERRIES_JUICE,
+    public static final FlowingFluid GLOW_BERRIES_JUICE = new JuiceFluid(
             () -> ModItems.GLOW_BERRIES_BUCKET,
             () -> ModFluids.GLOW_BERRIES_JUICE_BLOCK
     );
     public static final LiquidBlock GLOW_BERRIES_JUICE_BLOCK = new LiquidBlock(GLOW_BERRIES_JUICE, BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).setId(PortHelper.createBlockId("glow_berries_juice")));
 
     public static void registerFluids() {
-        register("grape_juice", GRAPE_JUICE, FLOWING_GRAPE_JUICE, GRAPE_JUICE_BLOCK);
-        register("ice_grape_juice", ICE_GRAPE_JUICE, FLOWING_ICE_GRAPE_JUICE, ICE_GRAPE_JUICE_BLOCK);
-        register("gold_grape_juice", GOLD_GRAPE_JUICE, FLOWING_GOLD_GRAPE_JUICE, GOLD_GRAPE_JUICE_BLOCK);
-        register("green_grape_juice", GREEN_GRAPE_JUICE, FLOWING_GREEN_GRAPE_JUICE, GREEN_GRAPE_JUICE_BLOCK);
-        register("sweet_berries_juice", SWEET_BERRIES_JUICE, FLOWING_SWEET_BERRIES_JUICE, SWEET_BERRIES_JUICE_BLOCK);
-        register("glow_berries_juice", GLOW_BERRIES_JUICE, FLOWING_GLOW_BERRIES_JUICE, GLOW_BERRIES_JUICE_BLOCK);
+        register("grape_juice", GRAPE_JUICE, GRAPE_JUICE_BLOCK);
+        register("ice_grape_juice", ICE_GRAPE_JUICE, ICE_GRAPE_JUICE_BLOCK);
+        register("gold_grape_juice", GOLD_GRAPE_JUICE, GOLD_GRAPE_JUICE_BLOCK);
+        register("green_grape_juice", GREEN_GRAPE_JUICE, GREEN_GRAPE_JUICE_BLOCK);
+        register("sweet_berries_juice", SWEET_BERRIES_JUICE, SWEET_BERRIES_JUICE_BLOCK);
+        register("glow_berries_juice", GLOW_BERRIES_JUICE, GLOW_BERRIES_JUICE_BLOCK);
     }
 
     @Environment(EnvType.CLIENT)
     public static void registerFluidRenderers() {
-        registerRender(GRAPE_JUICE, FLOWING_GRAPE_JUICE, "block/grape_juice_still", "block/grape_juice_flow", 0xFFFFFFFF);
-        registerRender(ICE_GRAPE_JUICE, FLOWING_ICE_GRAPE_JUICE, "block/ice_grape_juice_still", "block/ice_grape_juice_flow", 0xFFFFFFFF);
-        registerRender(GOLD_GRAPE_JUICE, FLOWING_GOLD_GRAPE_JUICE, "block/gold_grape_juice_still", "block/gold_grape_juice_flow", 0xFFFFFFFF);
-        registerRender(GREEN_GRAPE_JUICE, FLOWING_GREEN_GRAPE_JUICE, "block/green_grape_juice_still", "block/green_grape_juice_flow", 0xFFFFFFFF);
-        registerRender(SWEET_BERRIES_JUICE, FLOWING_SWEET_BERRIES_JUICE, "block/sweet_berries_juice_still", "block/sweet_berries_juice_flow", 0xFFFFFFFF);
-        registerRender(GLOW_BERRIES_JUICE, FLOWING_GLOW_BERRIES_JUICE, "block/glow_berries_juice_still", "block/glow_berries_juice_flow", 0xFFFFFFFF);
+        registerRender(GRAPE_JUICE, "block/grape_juice_still", "block/grape_juice_flow", 0xFFFFFFFF);
+        registerRender(ICE_GRAPE_JUICE, "block/ice_grape_juice_still", "block/ice_grape_juice_flow", 0xFFFFFFFF);
+        registerRender(GOLD_GRAPE_JUICE, "block/gold_grape_juice_still", "block/gold_grape_juice_flow", 0xFFFFFFFF);
+        registerRender(GREEN_GRAPE_JUICE, "block/green_grape_juice_still", "block/green_grape_juice_flow", 0xFFFFFFFF);
+        registerRender(SWEET_BERRIES_JUICE, "block/sweet_berries_juice_still", "block/sweet_berries_juice_flow", 0xFFFFFFFF);
+        registerRender(GLOW_BERRIES_JUICE, "block/glow_berries_juice_still", "block/glow_berries_juice_flow", 0xFFFFFFFF);
     }
 
     public static void init() {
 
     }
 
-    private static void register(String name,
-                                 FlowingFluid still,
-                                 FlowingFluid flowing,
-                                 Block block) {
-        Registry.register(BuiltInRegistries.FLUID, id(name), still);
-        Registry.register(BuiltInRegistries.FLUID, id("flowing_" + name), flowing);
+    private static void register(String name, FlowingFluid fluid, Block block) {
+        Registry.register(BuiltInRegistries.FLUID, id(name), fluid);
         Registry.register(BuiltInRegistries.BLOCK, id(name), block);
     }
 
     @Environment(EnvType.CLIENT)
-    private static void registerRender(Fluid still, Fluid flowing, String stillTexture, String flowTexture, int color) {
+    private static void registerRender(Fluid fluid, String stillTexture, String flowTexture, int color) {
         Identifier stillId = id(stillTexture);
         Identifier flowId = id(flowTexture);
         Material stillMaterial = new Material(stillId);
         Material flowMaterial = new Material(flowId);
-        FluidRenderingRegistry.register(still, flowing, new FluidModel.Unbaked(stillMaterial, flowMaterial, null, null), FluidRenderingRegistry.get(still));
-        registration(still, color);
-        registration(flowing, color);
+        FluidRenderingRegistry.register(fluid, new FluidModel.Unbaked(stillMaterial, flowMaterial, null, null), FluidRenderingRegistry.get(fluid));
+        registration(fluid, color);
     }
 
     @Environment(EnvType.CLIENT)

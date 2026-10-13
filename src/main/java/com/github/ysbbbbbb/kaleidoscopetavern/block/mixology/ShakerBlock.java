@@ -68,7 +68,7 @@ public class ShakerBlock extends Block implements EntityBlock, SimpleWaterlogged
 
     @Override
     public @NotNull FluidState getFluidState(BlockState state) {
-        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource() : super.getFluidState(state);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class ShakerBlock extends Block implements EntityBlock, SimpleWaterlogged
             getDrops(state, serverLevel, pos, shaker, player, stack)
                     .forEach(s -> ItemUtils.giveItemToPlayer(player, s));
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_SUPPRESS_DROPS | Block.UPDATE_ALL);
-            level.playSound(null, pos, SoundEvents.LANTERN_BREAK.value(), SoundSource.BLOCKS);
+            SoundEvents.LANTERN.breakSound().ifPresent(sound -> level.playSound(null, pos, sound.value(), SoundSource.BLOCKS));
             return InteractionResult.SUCCESS;
         }
 

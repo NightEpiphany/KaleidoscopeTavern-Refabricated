@@ -66,7 +66,7 @@ public class GlasswareBlock extends Block implements SimpleWaterloggedBlock, IMo
             getDrops(state, serverLevel, pos, level.getBlockEntity(pos), player, stack)
                     .forEach(s -> ItemUtils.giveItemToPlayer(player, s));
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_SUPPRESS_DROPS | Block.UPDATE_ALL);
-            level.playSound(null, pos, SoundEvents.STONE_PLACE, player.getSoundSource(), 1.0F, 1.0F);
+            SoundEvents.STONE.placeSound().ifPresent(sound -> level.playSound(null, pos, sound, player.getSoundSource(), 1.0F, 1.0F));
         }
         return InteractionResult.SUCCESS;
     }
@@ -110,7 +110,7 @@ public class GlasswareBlock extends Block implements SimpleWaterloggedBlock, IMo
 
     @Override
     public @NotNull FluidState getFluidState(BlockState state) {
-        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource() : super.getFluidState(state);
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.GlasswareHolderBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.neo.ItemStackHandler;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -64,7 +63,7 @@ public class GlasswareHolderBlock extends HorizontalDirectionalBlock implements 
 
     @Override
     public @NotNull FluidState getFluidState(BlockState state) {
-        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource() : super.getFluidState(state);
     }
 
     @Override
@@ -122,7 +121,7 @@ public class GlasswareHolderBlock extends HorizontalDirectionalBlock implements 
             ItemStack extracted = items.extractItem(slot, 1, false);
             player.setItemInHand(InteractionHand.MAIN_HAND, extracted);
             be.refresh();
-            level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_PLACE.value(), SoundSource.BLOCKS);
+            SoundEvents.AMETHYST_BLOCK.placeSound().ifPresent(sound -> level.playSound(null, pos, sound.value(), SoundSource.BLOCKS));
         }
 
         return InteractionResult.SUCCESS;
@@ -143,7 +142,7 @@ public class GlasswareHolderBlock extends HorizontalDirectionalBlock implements 
                 itemInHand.shrink(1);
             }
             be.refresh();
-            level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_PLACE.value(), SoundSource.BLOCKS);
+            SoundEvents.AMETHYST_BLOCK.placeSound().ifPresent(sound -> level.playSound(null, pos, sound.value(), SoundSource.BLOCKS));
         }
 
         return InteractionResult.SUCCESS;

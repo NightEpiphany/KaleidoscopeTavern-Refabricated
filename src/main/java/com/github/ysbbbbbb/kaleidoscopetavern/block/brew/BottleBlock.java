@@ -97,7 +97,7 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
             getDrops(state, serverLevel, pos, level.getBlockEntity(pos), player, ItemStack.EMPTY)
                     .forEach(stack -> ItemUtils.giveItemToPlayer(player, stack));
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_SUPPRESS_DROPS | Block.UPDATE_ALL);
-            level.playSound(null, pos, SoundEvents.STONE_BREAK, player.getSoundSource(), 1.0F, 1.0F);
+            SoundEvents.STONE.breakSound().ifPresent(sound -> level.playSound(null, pos, sound, player.getSoundSource(), 1.0F, 1.0F));
         }
         return InteractionResult.SUCCESS;
     }
@@ -139,7 +139,7 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
 
     @Override
     public @NotNull FluidState getFluidState(BlockState state) {
-        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource() : super.getFluidState(state);
     }
 
     @Override

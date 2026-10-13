@@ -78,8 +78,8 @@ public class ThrownMolotovEntity extends ThrowableProjectile {
             // 播放音效和粒子
             this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
                     SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 2.0F, 1.0F);
-            this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                    SoundEvents.GLASS_BREAK, SoundSource.BLOCKS, 2.0F, 1.0F);
+            SoundEvents.GLASS.breakSound().ifPresent(sound -> this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                    sound, SoundSource.BLOCKS, 2.0F, 1.0F));
 
             if (this.level() instanceof ServerLevel serverLevel) {
                 serverLevel.sendParticles(ParticleTypes.FLAME,
