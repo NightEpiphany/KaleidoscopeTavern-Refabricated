@@ -24,6 +24,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -321,7 +322,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
         }
 
         if (carriedStack.is(Items.BUCKET)) {
-            Item bucketItem = fluidVariant.getFluid().getBucket();
+            Item bucketItem = BuiltInRegistries.ITEM.getValueOrThrow(fluidVariant.getFluid().getBucket());
             if (!bucketItem.getDefaultInstance().isEmpty()) {
                 try (Transaction transaction = Transaction.openOuter()) {
                     long extracted = this.fluid.extract(fluidVariant, IPressingTub.MAX_FLUID_AMOUNT_TRANSFER, transaction);

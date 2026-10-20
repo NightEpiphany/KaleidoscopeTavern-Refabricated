@@ -22,6 +22,7 @@ import me.shedaniel.rei.api.common.display.DisplaySerializer;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryStacks;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
@@ -121,7 +122,9 @@ public class ReiPressingTubRecipeCategory implements DisplayCategory<ReiPressing
             final int finalNeedPressCount = needPressCount;
             Ingredient inputs = recipe.getIngredient();
             EntryIngredient entryStacks = ReiUtil.ofIngredient(inputs, finalNeedPressCount);
-            List<EntryIngredient> outputs = List.of(ReiUtil.ofItem(recipe.getFluid().getBucket()));
+            List<EntryIngredient> outputs = List.of(ReiUtil.ofItem(
+                    BuiltInRegistries.ITEM.getValueOrThrow(recipe.getFluid().getBucket())
+            ));
             registry.add(new PressingTubRecipeDisplay(holder.id().identifier(), Collections.singletonList(entryStacks), outputs, IPressingTub.MAX_FLUID_AMOUNT / holder.value().getFluidAmount()));
         });
     }
@@ -158,7 +161,17 @@ public class ReiPressingTubRecipeCategory implements DisplayCategory<ReiPressing
         }
 
         public PressingTubRecipeDisplay(RecipeHolder<PressingTubRecipe> holder) {
-            this(holder.id().identifier(), List.of(ReiUtil.ofIngredient(holder.value().getIngredient(), (IPressingTub.MAX_FLUID_AMOUNT / holder.value().getFluidAmount()))), List.of(ReiUtil.ofItem(holder.value().getFluid().getBucket())), (IPressingTub.MAX_FLUID_AMOUNT / holder.value().getFluidAmount()));
+            this(
+                    holder.id().identifier(),
+                    List.of(ReiUtil.ofIngredient(
+                            holder.value().getIngredient(),
+                            (IPressingTub.MAX_FLUID_AMOUNT / holder.value().getFluidAmount())
+                    )),
+                    List.of(ReiUtil.ofItem(BuiltInRegistries.ITEM.getValueOrThrow(
+                            holder.value().getFluid().getBucket()
+                    ))),
+                    (IPressingTub.MAX_FLUID_AMOUNT / holder.value().getFluidAmount())
+            );
         }
 
         @Override

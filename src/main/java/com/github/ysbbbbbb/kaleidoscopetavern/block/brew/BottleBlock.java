@@ -1,9 +1,9 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
-import com.github.ysbbbbbb.kaleidoscopetavern.util.PortHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -46,17 +46,17 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
 
     private @Nullable VoxelShape shape;
 
-    public BottleBlock(String id, @Nullable VoxelShape shape) {
+    public BottleBlock(ResourceKey<Block> id, @Nullable VoxelShape shape) {
         this.shape = shape;
         this(id);
     }
 
-    public BottleBlock(String id) {
+    public BottleBlock(ResourceKey<Block> id) {
         super(Properties.of()
                 .noOcclusion()
                 .instabreak()
                 .pushReaction(PushReaction.POPPED)
-                .setId(PortHelper.createBlockId(id))
+                .setId(id)
                 .sound(BlockSoundSets.GLASS));
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)

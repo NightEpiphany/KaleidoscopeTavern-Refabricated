@@ -18,6 +18,7 @@ import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
@@ -77,7 +78,10 @@ public class BarrelRecipeCategory implements IRecipeCategory<RecipeHolder<Barrel
             offsetX += 18;
         }
 
-        ItemStack fluidStack = new ItemStack(recipe.fluid().getBucket(), 4);
+        ItemStack fluidStack = new ItemStack(
+                BuiltInRegistries.ITEM.getValueOrThrow(recipe.fluid().getBucket()),
+                4
+        );
         builder.addSlot(RecipeIngredientRole.INPUT, 10, 9)
                 .add(fluidStack);
 

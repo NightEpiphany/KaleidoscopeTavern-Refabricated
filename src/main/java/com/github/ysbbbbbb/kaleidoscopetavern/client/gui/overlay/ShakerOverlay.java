@@ -10,13 +10,11 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.pipeline.RenderPipelines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.Identifier;
@@ -28,8 +26,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jspecify.annotations.NonNull;
-
-import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class ShakerOverlay implements HudElement {
@@ -43,7 +39,7 @@ public class ShakerOverlay implements HudElement {
     }
 
     @Override
-    public void extractRenderState(@NonNull GuiGraphicsExtractor guiGraphics, @NonNull DeltaTracker deltaTracker) {
+    public void extractRenderState(@NonNull GuiGraphicsExtractor guiGraphics) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.gameMode == null || minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
             return;
@@ -55,7 +51,7 @@ public class ShakerOverlay implements HudElement {
 
         int screenWidth = guiGraphics.guiWidth();
         int screenHeight = guiGraphics.guiHeight();
-        float partialTick = deltaTracker.getGameTimeDeltaPartialTick(false);
+        float partialTick = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false);
         renderShakerBlockTips(guiGraphics, screenWidth, screenHeight, minecraft, player);
         renderShakerProgress(guiGraphics, screenWidth, screenHeight, player, partialTick);
     }

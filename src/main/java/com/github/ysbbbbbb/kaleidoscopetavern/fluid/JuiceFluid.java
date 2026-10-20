@@ -2,8 +2,9 @@ package com.github.ysbbbbbb.kaleidoscopetavern.fluid;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
@@ -12,42 +13,35 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
-import java.util.function.Supplier;
-
 public final class JuiceFluid extends FlowingFluid {
-    private final Supplier<? extends Item> bucket;
-    private final Supplier<? extends Block> block;
+    private final ResourceKey<Block> blockKey;
     private final int tickRate;
     private final int slopeFindDistance;
     private final int dropOff;
     private final float blastResistance;
 
-    public JuiceFluid(Supplier<? extends Item> bucket,
-                      Supplier<? extends Block> block) {
-        this(bucket, block, 5, 4, 1, 100.0F);
+    public JuiceFluid(final Fluid.Properties properties,
+                      ResourceKey<Block> blockKey) {
+        this(properties, blockKey, 5, 4, 1, 100.0F);
     }
 
-    public JuiceFluid(Supplier<? extends Item> bucket,
-                      Supplier<? extends Block> block,
+    public JuiceFluid(final Fluid.Properties properties,
+                      ResourceKey<Block> blockKey,
                       int tickRate,
                       int slopeFindDistance,
                       int dropOff,
                       float blastResistance) {
-        this.bucket = bucket;
-        this.block = block;
+        super(properties);
+        this.blockKey = blockKey;
         this.tickRate = tickRate;
         this.slopeFindDistance = slopeFindDistance;
         this.dropOff = dropOff;
         this.blastResistance = blastResistance;
-    }
-
-    @Override
-    public @NotNull Item getBucket() {
-        return bucket.get();
     }
 
     @Override
@@ -72,7 +66,9 @@ public final class JuiceFluid extends FlowingFluid {
 
     @Override
     public @NotNull BlockState createLegacyBlock(@NonNull FluidState state) {
-        return block.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
+        return BuiltInRegistries.BLOCK.getValueOrThrow(blockKey)
+                .defaultBlockState()
+                .setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
     }
 
     @Override

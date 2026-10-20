@@ -20,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
@@ -99,7 +100,7 @@ public class PressingTubCategory implements IRecipeCategory<RecipeHolder<Pressin
 
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 128, 18)
-                .add(recipe.getFluid().getBucket());
+                .add(BuiltInRegistries.ITEM.getValueOrThrow(recipe.getFluid().getBucket()));
     }
 
 

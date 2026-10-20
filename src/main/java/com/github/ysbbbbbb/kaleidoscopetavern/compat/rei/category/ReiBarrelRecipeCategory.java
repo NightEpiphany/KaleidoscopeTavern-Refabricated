@@ -21,6 +21,7 @@ import me.shedaniel.rei.api.common.display.DisplaySerializer;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryStacks;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -118,7 +119,10 @@ public class ReiBarrelRecipeCategory implements DisplayCategory<ReiBarrelRecipeC
         ReiUtil.INSTANCE.barrelRecipes().forEach(holder -> {
             var recipe = holder.value();
             List<EntryIngredient> inputs = Lists.newArrayList();
-            inputs.addFirst(ReiUtil.ofItemStack(new ItemStack(recipe.fluid().getBucket(), 4)));
+            inputs.addFirst(ReiUtil.ofItemStack(new ItemStack(
+                    BuiltInRegistries.ITEM.getValueOrThrow(recipe.fluid().getBucket()),
+                    4
+            )));
             recipe.ingredients().stream().map(i -> ReiUtil.ofIngredient(i, 16)).forEach(inputs::add);
             EntryIngredient carrier = holder.value().carrier().isEmpty() ? EntryIngredient.empty() : ReiUtil.ofIngredient(holder.value().carrier());
             List<EntryIngredient> outputs = List.of(ReiUtil.ofItemStack(recipe.result().getDefaultInstance().copyWithCount(16)));

@@ -9,6 +9,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.barrel.BarrelViewRecipe
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.pressing_tub.PressingTubViewRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.shaker.ShakerViewRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -30,7 +31,9 @@ public class ModRRVPlugin implements ReliableRecipeViewerClientPlugin {
         ClientRecipeManager.INSTANCE.getRecipesForType(ModRecipes.BARREL_RECIPE).forEach(holder -> {
             var recipe = holder.value();
             List<Ingredient> ingredients = new ArrayList<>();
-            ingredients.addFirst(Ingredient.of(recipe.fluid().getBucket()));
+            ingredients.addFirst(Ingredient.of(
+                    BuiltInRegistries.ITEM.getValueOrThrow(recipe.fluid().getBucket())
+            ));
             ingredients.addAll(recipe.ingredients());
             recipeList.add(new BarrelViewRecipe(holder.id().identifier(), ItemStackTemplate.fromNonEmptyStack(recipe.result().getDefaultInstance()), ingredients, recipe.carrier()));
         });

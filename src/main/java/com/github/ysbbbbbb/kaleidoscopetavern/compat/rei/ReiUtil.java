@@ -9,6 +9,7 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.fabricmc.fabric.api.recipe.v1.sync.SynchronizedRecipes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -55,9 +56,17 @@ public enum ReiUtil {
     }
 
     public static List<EntryIngredient> ofIngredients(List<Ingredient> ingredients, Fluid base) {
-        if (ingredients.size() == 0) return ImmutableList.of(ofItem(base.getBucket(), 4));
+        if (ingredients.size() == 0) {
+            return ImmutableList.of(ofItem(
+                    BuiltInRegistries.ITEM.getValueOrThrow(base.getBucket()),
+                    4
+            ));
+        }
         List<EntryIngredient> result = new ArrayList<>(ingredients.size() + 1);
-        result.addFirst(ofItemStack(new ItemStack(base.getBucket(), 4)));
+        result.addFirst(ofItemStack(new ItemStack(
+                BuiltInRegistries.ITEM.getValueOrThrow(base.getBucket()),
+                4
+        )));
         for (int i = 0; i < ingredients.size(); i++) {
             Ingredient ingredient = ingredients.get(i);
             EntryIngredient entryIngredient = ofIngredient(ingredient, 16);

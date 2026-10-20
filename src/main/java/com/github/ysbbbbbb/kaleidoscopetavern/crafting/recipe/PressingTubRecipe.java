@@ -17,7 +17,9 @@ public class PressingTubRecipe extends SingleItemRecipe {
     private final int fluidAmount;
 
     public PressingTubRecipe(Ingredient ingredient, Fluid fluid, int fluidAmount) {
-        super(new CommonInfo(false), ingredient, new ItemStackTemplate(fluid.getBucket()));
+        super(new CommonInfo(false), ingredient, new ItemStackTemplate(
+                BuiltInRegistries.ITEM.getValueOrThrow(fluid.getBucket())
+        ));
         this.fluid = fluid;
         this.fluidAmount = fluidAmount;
     }

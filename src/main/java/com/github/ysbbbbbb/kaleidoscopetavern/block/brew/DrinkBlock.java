@@ -7,6 +7,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.VoxelShapeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -35,21 +36,22 @@ import org.jspecify.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Objects;
 
 public class DrinkBlock extends BottleBlock implements EntityBlock {
     protected final IntegerProperty countProperty;
     protected final int maxCount;
     protected final EnumMap<Direction, VoxelShape>[] shapes;
-    protected final String id;
+    protected final ResourceKey<Block> id;
 
     @SuppressWarnings("all")
     @Deprecated(forRemoval = true)
-    public DrinkBlock(String id, boolean irregular, int maxCount, VoxelShape... shapes) {
+    public DrinkBlock(ResourceKey<Block> id, boolean irregular, int maxCount, VoxelShape... shapes) {
         this(id, maxCount, shapes);
     }
 
     @SuppressWarnings("unchecked")
-    public DrinkBlock(String id, int maxCount, VoxelShape... shapes) {
+    public DrinkBlock(ResourceKey<Block> id, int maxCount, VoxelShape... shapes) {
         super(id);
         this.id = id;
         this.maxCount = maxCount;
@@ -70,7 +72,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     }
 
     public String getId() {
-        return id;
+        return id.identifier().getPath();
     }
 
     public boolean tryIncreaseCount(Level level, BlockPos pos, BlockState state, ItemStack stack) {
@@ -222,7 +224,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     public static class Builder {
         private int maxCount;
         private VoxelShape[] shapes;
-        private String id = "";
+        private ResourceKey<Block> id;
 
         /**
          * @deprecated 现在通过 Item Tag 来决定了，不应当再使用此方法
@@ -232,7 +234,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
             return this;
         }
 
-        public Builder setId(String id) {
+        public Builder setId(ResourceKey<Block> id) {
             this.id = id;
             return this;
         }
@@ -248,7 +250,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
         }
 
         public Block build() {
-            return new DrinkBlock(id, maxCount, shapes);
+            return new DrinkBlock(Objects.requireNonNull(id, "DrinkBlock id"), maxCount, shapes);
         }
     }
 }

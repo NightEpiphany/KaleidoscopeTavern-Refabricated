@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -14,7 +15,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
@@ -247,7 +247,7 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
         // 判断产物是否是铁桶容器的
         CustomFluidTank fluidTank = pressingTub.getFluid();
         Fluid fluid = fluidTank.getFluid();
-        Item bucket = fluid.getBucket();
+        var bucket = BuiltInRegistries.ITEM.getValueOrThrow(fluid.getBucket());
         if (bucket instanceof BucketItem) {
             FluidVariant variant = fluidTank.getFluidVariant();
             try (Transaction transaction = Transaction.openOuter()) {

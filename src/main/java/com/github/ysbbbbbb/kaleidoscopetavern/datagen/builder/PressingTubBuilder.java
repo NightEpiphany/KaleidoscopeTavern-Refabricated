@@ -4,6 +4,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.serializer.PressingTubRecipeSerializer;
 import net.minecraft.advancements.triggers.Criterion;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -73,7 +74,7 @@ public class PressingTubBuilder implements RecipeBuilder {
     }
 
     public Item getResult() {
-        return this.fluid.getBucket();
+        return BuiltInRegistries.ITEM.getValueOrThrow(this.fluid.getBucket());
     }
 
     @Override
