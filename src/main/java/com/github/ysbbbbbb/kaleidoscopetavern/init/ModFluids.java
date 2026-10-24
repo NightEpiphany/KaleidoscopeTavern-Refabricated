@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.init;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
+import com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.ModRRVFluidItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.fluid.JuiceFluid;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.registery.ids.ModBlockIds;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.registery.ids.ModFluidIds;
@@ -11,6 +12,7 @@ import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderingRegistry;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRenderHandler;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.resources.model.sprite.Material;
@@ -98,6 +100,8 @@ public final class ModFluids {
         register(ModFluidIds.GREEN_GRAPE_JUICE, GREEN_GRAPE_JUICE, ModBlockIds.GREEN_GRAPE_JUICE, GREEN_GRAPE_JUICE_BLOCK);
         register(ModFluidIds.SWEET_BERRIES_JUICE, SWEET_BERRIES_JUICE, ModBlockIds.SWEET_BERRIES_JUICE, SWEET_BERRIES_JUICE_BLOCK);
         register(ModFluidIds.GLOW_BERRIES_JUICE, GLOW_BERRIES_JUICE, ModBlockIds.GLOW_BERRIES_JUICE, GLOW_BERRIES_JUICE_BLOCK);
+        if (FabricLoader.getInstance().isModLoaded("rrv"))
+            ModRRVFluidItems.register();
     }
 
     @Environment(EnvType.CLIENT)

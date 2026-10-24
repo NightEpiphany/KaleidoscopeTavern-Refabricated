@@ -16,6 +16,12 @@ public final class ModItemIds {
     public static final ResourceKey<Item> GREEN_GRAPE_BUCKET = create("green_grape_bucket");
     public static final ResourceKey<Item> SWEET_BERRIES_BUCKET = create("sweet_berries_bucket");
     public static final ResourceKey<Item> GLOW_BERRIES_BUCKET = create("glow_berries_bucket");
+    public static final ResourceKey<Item> GRAPE_JUICE = create("grape_juice");
+    public static final ResourceKey<Item> ICE_GRAPE_JUICE = create("ice_grape_juice");
+    public static final ResourceKey<Item> GOLD_GRAPE_JUICE = create("gold_grape_juice");
+    public static final ResourceKey<Item> GREEN_GRAPE_JUICE = create("green_grape_juice");
+    public static final ResourceKey<Item> SWEET_BERRIES_JUICE = create("sweet_berries_juice");
+    public static final ResourceKey<Item> GLOW_BERRIES_JUICE = create("glow_berries_juice");
 
     private static ResourceKey<Item> create(String name) {
         return ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, name));
