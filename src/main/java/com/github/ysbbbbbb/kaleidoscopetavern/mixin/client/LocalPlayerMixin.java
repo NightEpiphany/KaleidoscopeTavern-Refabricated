@@ -27,12 +27,12 @@ public class LocalPlayerMixin {
     protected Minecraft minecraft;
 
     @ModifyExpressionValue(method = "tickSpinningEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getEffectBlendFactor(Lnet/minecraft/core/Holder;F)F"))
-    private float includeTipsyInSpinningTick(float nauseaIntensity) {
+    private float kaleidoscopeTavern$includeTipsyInSpinningTick(float nauseaIntensity) {
         return Math.max(nauseaIntensity, this.getTipsySpinningIntensity(1.0F));
     }
 
     @ModifyExpressionValue(method = "tickSpinningEffect", at = @At(value = "CONSTANT", args = "floatValue=7.0F"))
-    private float slowTipsySpinningSpeed(float nauseaSpinningSpeed) {
+    private float kaleidoscopeTavern$slowTipsySpinningSpeed(float nauseaSpinningSpeed) {
         LocalPlayer player = this.minecraft.player;
         if (player == null) {
             return nauseaSpinningSpeed;

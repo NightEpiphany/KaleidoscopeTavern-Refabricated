@@ -33,7 +33,7 @@ public class LevelExtractorMixin {
                     target = "Lnet/minecraft/client/player/LocalPlayer;getEffectBlendFactor(Lnet/minecraft/core/Holder;F)F"
             )
     )
-    private float includeTipsyInSpinningRender(
+    private float kaleidoscopeTavern$includeTipsyInSpinningRender(
             float original,
             final Camera camera,
             final DeltaTracker deltaTracker,

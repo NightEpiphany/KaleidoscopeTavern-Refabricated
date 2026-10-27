@@ -91,12 +91,12 @@ public class ArdentHeatEffect extends BaseEffect {
                 }
             } else {
                 // 不穿盔甲时，累计撞击 5 次扣 1 点伤害
-                int count = ((PlayerExtraData) player).kaleidoscope_tavern$getPersistentData() + 1;
+                int count = ((PlayerExtraData) player).kaleidoscopeTavern$getPersistentData() + 1;
                 if (count >= 5) {
                     player.hurt(player.damageSources().generic(), 1.0F);
                     count -= 5;
                 }
-                ((PlayerExtraData) player).kaleidoscope_tavern$setPersistentData(count);
+                ((PlayerExtraData) player).kaleidoscopeTavern$setPersistentData(count);
             }
         }
         return true;

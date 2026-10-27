@@ -29,27 +29,27 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerExtraDat
 
 
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
-    public void defineSyncedData(final SynchedEntityData.Builder entityData, CallbackInfo ci) {
+    public void kaleidoscopeTavern$defineSyncedData(final SynchedEntityData.Builder entityData, CallbackInfo ci) {
         entityData.define(PERSISTENT_DATA, OptionalInt.empty());
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
-    public void tickPre(CallbackInfo ci) {
+    public void kaleidoscopeTavern$tickPre(CallbackInfo ci) {
         PlayerTickEvents.START.invoker().onStartOfPlayerTick((Player) (Object) this);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
-    public void tickPost(CallbackInfo ci) {
+    public void kaleidoscopeTavern$tickPost(CallbackInfo ci) {
         PlayerTickEvents.END.invoker().onEndOfPlayerTick((Player) (Object) this);
     }
 
     @Override
-    public int kaleidoscope_tavern$getPersistentData() {
+    public int kaleidoscopeTavern$getPersistentData() {
         return this.entityData.get(PERSISTENT_DATA).orElse(0);
     }
 
     @Override
-    public void kaleidoscope_tavern$setPersistentData(int compoundTag) {
+    public void kaleidoscopeTavern$setPersistentData(int compoundTag) {
         this.entityData.set(PERSISTENT_DATA, OptionalInt.of(compoundTag));
     }
 }

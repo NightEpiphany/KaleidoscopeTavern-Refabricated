@@ -32,7 +32,7 @@ public class EntityRendererDispatcherMixin {
     private Map<PlayerModelType, AvatarRenderer<AbstractClientPlayer>> playerRenderers = Map.of();
 
     @Inject(method = "onResourceManagerReload", at = @At("TAIL"))
-    private void onResourceManagerReload(ResourceManager resourceManager, CallbackInfo ci) {
+    private void kaleidoscopeTavern$onResourceManagerReload(ResourceManager resourceManager, CallbackInfo ci) {
         for (AvatarRenderer<AbstractClientPlayer> renderer : this.playerRenderers.values()) {
             renderer.addLayer(new StringLightsLayer<>(renderer));
         }

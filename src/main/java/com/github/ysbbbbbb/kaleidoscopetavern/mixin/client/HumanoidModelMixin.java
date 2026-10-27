@@ -29,7 +29,7 @@ public abstract class HumanoidModelMixin {
     public ModelPart leftArm;
 
     @Unique
-    private static float kaleidoscope_tavern$shakeOffset(HumanoidRenderState renderState, HumanoidArm arm) {
+    private static float shakeOffset(HumanoidRenderState renderState, HumanoidArm arm) {
         if (!renderState.isUsingItem || renderState.ticksUsingItem(arm) <= 0.0F) {
             return 0.0F;
         }
@@ -43,8 +43,8 @@ public abstract class HumanoidModelMixin {
     }
 
     @Inject(method = "poseRightArm", at = @At("HEAD"), cancellable = true)
-    private void poseRightArmShaking(HumanoidRenderState state, CallbackInfo ci) {
-        float rot = kaleidoscope_tavern$shakeOffset(state, HumanoidArm.RIGHT);
+    private void kaleidoscopeTavern$poseRightArmShaking(HumanoidRenderState state, CallbackInfo ci) {
+        float rot = shakeOffset(state, HumanoidArm.RIGHT);
         if (rot != 0.0F) {
             this.rightArm.xRot = 1.375F * Mth.PI - Mth.PI * rot;
             this.rightArm.zRot = -Mth.PI * 0.05F;
@@ -53,8 +53,8 @@ public abstract class HumanoidModelMixin {
     }
 
     @Inject(method = "poseLeftArm", at = @At("HEAD"), cancellable = true)
-    private void poseLeftArmShaking(HumanoidRenderState state, CallbackInfo ci) {
-        float rot = kaleidoscope_tavern$shakeOffset(state, HumanoidArm.LEFT);
+    private void kaleidoscopeTavern$poseLeftArmShaking(HumanoidRenderState state, CallbackInfo ci) {
+        float rot = shakeOffset(state, HumanoidArm.LEFT);
         if (rot != 0.0F) {
             this.leftArm.xRot = 1.375F * Mth.PI + Mth.PI * rot;
             this.leftArm.zRot = Mth.PI * 0.05F;

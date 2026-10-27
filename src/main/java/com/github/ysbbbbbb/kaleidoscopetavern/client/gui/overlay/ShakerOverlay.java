@@ -13,8 +13,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiPipeline;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.pipeline.RenderPipelines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.Identifier;
@@ -59,11 +59,11 @@ public class ShakerOverlay implements HudElement {
     private static void renderShakerProgress(GuiGraphicsExtractor guiGraphics, int screenWidth, int screenHeight, LocalPlayer player, float partialTick) {
         int remainingTicks = player.getUseItemRemainingTicks();
         if (remainingTicks > 0 && player.getUseItem().is(ModItems.SHAKER)) {
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, IMG, screenWidth / 2 - 91, screenHeight / 2 + 32,
+            guiGraphics.blit(GuiPipeline.TEXTURED, IMG, screenWidth / 2 - 91, screenHeight / 2 + 32,
                     0, 0, 181, 17, IMG_WIDTH, IMG_HEIGHT);
 
             int offsetX = (int) Math.round((player.getTicksUsingItem() + partialTick) * 1.5);
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, IMG, screenWidth / 2 - 91 + offsetX, screenHeight / 2 + 26,
+            guiGraphics.blit(GuiPipeline.TEXTURED, IMG, screenWidth / 2 - 91 + offsetX, screenHeight / 2 + 26,
                     181, 0, 11, 13, IMG_WIDTH, IMG_HEIGHT);
         }
     }
@@ -108,6 +108,6 @@ public class ShakerOverlay implements HudElement {
     }
 
     private static void renderIcon(GuiGraphicsExtractor guiGraphics, int x, int y, int color) {
-        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, ICON, x, y, 16, 16, color);
+        guiGraphics.blitSprite(GuiPipeline.TEXTURED, ICON, x, y, 16, 16, color);
     }
 }

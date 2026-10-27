@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class HeightWarningDisableMixin {
 
     @Inject(method = "sendBuildLimitMessage", at = @At("HEAD"), cancellable = true)
-    public void disableHeightWarning(boolean isTooHigh, int limit, CallbackInfo ci) {
+    public void kaleidoscopeTavern$disableHeightWarning(boolean isTooHigh, int limit, CallbackInfo ci) {
         ServerPlayer serverPlayer = (ServerPlayer) (Object) this;
         if (serverPlayer.getY() < 319 && limit == 319)
             ci.cancel();

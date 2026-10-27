@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class HumanoidMobRendererMixin {
 
     @Inject(method = "getEquipmentIfRenderable", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/layers/HumanoidArmorLayer;shouldRender(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;)Z", shift = At.Shift.BY, by = -1), cancellable = true)
-    private static void getEquipmentIfRenderable(LivingEntity entity, EquipmentSlot slot, CallbackInfoReturnable<ItemStack> cir, @Local(name = "itemStack") ItemStack itemStack) {
+    private static void kaleidoscopeTavern$getEquipmentIfRenderable(LivingEntity entity, EquipmentSlot slot, CallbackInfoReturnable<ItemStack> cir, @Local(name = "itemStack") ItemStack itemStack) {
         if (itemStack.getItem() instanceof StringLightsBlockItem)
             cir.setReturnValue(itemStack.copy());
     }
