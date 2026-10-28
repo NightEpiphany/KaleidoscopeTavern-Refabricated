@@ -1,9 +1,11 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv;
 
+import cc.cassian.rrv.common.ReliableRecipeViewer;
 import cc.cassian.rrv.common.recipe.item.FluidItem;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.registery.ids.ModItemIds;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -25,7 +27,8 @@ public final class ModRRVFluidItems {
     private static void register(ResourceKey<Item> itemKey, Fluid fluid, Block block) {
         FluidItem.FluidItemProperties properties = new FluidItem.FluidItemProperties()
                 .fluid(fluid)
-                .setItemId(itemKey);
+                .setItemId(itemKey)
+                .modelId(Identifier.fromNamespaceAndPath(ReliableRecipeViewer.MOD_ID, "fluiditem"));
         ModItems.registerItem(itemKey, itemProperties -> new FluidItem(
                 block,
                 (FluidItem.FluidItemProperties) itemProperties
