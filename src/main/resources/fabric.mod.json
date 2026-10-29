@@ -39,7 +39,8 @@
 		"fabric-api": ">=0.165"
 	},
 	"breaks": {
-		"rrv": "<8.0.0"
+		"rrv": "<8.0.0",
+		"kaleidoscope_world_liquor": "<=1.1.13.1"
 	},
 	"suggests": {
 		"forgeconfigapiport": "*",
