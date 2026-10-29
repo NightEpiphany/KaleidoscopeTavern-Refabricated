@@ -1,7 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.plant;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
-import com.github.ysbbbbbb.kaleidoscopetavern.util.event.EventHooks;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.CropHooks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -119,10 +119,10 @@ public class GrapeCropBlock extends Block implements BonemealableBlock, SimpleWa
 
     @Override
     public void randomTick(@NonNull BlockState state, @NonNull ServerLevel level, @NonNull BlockPos pos, RandomSource random) {
-        if (EventHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.probability.getProbability(state, level, pos, random))) {
+        if (CropHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.probability.getProbability(state, level, pos, random))) {
             int nextAge = state.getValue(AGE) + random.nextInt(1, 3);
             level.setBlockAndUpdate(pos, state.setValue(AGE, Math.min(nextAge, MAX_AGE)));
-            EventHooks.onCropsGrowPost(level, pos, state);
+            CropHooks.onCropsGrowPost(level, pos, state);
         }
     }
 

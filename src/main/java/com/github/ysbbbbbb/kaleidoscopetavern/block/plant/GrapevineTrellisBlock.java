@@ -4,7 +4,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.TrellisType;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.tag.TagMod;
-import com.github.ysbbbbbb.kaleidoscopetavern.util.event.EventHooks;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.CropHooks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -122,7 +122,7 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
 
     @Override
     public void randomTick(@NonNull BlockState state, @NonNull ServerLevel level, @NonNull BlockPos pos, RandomSource random) {
-        if (EventHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.probability.getProbability(state, level, pos, random))) {
+        if (CropHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.probability.getProbability(state, level, pos, random))) {
             this.doGrow(level, pos, state);
         }
     }
@@ -200,7 +200,7 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
             // 如果没有达到最大年龄，直接增加年龄
             if (!isMaxAge(state)) {
                 level.setBlockAndUpdate(pos, state.cycle(AGE));
-                EventHooks.onCropsGrowPost(level, pos, state);
+                CropHooks.onCropsGrowPost(level, pos, state);
                 return;
             }
         }
@@ -213,7 +213,7 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
                 if (this.canGrowInto(checkState)) {
                     BlockState growIntoState = this.getGrowIntoState(direction, checkState);
                     level.setBlockAndUpdate(checkPos, growIntoState);
-                    EventHooks.onCropsGrowPost(level, checkPos, checkState);
+                    CropHooks.onCropsGrowPost(level, checkPos, checkState);
                     return;
                 }
             }
@@ -221,12 +221,12 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
             // 如果所有方向都检查完了都不能生长，那么检查下方是否有两格空位，生长葡萄
             if (canGrowGrape(level, pos)) {
                 level.setBlockAndUpdate(pos.below(), this.grapeCrop.get());
-                EventHooks.onCropsGrowPost(level, pos.below(), state);
+                CropHooks.onCropsGrowPost(level, pos.below(), state);
             }
         } else {
             // 其他朝向的，直接加满
             level.setBlockAndUpdate(pos, state.setValue(AGE, MAX_AGE));
-            EventHooks.onCropsGrowPost(level, pos, state);
+            CropHooks.onCropsGrowPost(level, pos, state);
         }
     }
 

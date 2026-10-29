@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.item;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.api.event.CocktailCraftedEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.mixology.SignatureCocktailBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.container.SimpleInput;
 import com.github.ysbbbbbb.kaleidoscopetavern.datamap.data.DrinkEffectData;
@@ -111,6 +112,10 @@ public class ShakerItem extends BlockItem {
         // 如果有产物，并且点击的是空鸡尾酒杯，尝试倒出
         BlockState rawState = level.getBlockState(pos);
         if (hasResult(stack) && rawState.is(ModBlocks.EMPTY_GLASSWARE)) {
+            ItemStack result = getResult(stack);
+            if (!result.isEmpty() && context.getPlayer() instanceof ServerPlayer serverPlayer) {
+                new CocktailCraftedEvent(serverPlayer, result.copy()).post();
+            }
             pourResult(level, stack, pos, rawState);
             return InteractionResult.SUCCESS;
         }

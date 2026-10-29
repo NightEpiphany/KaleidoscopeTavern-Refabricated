@@ -1,10 +1,10 @@
-package com.github.ysbbbbbb.kaleidoscopetavern.api.event;
+package com.github.ysbbbbbb.kaleidoscopetavern.api.event.special;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.world.entity.player.Player;
 
-public class PlayerTickEvents {
+public final class PlayerTickEvent {
     public static final Event<Start> START = EventFactory.createArrayBacked(Start.class, callbacks -> (player) -> {
         for (Start callback : callbacks) {
             callback.onStartOfPlayerTick(player);

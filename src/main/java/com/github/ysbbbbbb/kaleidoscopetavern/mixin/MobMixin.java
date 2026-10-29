@@ -1,7 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.mixin;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.event.LivingChangeTargetEvent;
-import com.github.ysbbbbbb.kaleidoscopetavern.util.event.EventHooks;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -20,7 +19,8 @@ public abstract class MobMixin extends LivingEntity {
 
     @Inject(method = "setTarget", at = @At("HEAD"), cancellable = true)
     public void kaleidoscopeTavern$setTarget(LivingEntity target, CallbackInfo ci) {
-        LivingChangeTargetEvent livingChangeTargetEvent = EventHooks.onLivingChangeTarget(this, target, LivingChangeTargetEvent.LivingTargetType.MOB_TARGET);
-        if (livingChangeTargetEvent.isCanceled()) ci.cancel();
+        LivingChangeTargetEvent event = new LivingChangeTargetEvent(this, target, LivingChangeTargetEvent.LivingTargetType.MOB_TARGET);
+        event.post();
+        if (event.isCanceled()) ci.cancel();
     }
 }

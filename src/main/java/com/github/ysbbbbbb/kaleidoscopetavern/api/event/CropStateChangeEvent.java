@@ -1,12 +1,12 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.api.event;
 
-import com.github.ysbbbbbb.kaleidoscopetavern.util.event.CancellableEvent;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.event.CancellableKTEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class CropStateChangeEvent extends CancellableEvent {
+public abstract class CropStateChangeEvent extends CancellableKTEvent {
     private final LevelAccessor level;
     private final BlockPos pos;
     private final BlockState state;
@@ -27,11 +27,6 @@ public abstract class CropStateChangeEvent extends CancellableEvent {
 
     public LevelAccessor getLevel() {
         return level;
-    }
-
-    @Override
-    public void post() {
-        CALLBACK.invoker().post(this);
     }
 
     public static class Pre extends CropStateChangeEvent {

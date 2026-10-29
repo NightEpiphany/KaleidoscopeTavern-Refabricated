@@ -1,10 +1,9 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.api.event;
 
-import com.github.ysbbbbbb.kaleidoscopetavern.event.ChangeTargetEvent;
-import com.github.ysbbbbbb.kaleidoscopetavern.util.event.CancellableEvent;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.event.CancellableKTEvent;
 import net.minecraft.world.entity.LivingEntity;
 
-public class LivingChangeTargetEvent extends CancellableEvent {
+public class LivingChangeTargetEvent extends CancellableKTEvent {
     private final LivingEntity entity;
     private final ILivingTargetType targetType;
     private final LivingEntity originalTarget;
@@ -37,19 +36,6 @@ public class LivingChangeTargetEvent extends CancellableEvent {
     public LivingEntity getOriginalTarget()
     {
         return originalTarget;
-    }
-
-    public static void register() {
-        CALLBACK.register(event -> {
-            if (event instanceof LivingChangeTargetEvent livingChangeTargetEvent) {
-                ChangeTargetEvent.onTarget(livingChangeTargetEvent);
-            }
-        });
-    }
-
-    @Override
-    public void post() {
-        CALLBACK.invoker().post(this);
     }
 
     public interface ILivingTargetType { }

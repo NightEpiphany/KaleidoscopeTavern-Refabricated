@@ -1,12 +1,12 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.api.event;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.client.event.LeftClickEvent;
-import com.github.ysbbbbbb.kaleidoscopetavern.util.event.CancellableEvent;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.event.CancellableKTEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerLeftClickEvent extends CancellableEvent {
+public class PlayerLeftClickEvent extends CancellableKTEvent {
     private final @Nullable Player player;
     private final InteractionHand hand;
 
@@ -29,10 +29,5 @@ public class PlayerLeftClickEvent extends CancellableEvent {
                 LeftClickEvent.onLeftClickItem(playerLeftClickEvent);
             }
         });
-    }
-
-    @Override
-    public void post() {
-        CALLBACK.invoker().post(this);
     }
 }

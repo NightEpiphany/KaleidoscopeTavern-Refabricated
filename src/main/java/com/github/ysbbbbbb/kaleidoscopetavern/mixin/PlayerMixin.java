@@ -1,7 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.mixin;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.entity.PlayerExtraData;
-import com.github.ysbbbbbb.kaleidoscopetavern.api.event.PlayerTickEvents;
+import com.github.ysbbbbbb.kaleidoscopetavern.api.event.special.PlayerTickEvent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -35,12 +35,12 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerExtraDat
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void kaleidoscopeTavern$tickPre(CallbackInfo ci) {
-        PlayerTickEvents.START.invoker().onStartOfPlayerTick((Player) (Object) this);
+        PlayerTickEvent.START.invoker().onStartOfPlayerTick((Player) (Object) this);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void kaleidoscopeTavern$tickPost(CallbackInfo ci) {
-        PlayerTickEvents.END.invoker().onEndOfPlayerTick((Player) (Object) this);
+        PlayerTickEvent.END.invoker().onEndOfPlayerTick((Player) (Object) this);
     }
 
     @Override

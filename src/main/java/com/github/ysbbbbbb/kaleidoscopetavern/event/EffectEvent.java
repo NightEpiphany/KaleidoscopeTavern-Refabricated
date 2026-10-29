@@ -1,6 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.event;
 
-import com.github.ysbbbbbb.kaleidoscopetavern.api.event.PlayerTickEvents;
+import com.github.ysbbbbbb.kaleidoscopetavern.api.event.special.PlayerTickEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModEffects;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.tag.TagMod;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
@@ -20,7 +20,7 @@ public class EffectEvent {
     public static void register() {
         ServerLivingEntityEvents.ALLOW_DEATH.register(EffectEvent::onLivingDeath);
         ServerLivingEntityEvents.AFTER_DAMAGE.register(EffectEvent::onLivingHurt);
-        PlayerTickEvents.END.register(EffectEvent::playerTicking);
+        PlayerTickEvent.END.register(EffectEvent::playerTicking);
     }
 
     /**
