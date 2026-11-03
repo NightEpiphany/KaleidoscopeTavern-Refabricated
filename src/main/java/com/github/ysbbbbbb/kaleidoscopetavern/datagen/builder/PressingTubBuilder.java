@@ -3,6 +3,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.datagen.builder;
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.serializer.PressingTubRecipeSerializer;
+import com.github.ysbbbbbb.kaleidoscopetavern.datagen.DatagenIngredients;
 import net.minecraft.advancements.triggers.Criterion;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -13,6 +14,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemInstance;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
@@ -25,7 +27,7 @@ import org.jspecify.annotations.NonNull;
 public class PressingTubBuilder implements RecipeBuilder {
     private static final String NAME = "pressing_tub";
 
-    private Ingredient ingredient = Ingredient.of();
+    private Ingredient ingredient = Ingredient.of(Items.AIR);
     private Fluid fluid = Fluids.WATER;
     private int fluidAmount = PressingTubRecipeSerializer.DEFAULT_FLUID_AMOUNT;
 
@@ -39,7 +41,7 @@ public class PressingTubBuilder implements RecipeBuilder {
     }
 
     public PressingTubBuilder setIngredient(TagKey<Item> itemLike) {
-        this.ingredient = Ingredient.of();
+        this.ingredient = DatagenIngredients.tag(itemLike);
         return this;
     }
 

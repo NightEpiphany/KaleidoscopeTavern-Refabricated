@@ -2,6 +2,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.datagen.builder;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.serializer.BarrelRecipeSerializer;
+import com.github.ysbbbbbb.kaleidoscopetavern.datagen.DatagenIngredients;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.google.common.collect.Lists;
 import net.minecraft.advancements.triggers.Criterion;
@@ -15,6 +16,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
@@ -29,7 +31,7 @@ import java.util.List;
 public class BarrelBuilder implements RecipeBuilder {
     private static final String NAME = "barrel";
 
-    private final List<Ingredient> ingredients = Lists.newArrayList();
+    private List<Ingredient> ingredients = Lists.newArrayList();
 
     private Fluid fluid = Fluids.WATER;
     private Ingredient carrier = Ingredient.of(ModItems.EMPTY_BOTTLE);
@@ -45,7 +47,7 @@ public class BarrelBuilder implements RecipeBuilder {
     }
 
     public BarrelBuilder addIngredient(TagKey<Item> tag) {
-        this.ingredients.add(Ingredient.of());
+        this.ingredients = List.of(DatagenIngredients.tag(tag));
         return this;
     }
 
@@ -65,7 +67,7 @@ public class BarrelBuilder implements RecipeBuilder {
     }
 
     public BarrelBuilder setCarrier(TagKey<Item> tag) {
-        this.carrier = Ingredient.of();
+        this.carrier = DatagenIngredients.tag(tag);
         return this;
     }
 
@@ -118,7 +120,7 @@ public class BarrelBuilder implements RecipeBuilder {
 
 
     public void save(RecipeOutput recipeOutput, Identifier id) {
-        NonNullList<Ingredient> nullList = NonNullList.withSize(BarrelRecipeSerializer.MAX_INGREDIENTS, Ingredient.of());
+        NonNullList<Ingredient> nullList = NonNullList.withSize(BarrelRecipeSerializer.MAX_INGREDIENTS, Ingredient.of(Items.AIR));
         int size = Math.min(this.ingredients.size(), BarrelRecipeSerializer.MAX_INGREDIENTS);
         for (int i = 0; i < size; i++) {
             nullList.set(i, this.ingredients.get(i));

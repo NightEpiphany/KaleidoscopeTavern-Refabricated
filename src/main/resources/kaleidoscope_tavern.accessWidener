@@ -6,3 +6,4 @@ accessible field net/minecraft/world/item/component/ItemContainerContents items 
 accessible method net/minecraft/world/entity/monster/zombie/ZombieVillager startConverting (Ljava/util/UUID;I)V
 accessible method net/minecraft/client/particle/DripParticle <init> (Lnet/minecraft/client/multiplayer/ClientLevel;DDDLnet/minecraft/world/level/material/Fluid;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;)V
 accessible field net/minecraft/client/resources/model/ModelManager atlasManager Lnet/minecraft/client/resources/model/sprite/AtlasManager;
+accessible method net/minecraft/resources/RegistryOps <init> (Lcom/mojang/serialization/DynamicOps;Lnet/minecraft/resources/RegistryOps$RegistryInfoLookup;)V
