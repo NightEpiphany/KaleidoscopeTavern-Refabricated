@@ -40,7 +40,11 @@ public class GlasswareBlock extends Block implements SimpleWaterloggedBlock, IMo
     public static final VoxelShape SHAPE = Block.box(4, 0, 4, 12, 10, 12);
 
     public GlasswareBlock(Properties properties) {
-        super(properties);
+        super(properties
+                .noOcclusion()
+                .instabreak()
+                .pushReaction(PushReaction.POPPED)
+                .sound(SoundType.GLASS));
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(ROTATION, 0)
                 .setValue(WATERLOGGED, false));
