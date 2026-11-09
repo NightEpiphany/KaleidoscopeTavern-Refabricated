@@ -9,6 +9,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -100,6 +101,10 @@ public class BarrelBlock extends BaseEntityBlock implements SimpleWaterloggedBlo
         }
         BarrelBlockEntity barrelEntity = getBarrelEntity(level, pos, state);
         if (barrelEntity == null) {
+            return InteractionResult.PASS;
+        }
+        // 点击桶身时优先放置方块，避免状态查询拦截水龙头等方块物品。
+        if (!isCeiling(state) && player.getMainHandItem().getItem() instanceof BlockItem) {
             return InteractionResult.PASS;
         }
         // 只有顶层可以交互
