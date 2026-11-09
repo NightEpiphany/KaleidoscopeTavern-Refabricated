@@ -116,8 +116,10 @@ public class ShakerItem extends BlockItem {
             pourResult(level, stack, pos, rawState);
             return InteractionResult.SUCCESS;
         }
-
-        return super.useOn(context);
+        var player = context.getPlayer();
+        if (player != null && player.isSecondaryUseActive())
+            return super.useOn(context);
+        else return InteractionResult.CONSUME;
     }
 
     /**
