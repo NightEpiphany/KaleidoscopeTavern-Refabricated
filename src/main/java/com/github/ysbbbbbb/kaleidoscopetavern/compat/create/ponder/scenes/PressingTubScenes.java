@@ -206,7 +206,7 @@ public class PressingTubScenes {
 
         scene.world().modifyEntity(slime, (e) -> {
             e.lerpMotion(new Vec3(e.getX(), e.getY(), e.getZ()));
-            e.lerpHeadTo(0, 6);
+            e.lerpHeadTo(0);
         });
         scene.idle(6);
 
@@ -238,7 +238,7 @@ public class PressingTubScenes {
 
         scene.world().modifyEntity(slime, (e) -> {
             e.lerpMotion(new Vec3(e.getX(), e.getY(), e.getZ()));
-            e.lerpHeadTo(180, 6);
+            e.lerpHeadTo(180);
         });
         scene.idle(6);
 
@@ -315,7 +315,7 @@ public class PressingTubScenes {
 
         scene.world().modifyEntity(slime, (e) -> {
             e.lerpMotion(new Vec3(e.getX(), e.getY(), e.getZ()));
-            e.lerpHeadTo(150, 6);
+            e.lerpHeadTo(150);
         });
 
         scene.idle(25);
@@ -410,7 +410,7 @@ public class PressingTubScenes {
         scene.idle(1);
         scene.world().modifyEntity(slime, (e) -> {
             e.lerpMotion(new Vec3(e.getX(), e.getY(), e.getZ()));
-            e.lerpHeadTo(180, 6);
+            e.lerpHeadTo(180);
         });
         scene.idle(6);
         speed.set(0D);
@@ -442,7 +442,7 @@ public class PressingTubScenes {
         scene.idle(1);
         scene.world().modifyEntity(slime, (e) -> {
             e.lerpMotion(new Vec3(e.getX(), e.getY(), e.getZ()));
-            e.lerpHeadTo(0, 6);
+            e.lerpHeadTo(0);
         });
         scene.idle(6);
         scene.idle(20);
@@ -496,7 +496,7 @@ public class PressingTubScenes {
         scene.idle(1);
         scene.world().modifyEntity(slime, (e) -> {
             e.lerpMotion(new Vec3(e.getX(), e.getY(), e.getZ()));
-            e.lerpHeadTo(180, 6);
+            e.lerpHeadTo(180);
         });
         scene.idle(6);
         speed.set(0D);
