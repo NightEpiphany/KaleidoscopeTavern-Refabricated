@@ -25,6 +25,7 @@
     "client.LeftClickMixin",
     "client.LevelExtractorMixin",
     "client.LocalPlayerMixin",
+    "client.ModelBakeryMixin",
     "client.PlayerRendererMixin"
   ]
 }

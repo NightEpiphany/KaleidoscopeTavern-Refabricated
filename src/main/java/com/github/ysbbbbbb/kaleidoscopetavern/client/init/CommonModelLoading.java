@@ -4,9 +4,6 @@ import com.github.ysbbbbbb.kaleidoscopetavern.api.client.IModelModifyRotationAft
 import com.github.ysbbbbbb.kaleidoscopetavern.client.model.baked.RotatedBlockStateModel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
-import net.fabricmc.fabric.api.client.model.loading.v1.ModelModifier;
-import net.fabricmc.fabric.api.client.model.loading.v1.ModelModifier.AfterBakeBlock;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -17,13 +14,7 @@ public final class CommonModelLoading {
     private CommonModelLoading() {
     }
 
-    public static void init() {
-        ModelLoadingPlugin.register(context -> context.modifyBlockModelAfterBake()
-                .register(ModelModifier.WRAP_PHASE, CommonModelLoading::wrapModel));
-    }
-
-    private static BlockStateModel wrapModel(BlockStateModel model, AfterBakeBlock.Context context) {
-        BlockState state = context.state();
+    public static BlockStateModel wrapModel(BlockStateModel model, BlockState state) {
         if (!(state.getBlock() instanceof IModelModifyRotationAfterBake<?> rotationAfterBake)) {
             return model;
         }

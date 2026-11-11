@@ -2,18 +2,12 @@ package com.github.ysbbbbbb.kaleidoscopetavern.client.model.baked;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.model.loading.v1.wrapper.WrapperBlockStateModel;
-import net.fabricmc.fabric.api.client.renderer.v1.mesh.MutableQuadView;
-import net.fabricmc.fabric.api.client.renderer.v1.mesh.QuadEmitter;
-import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.resources.model.sprite.Material;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -21,53 +15,54 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Map;
 
 @Environment(EnvType.CLIENT)
-public final class RotatedBlockStateModel extends WrapperBlockStateModel {
+public final class RotatedBlockStateModel implements BlockStateModel {
     private static final double SEGMENT_RADIANS = Math.PI * 2.0D / 16.0D;
-    private final int rotation;
+    private static final Direction[] DIRECTIONS = Direction.values();
+    private final BlockStateModel wrapped;
+    private final Map<BlockStateModelPart, BlockStateModelPart> rotatedParts = new IdentityHashMap<>(4);
     private final double sin;
     private final double cos;
     private final Matrix4f normalTransform;
 
     public RotatedBlockStateModel(BlockStateModel wrapped, int rotation) {
-        super(wrapped);
-        this.rotation = rotation;
+        this.wrapped = wrapped;
         double radians = rotation * SEGMENT_RADIANS;
         this.sin = Math.sin(radians);
         this.cos = Math.cos(radians);
-        this.normalTransform = new Matrix4f().rotateY((float) radians);
+        this.normalTransform = new Matrix4f().rotateY((float) -radians);
     }
 
     @Override
     public void collectParts(@NonNull RandomSource randomSource, @NonNull List<BlockStateModelPart> parts) {
-        List<BlockStateModelPart> wrappedParts = new ArrayList<>();
-        this.wrapped.collectParts(randomSource, wrappedParts);
-        for (BlockStateModelPart part : wrappedParts) {
-            parts.add(new RotatedPart(part));
+        int firstPart = parts.size();
+        this.wrapped.collectParts(randomSource, parts);
+        // Chunk workers share baked models, so publish each rotated part under the same lock.
+        synchronized (this.rotatedParts) {
+            for (int index = firstPart; index < parts.size(); index++) {
+                BlockStateModelPart part = parts.get(index);
+                BlockStateModelPart rotatedPart = this.rotatedParts.get(part);
+                if (rotatedPart == null) {
+                    rotatedPart = new RotatedPart(part);
+                    this.rotatedParts.put(part, rotatedPart);
+                }
+                parts.set(index, rotatedPart);
+            }
         }
     }
 
     @Override
-    public void emitQuads(@NonNull QuadEmitter emitter, @NonNull BlockAndTintGetter level, @NonNull BlockPos pos,
-                          @NonNull BlockState state, @NonNull RandomSource random,
-                          @NonNull Predicate<@Nullable Direction> cullTest) {
-        emitter.pushTransform(this::rotateQuad);
-        try {
-            this.wrapped.emitQuads(emitter, level, pos, state, random, direction -> false);
-        } finally {
-            emitter.popTransform();
-        }
+    public Material.@NonNull Baked particleMaterial() {
+        return this.wrapped.particleMaterial();
     }
 
     @Override
-    @Nullable
-    public Object createGeometryKey(@NonNull BlockAndTintGetter level, @NonNull BlockPos pos,
-                                    @NonNull BlockState state, @NonNull RandomSource random) {
-        Object wrappedKey = this.wrapped.createGeometryKey(level, pos, state, random);
-        return wrappedKey == null ? null : new GeometryKey(wrappedKey, this.rotation);
+    public int materialFlags() {
+        return this.wrapped.materialFlags();
     }
 
     private BakedQuad rotateQuad(BakedQuad quad) {
@@ -86,30 +81,6 @@ public final class RotatedBlockStateModel extends WrapperBlockStateModel {
         );
     }
 
-    private boolean rotateQuad(MutableQuadView quad) {
-        for (int vertex = 0; vertex < BakedQuad.VERTEX_COUNT; vertex++) {
-            double centeredX = quad.x(vertex) - 0.5D;
-            double centeredZ = quad.z(vertex) - 0.5D;
-            quad.pos(vertex,
-                    (float) (centeredX * this.cos - centeredZ * this.sin + 0.5D),
-                    quad.y(vertex),
-                    (float) (centeredX * this.sin + centeredZ * this.cos + 0.5D));
-
-            if (quad.hasNormal(vertex)) {
-                float normalX = quad.normalX(vertex);
-                float normalZ = quad.normalZ(vertex);
-                quad.normal(vertex,
-                        (float) (normalX * this.cos - normalZ * this.sin),
-                        quad.normalY(vertex),
-                        (float) (normalX * this.sin + normalZ * this.cos));
-            }
-        }
-
-        quad.cullFace(null);
-        quad.nominalFace(null);
-        return true;
-    }
-
     private Vector3fc rotatePosition(Vector3fc source) {
         double centeredX = source.x() - 0.5D;
         double centeredZ = source.z() - 0.5D;
@@ -120,32 +91,31 @@ public final class RotatedBlockStateModel extends WrapperBlockStateModel {
         );
     }
 
-    private record GeometryKey(Object wrappedKey, int rotation) {
-    }
-
     private final class RotatedPart implements BlockStateModelPart {
         private final BlockStateModelPart wrappedPart;
-        private @Nullable List<BakedQuad> quads;
+        private final List<BakedQuad> quads;
 
         private RotatedPart(BlockStateModelPart wrappedPart) {
             this.wrappedPart = wrappedPart;
+            this.quads = bakeQuads();
         }
 
         @Override
         public @NonNull List<BakedQuad> getQuads(@Nullable Direction direction) {
-            if (direction != null) {
-                return List.of();
-            }
-            if (this.quads == null) {
-                this.quads = bakeQuads();
-            }
-            return this.quads;
+            return direction == null ? this.quads : List.of();
         }
 
         private List<BakedQuad> bakeQuads() {
-            List<BakedQuad> rotated = new ArrayList<>();
-            addRotated(rotated, this.wrappedPart.getQuads(null));
-            for (Direction direction : Direction.values()) {
+            List<BakedQuad> unculled = this.wrappedPart.getQuads(null);
+            int capacity = unculled.size();
+            for (Direction direction : DIRECTIONS) {
+                capacity += this.wrappedPart.getQuads(direction).size();
+            }
+
+            List<BakedQuad> rotated = new ArrayList<>(capacity);
+            // Arbitrary rotations invalidate axis-aligned cull faces.
+            addRotated(rotated, unculled);
+            for (Direction direction : DIRECTIONS) {
                 addRotated(rotated, this.wrappedPart.getQuads(direction));
             }
             return List.copyOf(rotated);

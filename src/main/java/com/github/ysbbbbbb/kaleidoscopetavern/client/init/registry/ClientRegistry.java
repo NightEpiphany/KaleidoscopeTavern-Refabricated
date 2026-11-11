@@ -3,7 +3,6 @@ package com.github.ysbbbbbb.kaleidoscopetavern.client.init.registry;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.animation.ShakerAnimation;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.gui.overlay.ShakerOverlay;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ClientSetupEvent;
-import com.github.ysbbbbbb.kaleidoscopetavern.client.init.CommonModelLoading;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModParticleFactoryRegistry;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.render.misc.PotionBottleColor;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.render.misc.SignatureCocktailColor;
@@ -24,7 +23,6 @@ public final class ClientRegistry {
         ClientSetupEvent.init();
         ModFluids.registerFluidRenderers();
         ModParticleFactoryRegistry.init();
-        CommonModelLoading.init();
         renderType();
         color();
         events();
