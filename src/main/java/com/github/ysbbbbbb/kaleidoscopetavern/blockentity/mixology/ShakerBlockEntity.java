@@ -5,6 +5,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.IHasContainer;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemHandlerHelper;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemStackHandler;
 import net.minecraft.core.BlockPos;
@@ -89,7 +90,7 @@ public class ShakerBlockEntity extends BaseBlockEntity implements IShaker {
             );
         }
 
-        stack.shrink(1);
+        ItemUtils.consume(stack, user, 1);
 
         // 动画
         if (level != null) {

@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -84,9 +85,7 @@ public class StringLightsBlock extends HorizontalDirectionalBlock implements Sim
             level.setBlockAndUpdate(pos, transform);
             level.playSound(null, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS);
             level.levelEvent(player, LevelEvent.PARTICLES_PLANT_GROWTH, pos, 0);
-            if (!player.isCreative()) {
-                player.getItemInHand(hand).shrink(1);
-            }
+            ItemUtils.consume(player.getItemInHand(hand), player, 1);
             return InteractionResult.SUCCESS;
         }
         return super.use(state, level, pos, player, hand, hitResult);

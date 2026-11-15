@@ -270,7 +270,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
             if (user != null) {
                 user.playSound(SoundEvents.ITEM_FRAME_ADD_ITEM);
             }
-            stack.shrink(count - remaining.getCount());
+            ItemUtils.consume(stack, user, count - remaining.getCount());
             return true;
         }
         this.tip(user, "add_ingredient_no_space");

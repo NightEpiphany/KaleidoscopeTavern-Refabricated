@@ -4,6 +4,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.api.event.PlantGrapeEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.TrellisBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.tag.TagMod;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -29,9 +30,7 @@ public class NormalGrapePlant {
                     .setValue(TrellisBlock.WATERLOGGED, state.getValue(TrellisBlock.WATERLOGGED));
             level.setBlockAndUpdate(pos, plantedState);
             level.playSound(null, pos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS);
-            if (!player.isCreative()) {
-                itemInHand.shrink(1);
-            }
+            ItemUtils.consume(itemInHand, player, 1);
             // 不再触发后续事件
             event.setCanceled(true);
         }

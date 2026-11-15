@@ -5,6 +5,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemStackHandler;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 果盆方块实体的接口，定义果盆的核心交互逻辑。
@@ -54,6 +55,13 @@ public interface IPressingTub {
      * </ul>
      */
     boolean addIngredient(ItemStack stack);
+
+    /**
+     * 向果盆内添加待压榨的食材，创造模式玩家不消耗物品；自动化可传入 null。
+     */
+    default boolean addIngredient(@Nullable final LivingEntity target, ItemStack stack) {
+        return addIngredient(stack);
+    }
 
     /**
      * 从果盆内取回未压榨完毕的食材，成功返回 {@code true}，失败返回 {@code false}。

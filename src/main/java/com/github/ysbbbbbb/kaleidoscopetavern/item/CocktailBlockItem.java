@@ -84,9 +84,7 @@ public class CocktailBlockItem extends GlasswareBlockItem implements IHasContain
             serverPlayer.awardStat(Stats.ITEM_USED.get(this));
         }
         this.addDrinkEffect(stack, level, entity);
-        if (entity instanceof Player player && !player.isCreative()) {
-            stack.shrink(1);
-        }
+        com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils.consume(stack, entity, 1);
         return returnContainerToEntity(stack, level, entity);
     }
 

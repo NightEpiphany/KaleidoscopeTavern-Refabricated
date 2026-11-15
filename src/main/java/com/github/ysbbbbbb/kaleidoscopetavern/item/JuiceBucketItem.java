@@ -36,9 +36,7 @@ public class JuiceBucketItem extends BucketItem implements IHasContainer {
             serverPlayer.awardStat(Stats.ITEM_USED.get(this));
         }
 
-        if (entity instanceof Player player && !player.isCreative()) {
-            stack.shrink(1);
-        }
+        com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils.consume(stack, entity, 1);
 
         return returnContainerToEntity(stack, level, entity);
     }

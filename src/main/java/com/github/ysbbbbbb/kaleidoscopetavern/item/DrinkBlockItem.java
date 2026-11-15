@@ -90,9 +90,7 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
                     (soundType.getVolume() + 1) / 2f,
                     soundType.getPitch() * 0.8f
             );
-            if (!player.isCreative()) {
-                stack.shrink(1);
-            }
+            com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils.consume(stack, player, 1);
             return true;
         }
         return false;
@@ -130,9 +128,7 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
             serverPlayer.awardStat(Stats.ITEM_USED.get(this));
         }
         this.addDrinkEffect(stack, level, entity);
-        if (entity instanceof Player player && !player.isCreative()) {
-            stack.shrink(1);
-        }
+        com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils.consume(stack, entity, 1);
         return returnContainerToEntity(stack, level, entity);
     }
 

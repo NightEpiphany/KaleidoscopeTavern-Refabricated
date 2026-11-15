@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.event;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PotionBottleBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -68,9 +69,7 @@ public class VanillaBottlePlaceEvent {
         }
 
         level.playSound(null, placePos, SoundEvents.GLASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
-        if (!player.getAbilities().instabuild) {
-            stack.shrink(1);
-        }
+        ItemUtils.consume(stack, player, 1);
         return InteractionResult.CONSUME;
     }
 

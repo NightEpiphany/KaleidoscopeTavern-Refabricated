@@ -2,6 +2,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.GlasswareHolderBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemStackHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -108,9 +109,7 @@ public class GlasswareHolderBlock extends HorizontalDirectionalBlock implements 
         ItemStack itemInHand = player.getMainHandItem();
         if (!level.isClientSide()) {
             items.setStackInSlot(slot, itemInHand.copyWithCount(1));
-            if (!player.getAbilities().instabuild) {
-                itemInHand.shrink(1);
-            }
+            ItemUtils.consume(itemInHand, player, 1);
             be.refresh();
             level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_PLACE, SoundSource.BLOCKS);
         }

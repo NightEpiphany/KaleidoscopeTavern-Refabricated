@@ -2,6 +2,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.message.TextOpenS2CMessage;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.TextAlignment;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
 
@@ -53,6 +55,7 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
         super(entityType, pos, state);
     }
 
+    @SuppressWarnings("unused")
     public static void tick(Level level, BlockPos pos, BlockState state, TextBlockEntity be) {
         UUID uuid = be.getPlayerWhoMayEdit();
         if (uuid != null && be.playerIsTooFarAwayToEdit(uuid)) {
@@ -83,9 +86,7 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
                 textBlock.setColor(newColor);
                 textBlock.refresh();
                 level.playSound(null, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS);
-                if (!player.isCreative()) {
-                    itemInHand.shrink(1);
-                }
+                ItemUtils.consume(itemInHand, player, 1);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -96,9 +97,7 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
                 textBlock.setGlowing(true);
                 textBlock.refresh();
                 level.playSound(null, pos, SoundEvents.GLOW_INK_SAC_USE, SoundSource.BLOCKS);
-                if (!player.isCreative()) {
-                    itemInHand.shrink(1);
-                }
+                ItemUtils.consume(itemInHand, player, 1);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -109,9 +108,7 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
                 textBlock.setGlowing(false);
                 textBlock.refresh();
                 level.playSound(null, pos, SoundEvents.INK_SAC_USE, SoundSource.BLOCKS);
-                if (!player.isCreative()) {
-                    itemInHand.shrink(1);
-                }
+                ItemUtils.consume(itemInHand, player, 1);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -129,9 +126,7 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
                         SoundSource.BLOCKS, 1.0F, 1.0F
                 );
             }
-            if (!player.isCreative()) {
-                itemInHand.shrink(1);
-            }
+            ItemUtils.consume(itemInHand, player, 1);
             return InteractionResult.SUCCESS;
         }
 
@@ -149,7 +144,7 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
     public abstract int getMaxTextLength();
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@NonNull CompoundTag tag) {
         super.load(tag);
         this.text = tag.getString("text");
         this.color = DyeColor.byId(tag.getInt("color"));
@@ -159,7 +154,7 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(@NonNull CompoundTag tag) {
         super.saveAdditional(tag);
         tag.putString("text", this.text);
         tag.putInt("color", this.color.getId());

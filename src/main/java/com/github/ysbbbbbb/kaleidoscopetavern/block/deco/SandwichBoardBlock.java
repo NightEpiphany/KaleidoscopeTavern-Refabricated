@@ -3,6 +3,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 import com.github.ysbbbbbb.kaleidoscopetavern.api.client.IModelModifyRotationAfterBake;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.SandwichBoardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.google.common.collect.Maps;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -104,9 +105,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
                 }
 
                 level.playSound(null, pos, SoundType.GRASS.getPlaceSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
-                if (!player.isCreative()) {
-                    player.getItemInHand(hand).shrink(1);
-                }
+                ItemUtils.consume(player.getItemInHand(hand), player, 1);
 
                 return InteractionResult.SUCCESS;
             } else {

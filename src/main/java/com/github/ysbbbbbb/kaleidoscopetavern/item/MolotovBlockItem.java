@@ -1,7 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.item;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.entity.ThrownMolotovEntity;
-import net.minecraft.core.BlockPos;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -15,8 +15,8 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class MolotovBlockItem extends BottleBlockItem {
     public MolotovBlockItem(Block block) {
@@ -24,7 +24,7 @@ public class MolotovBlockItem extends BottleBlockItem {
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NonNull Level level, Player player, @NonNull InteractionHand hand) {
         player.startUsingItem(hand);
         return InteractionResultHolder.consume(player.getItemInHand(hand));
     }
@@ -42,7 +42,7 @@ public class MolotovBlockItem extends BottleBlockItem {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
+    public void releaseUsing(@NonNull ItemStack stack, @NonNull Level level, @NonNull LivingEntity entity, int timeLeft) {
         int time = this.getUseDuration(stack) - timeLeft;
         if (time < 10) {
             return;
@@ -56,19 +56,17 @@ public class MolotovBlockItem extends BottleBlockItem {
                     SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F,
                     0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
 
-            if (!(entity instanceof Player player) || !player.isCreative()) {
-                stack.shrink(1);
-            }
+            ItemUtils.consume(stack, entity, 1);
         }
     }
 
     @Override
-    public @NotNull UseAnim getUseAnimation(ItemStack stack) {
+    public @NotNull UseAnim getUseAnimation(@NonNull ItemStack stack) {
         return UseAnim.SPEAR;
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(@NonNull ItemStack stack) {
         return 72000;
     }
 }
