@@ -40,12 +40,6 @@ public class ModJeiPlugin implements IModPlugin {
         registration.addCraftingStation(ShakerRecipeCategory.TYPE, ModItems.SHAKER);
     }
 
-    public static void syncRecipes() {
-        RecipeSynchronization.synchronizeRecipeSerializer(ModRecipes.BARREL_SERIALIZER);
-        RecipeSynchronization.synchronizeRecipeSerializer(ModRecipes.PRESSING_TUB_SERIALIZER);
-        RecipeSynchronization.synchronizeRecipeSerializer(ModRecipes.SHAKER_SERIALIZER);
-    }
-
     @Override
     public @NotNull Identifier getPluginUid() {
         return UID;

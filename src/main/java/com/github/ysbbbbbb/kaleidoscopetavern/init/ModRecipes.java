@@ -7,6 +7,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.ShakerRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.serializer.BarrelRecipeSerializer;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.serializer.PressingTubRecipeSerializer;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.serializer.ShakerRecipeSerializer;
+import net.fabricmc.fabric.api.recipe.v1.sync.RecipeSynchronization;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -23,6 +24,12 @@ public final class ModRecipes {
     public static final RecipeType<BarrelRecipe> BARREL_RECIPE = simple(Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "barrel"));
     public static final RecipeType<ShakerRecipe> SHAKER_RECIPE = simple(Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "shaker"));
 
+    private static void syncRecipes() {
+        RecipeSynchronization.synchronizeRecipeSerializer(ModRecipes.BARREL_SERIALIZER);
+        RecipeSynchronization.synchronizeRecipeSerializer(ModRecipes.PRESSING_TUB_SERIALIZER);
+        RecipeSynchronization.synchronizeRecipeSerializer(ModRecipes.SHAKER_SERIALIZER);
+    }
+
     public static void registerRecipes() {
         Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "pressing_tub"), PRESSING_TUB_SERIALIZER);
         Registry.register(BuiltInRegistries.RECIPE_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "pressing_tub"), PRESSING_TUB_RECIPE);
@@ -30,6 +37,8 @@ public final class ModRecipes {
         Registry.register(BuiltInRegistries.RECIPE_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "barrel"), BARREL_RECIPE);
         Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "shaker"), SHAKER_SERIALIZER);
         Registry.register(BuiltInRegistries.RECIPE_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "shaker"), SHAKER_RECIPE);
+
+        syncRecipes();
     }
     private static <T extends Recipe<?>> RecipeType<T> simple(final Identifier id) {
         return new RecipeType<>() {
