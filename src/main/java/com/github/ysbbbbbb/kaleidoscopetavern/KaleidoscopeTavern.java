@@ -1,6 +1,5 @@
 package com.github.ysbbbbbb.kaleidoscopetavern;
 
-import com.github.ysbbbbbb.kaleidoscopetavern.compat.jei.ModJeiPlugin;
 import com.github.ysbbbbbb.kaleidoscopetavern.config.ConfigGetter;
 import com.github.ysbbbbbb.kaleidoscopetavern.config.GeneralConfig;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.*;
@@ -31,7 +30,5 @@ public final class KaleidoscopeTavern implements ModInitializer {
         ModCreativeTabs.registerTabs();
         ModParticles.registerParticles();
         ModSounds.registerSounds();
-        if (FabricLoader.getInstance().isModLoaded("jei"))
-            ModJeiPlugin.syncRecipes();
     }
 }

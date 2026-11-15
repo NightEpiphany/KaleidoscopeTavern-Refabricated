@@ -67,9 +67,7 @@ public class VanillaBottlePlaceEvent {
         }
 
         level.playSound(null, placePos, SoundEvents.GLASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
-        if (!player.getAbilities().instabuild) {
-            stack.shrink(1);
-        }
+        stack.consume(1, player);
         return InteractionResult.CONSUME;
     }
 

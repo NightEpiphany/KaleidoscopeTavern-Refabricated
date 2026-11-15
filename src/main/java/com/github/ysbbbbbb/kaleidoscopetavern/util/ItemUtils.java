@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.Nullable;
 
 public class ItemUtils {
     public static void getItemToLivingEntity(LivingEntity entity, ItemStack stack) {
@@ -107,6 +108,13 @@ public class ItemUtils {
 
         }
         return stack;
+    }
+
+    public static ItemStack separate(ItemStack stack, @Nullable final LivingEntity user, int count) {
+        if (user == null || !user.hasInfiniteMaterials()) {
+            return stack.split(count);
+        }
+        return stack.copyWithCount(Math.min(count, stack.getCount()));
     }
 
     public static ItemStack insertItemStacked(IItemHandler inventory, ItemStack stack, boolean simulate) {
