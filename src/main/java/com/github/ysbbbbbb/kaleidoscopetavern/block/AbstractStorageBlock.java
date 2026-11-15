@@ -7,6 +7,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.init.ModSounds;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.DrinkBlockItem;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.MolotovBlockItem;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.neo.ItemStackHandler;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -150,7 +151,7 @@ public abstract class AbstractStorageBlock extends HorizontalDirectionalBlock im
         }
 
         if (items.getStackInSlot(clickedSlot).isEmpty()) {
-            items.setStackInSlot(clickedSlot, player.getAbilities().instabuild ? handItem.copyWithCount(1) : handItem.split(1));
+            items.setStackInSlot(clickedSlot, ItemUtils.separate(handItem, player, 1));
             storage.refresh();
 
             SoundEvents.STONE.placeSound().ifPresent(sound -> level.playSound(null, pos, sound.value(), SoundSource.BLOCKS));
