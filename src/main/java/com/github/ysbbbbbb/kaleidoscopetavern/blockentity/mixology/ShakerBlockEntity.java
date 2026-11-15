@@ -85,7 +85,7 @@ public class ShakerBlockEntity extends BaseBlockEntity implements IShaker {
             );
         }
 
-        stack.shrink(1);
+        stack.consume(1, user);
 
         if (level != null) {
             this.putState.start((int) level.getGameTime());
