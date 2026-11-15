@@ -28,9 +28,7 @@ public class NormalGrapePlant {
                     .setValue(TrellisBlock.WATERLOGGED, state.getValue(TrellisBlock.WATERLOGGED));
             level.setBlockAndUpdate(pos, plantedState);
             level.playSound(null, pos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS);
-            if (!player.isCreative()) {
-                itemInHand.shrink(1);
-            }
+            itemInHand.consume(1, player);
             // 不再触发后续事件
             event.setCanceled(true);
         }

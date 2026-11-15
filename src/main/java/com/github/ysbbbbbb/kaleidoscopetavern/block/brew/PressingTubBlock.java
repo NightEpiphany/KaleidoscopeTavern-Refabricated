@@ -116,7 +116,7 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
         }
 
         // 最后尝试放入
-        if (pressingTub.addIngredient(itemInHand)) {
+        if (pressingTub.addIngredient(player, itemInHand)) {
             return ItemInteractionResult.SUCCESS;
         }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;

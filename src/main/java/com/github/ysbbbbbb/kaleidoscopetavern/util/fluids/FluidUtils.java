@@ -66,9 +66,9 @@ public class FluidUtils {
         }
 
         ItemStack result = resultStack(context);
-        if (!(user instanceof Player player) || !player.isCreative()) {
-            bucket.shrink(1);
-        }
+
+        bucket.consume(1, user);
+
         ItemUtils.getItemToLivingEntity(user, result);
         SoundEvent sound = FluidVariantAttributes.getEmptySound(resource);
         if (sound != null) {
@@ -139,9 +139,9 @@ public class FluidUtils {
         }
 
         ItemStack result = resultStack(context);
-        if (!(user instanceof Player player) || !player.isCreative()) {
-            bucket.shrink(1);
-        }
+
+        bucket.consume(1, user);
+
         ItemUtils.getItemToLivingEntity(user, result);
         SoundEvent sound = FluidVariantAttributes.getFillSound(resource);
         if (sound != null) {

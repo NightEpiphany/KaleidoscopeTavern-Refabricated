@@ -83,9 +83,7 @@ public class StringLightsBlock extends HorizontalDirectionalBlock implements Sim
             level.setBlockAndUpdate(pos, transform);
             level.playSound(null, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS);
             level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
-            if (!player.isCreative()) {
-                stack.shrink(1);
-            }
+            stack.consume(1, player);
             return ItemInteractionResult.SUCCESS;
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);

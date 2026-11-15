@@ -104,9 +104,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
                 }
 
                 level.playSound(null, pos, SoundType.GRASS.getPlaceSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
-                if (!player.isCreative()) {
-                    player.getItemInHand(hand).shrink(1);
-                }
+                player.getItemInHand(hand).consume(1, player);
 
                 return ItemInteractionResult.SUCCESS;
             } else {

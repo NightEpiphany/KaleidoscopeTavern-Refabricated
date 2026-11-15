@@ -54,9 +54,7 @@ public class MolotovBlockItem extends BottleBlockItem {
                     SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F,
                     0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
 
-            if (!(entity instanceof Player player) || !player.isCreative()) {
-                stack.shrink(1);
-            }
+            stack.consume(1, entity);
         }
     }
 

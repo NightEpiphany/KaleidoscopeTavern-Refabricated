@@ -89,7 +89,7 @@ public class ShakerBlockEntity extends BaseBlockEntity implements IShaker {
             );
         }
 
-        stack.shrink(1);
+        stack.consume(1, user);
 
         // 动画
         if (level != null) {
