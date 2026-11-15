@@ -5,13 +5,11 @@ import com.github.ysbbbbbb.kaleidoscopetavern.compat.jei.category.BarrelRecipeCa
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.jei.category.PressingTubCategory;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.jei.category.ShakerRecipeCategory;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
-import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import net.fabricmc.fabric.api.recipe.v1.sync.RecipeSynchronization;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
