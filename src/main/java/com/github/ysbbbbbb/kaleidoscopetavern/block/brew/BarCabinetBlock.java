@@ -4,6 +4,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.PositionType;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.BarCabinetBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.tag.TagMod;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -151,7 +152,7 @@ public class BarCabinetBlock extends BaseEntityBlock implements SimpleWaterlogge
             }
 
             if (bottleBlock != null && leftItem.isEmpty()) {
-                ItemStack split = stack.split(1);
+                ItemStack split = ItemUtils.separate(stack, player, 1);
                 barCabinet.setLeftItem(split);
                 barCabinet.setSingle(irregular);
                 barCabinet.refresh();
@@ -170,7 +171,7 @@ public class BarCabinetBlock extends BaseEntityBlock implements SimpleWaterlogge
             }
 
             if (bottleBlock != null && rightItem.isEmpty()) {
-                ItemStack split = stack.split(1);
+                ItemStack split = ItemUtils.separate(stack, player, 1);
                 barCabinet.setRightItem(split);
                 barCabinet.refresh();
                 barCabinet.setSingle(irregular);

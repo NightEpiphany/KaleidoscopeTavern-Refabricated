@@ -150,7 +150,7 @@ public abstract class AbstractStorageBlock extends HorizontalDirectionalBlock im
         }
 
         if (items.getStackInSlot(clickedSlot).isEmpty()) {
-            items.setStackInSlot(clickedSlot, handItem.split(1));
+            items.setStackInSlot(clickedSlot, player.getAbilities().instabuild ? handItem.copyWithCount(1) : handItem.split(1));
             storage.refresh();
 
             SoundEvents.STONE.placeSound().ifPresent(sound -> level.playSound(null, pos, sound.value(), SoundSource.BLOCKS));

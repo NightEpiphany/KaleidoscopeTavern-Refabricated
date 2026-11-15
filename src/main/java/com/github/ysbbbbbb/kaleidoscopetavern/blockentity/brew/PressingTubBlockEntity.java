@@ -90,12 +90,17 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
 
     @Override
     public boolean addIngredient(ItemStack stack) {
+        return addIngredient(null, stack);
+    }
+
+    @Override
+    public boolean addIngredient(@Nullable final LivingEntity target, ItemStack stack) {
         int count = stack.getCount();
         ItemStack remaining = this.items.insertItem(0, stack.copy(), false);
         if (remaining.getCount() >= count) {
             return false;
         }
-        stack.shrink(count - remaining.getCount());
+        stack.consume(count - remaining.getCount(), target);
         if (this.level instanceof ServerLevel) {
             this.level.playSound(null,
                     worldPosition.getX() + 0.5,
@@ -333,9 +338,9 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
                 }
 
                 ItemStack resultStack = bucketItem.getDefaultInstance();
-                if (!(target instanceof Player player) || !player.isCreative()) {
-                    carriedStack.shrink(1);
-                }
+
+                carriedStack.consume(1, target);
+
                 ItemUtils.getItemToLivingEntity(target, resultStack);
 
                 SoundEvent sound = getBucketFillSound(fluidVariant);
@@ -368,9 +373,8 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
         ItemVariant resultVariant = context.getItemVariant();
         ItemStack resultStack = resultVariant.toStack((int) Math.min(Integer.MAX_VALUE, context.getAmount()));
 
-        if (!(target instanceof Player player) || !player.isCreative()) {
-            carriedStack.shrink(1);
-        }
+        carriedStack.consume(1, target);
+
         ItemUtils.getItemToLivingEntity(target, resultStack);
 
         SoundEvent sound = getBucketFillSound(fluidVariant);

@@ -86,9 +86,7 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
                 textBlock.setColor(newColor);
                 textBlock.refresh();
                 level.playSound(null, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS);
-                if (!player.isCreative()) {
-                    itemInHand.shrink(1);
-                }
+                itemInHand.consume(1, player);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -99,9 +97,7 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
                 textBlock.setGlowing(true);
                 textBlock.refresh();
                 level.playSound(null, pos, SoundEvents.GLOW_INK_SAC_USE, SoundSource.BLOCKS);
-                if (!player.isCreative()) {
-                    itemInHand.shrink(1);
-                }
+                itemInHand.consume(1, player);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -112,9 +108,7 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
                 textBlock.setGlowing(false);
                 textBlock.refresh();
                 level.playSound(null, pos, SoundEvents.INK_SAC_USE, SoundSource.BLOCKS);
-                if (!player.isCreative()) {
-                    itemInHand.shrink(1);
-                }
+                itemInHand.consume(1, player);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -132,9 +126,7 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
                         SoundSource.BLOCKS, 1.0F, 1.0F
                 );
             }
-            if (!player.isCreative()) {
-                itemInHand.shrink(1);
-            }
+            itemInHand.consume(1, player);
             return InteractionResult.SUCCESS;
         }
 

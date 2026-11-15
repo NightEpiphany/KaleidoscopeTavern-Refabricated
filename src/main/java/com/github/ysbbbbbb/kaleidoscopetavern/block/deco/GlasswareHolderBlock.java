@@ -138,9 +138,7 @@ public class GlasswareHolderBlock extends HorizontalDirectionalBlock implements 
         ItemStack itemInHand = player.getMainHandItem();
         if (!level.isClientSide()) {
             items.setStackInSlot(slot, itemInHand.copyWithCount(1));
-            if (!player.getAbilities().instabuild) {
-                itemInHand.shrink(1);
-            }
+            itemInHand.consume(1, player);
             be.refresh();
             SoundEvents.AMETHYST_BLOCK.placeSound().ifPresent(sound -> level.playSound(null, pos, sound.value(), SoundSource.BLOCKS));
         }

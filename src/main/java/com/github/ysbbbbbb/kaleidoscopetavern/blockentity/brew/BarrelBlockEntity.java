@@ -281,7 +281,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
             if (user != null) {
                 user.playSound(SoundEvents.ITEM_FRAME_ADD_ITEM);
             }
-            stack.shrink(count - remaining.getCount());
+            stack.consume(count - remaining.getCount(), user);
             this.refresh();
             return true;
         }

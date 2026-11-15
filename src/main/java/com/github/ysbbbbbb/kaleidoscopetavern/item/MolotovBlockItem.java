@@ -63,9 +63,7 @@ public class MolotovBlockItem extends BottleBlockItem implements ProjectileItem 
                         SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F,
                         0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
 
-                if (!player.isCreative()) {
-                    stack.shrink(1);
-                }
+                stack.consume(1, player);
                 return true;
             }
         }else {

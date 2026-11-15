@@ -110,7 +110,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
                 }
                 SoundEvents.GRASS.placeSound().ifPresent(sound -> level.playSound(null, pos, sound, SoundSource.BLOCKS, 1.0F, 1.0F));
                 if (!player.isCreative()) {
-                    player.getItemInHand(hand).shrink(1);
+                    player.getItemInHand(hand).consume(1, player);
                 }
 
                 return InteractionResult.SUCCESS;
