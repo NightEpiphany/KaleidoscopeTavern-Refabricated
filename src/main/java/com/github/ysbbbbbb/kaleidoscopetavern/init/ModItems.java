@@ -109,7 +109,7 @@ public final class ModItems {
     public static final Item NIGHT_EPIPHANY_PAINTING = registerItem(ModBlockItemIds.NIGHT_EPIPHANY_PAINTING, p -> new PaintingBlockItem(ModBlocks.NIGHT_EPIPHANY_PAINTING, p));
     public static final Item DOBELRING_PAINTING = registerItem(ModBlockItemIds.DOBELRING_PAINTING, p -> new PaintingBlockItem(ModBlocks.DOBELRING_PAINTING, p));
     // 空瓶
-    public static final Item EMPTY_BOTTLE = registerItemViaBlock(ModBlockItemIds.EMPTY_BOTTLE, ModBlocks.EMPTY_BOTTLE, BottleBlockItem::new);
+    public static final Item EMPTY_BOTTLE = registerItemViaBlock(ModBlockItemIds.EMPTY_BOTTLE, ModBlocks.EMPTY_BOTTLE, (b, p) -> new BottleBlockItem(b, p.dispensed(ModDispenseBehaviors.BOTTLE)));
     public static final Item EMPTY_GLASSWARE = registerItemViaBlock(ModBlockItemIds.EMPTY_GLASSWARE, ModBlocks.EMPTY_GLASSWARE, GlasswareBlockItem::new);
     public static final Item SIGNATURE_COCKTAIL = registerItemViaBlock(ModBlockItemIds.SIGNATURE_COCKTAIL, ModBlocks.SIGNATURE_COCKTAIL, SignatureCocktailBlockItem::new);
     public static final Item MYSTERY_COCKTAIL = registerItemViaBlock(ModBlockItemIds.MYSTERY_COCKTAIL, ModBlocks.MYSTERY_COCKTAIL, CocktailBlockItem::new);
@@ -146,7 +146,7 @@ public final class ModItems {
     public static final Item BUTTERFLY_INCENSE = registerItem(ModBlockItemIds.BUTTERFLY_INCENSE, p -> new BlockItem(ModBlocks.BUTTERFLY_INCENSE, p.useBlockDescriptionPrefix()));
     public static final Item FIREFLY_INCENSE = registerItem(ModBlockItemIds.FIREFLY_INCENSE, p -> new BlockItem(ModBlocks.FIREFLY_INCENSE, p.useBlockDescriptionPrefix()));
     // 燃烧瓶
-    public static final Item MOLOTOV = registerItem(ModBlockItemIds.MOLOTOV, p -> new MolotovBlockItem(ModBlocks.MOLOTOV, p.useBlockDescriptionPrefix()));
+    public static final Item MOLOTOV = registerItem(ModBlockItemIds.MOLOTOV, p -> new MolotovBlockItem(ModBlocks.MOLOTOV, p.useBlockDescriptionPrefix().dispensed(ModDispenseBehaviors.BOTTLE)));
     // 吧台
     public static final Item BAR_COUNTER = registerItem(ModBlockItemIds.BAR_COUNTER, p -> new BlockItem(ModBlocks.BAR_COUNTER, p.useBlockDescriptionPrefix()));
     // 人字梯
@@ -174,31 +174,31 @@ public final class ModItems {
     public static final Item SHAKER = registerItem(ModBlockItemIds.SHAKER, ShakerItem::new);
     public static final Item GLASSWARE_HOLDER = registerItem(ModBlockItemIds.GLASSWARE_HOLDER, p -> new BlockItem(ModBlocks.GLASSWARE_HOLDER, p.useBlockDescriptionPrefix()));
     // 酒
-    public static final Item WINE = registerItem(ModBlockItemIds.WINE, p -> new DrinkBlockItem(ModBlocks.WINE, p));
-    public static final Item CHAMPAGNE = registerItem(ModBlockItemIds.CHAMPAGNE, p -> new DrinkBlockItem(ModBlocks.CHAMPAGNE, p));
-    public static final Item VODKA = registerItem(ModBlockItemIds.VODKA, p -> new DrinkBlockItem(ModBlocks.VODKA, p));
-    public static final Item BRANDY = registerItem(ModBlockItemIds.BRANDY, p -> new DrinkBlockItem(ModBlocks.BRANDY, p));
-    public static final Item CARIGNAN = registerItem(ModBlockItemIds.CARIGNAN, p -> new DrinkBlockItem(ModBlocks.CARIGNAN, p));
-    public static final Item SAKURA_WINE = registerItem(ModBlockItemIds.SAKURA_WINE, p -> new DrinkBlockItem(ModBlocks.SAKURA_WINE, p));
-    public static final Item PLUM_WINE = registerItem(ModBlockItemIds.PLUM_WINE, p -> new DrinkBlockItem(ModBlocks.PLUM_WINE, p));
-    public static final Item WHISKEY = registerItem(ModBlockItemIds.WHISKEY, p -> new DrinkBlockItem(ModBlocks.WHISKEY, p));
-    public static final Item ICE_WINE = registerItem(ModBlockItemIds.ICE_WINE, p -> new DrinkBlockItem(ModBlocks.ICE_WINE, p));
-    public static final Item VINEGAR = registerItem(ModBlockItemIds.VINEGAR, p -> new DrinkBlockItem(ModBlocks.VINEGAR, p));
-    public static final Item POLARIS_SWEET_WHITE = registerItem(ModBlockItemIds.POLARIS_SWEET_WHITE, p -> new DrinkBlockItem(ModBlocks.POLARIS_SWEET_WHITE, p));
-    public static final Item HONEY_WINE = registerItem(ModBlockItemIds.HONEY_WINE, p -> new DrinkBlockItem(ModBlocks.HONEY_WINE, p));
-    public static final Item RED_QUEEN = registerItem(ModBlockItemIds.RED_QUEEN, p -> new DrinkBlockItem(ModBlocks.RED_QUEEN, p));
-    public static final Item MINERS_STAR = registerItem(ModBlockItemIds.MINERS_STAR, p -> new DrinkBlockItem(ModBlocks.MINERS_STAR, p));
-    public static final Item RUM = registerItem(ModBlockItemIds.RUM, p -> new DrinkBlockItem(ModBlocks.RUM, p));
-    public static final Item RIESLING_DRY_WHITE = registerItem(ModBlockItemIds.RIESLING_DRY_WHITE, p -> new DrinkBlockItem(ModBlocks.RIESLING_DRY_WHITE, p));
-    public static final Item SUNSET_GLOW = registerItem(ModBlockItemIds.SUNSET_GLOW, p -> new DrinkBlockItem(ModBlocks.SUNSET_GLOW, p));
-    public static final Item MADAME_SHEXIANG = registerItem(ModBlockItemIds.MADAME_SHEXIANG, p -> new DrinkBlockItem(ModBlocks.MADAME_SHEXIANG, p));
-    public static final Item SWEET_BERRY_WINE = registerItem(ModBlockItemIds.SWEET_BERRY_WINE, p -> new DrinkBlockItem(ModBlocks.SWEET_BERRY_WINE, p));
-    public static final Item SHERRY = registerItem(ModBlockItemIds.SHERRY, p -> new DrinkBlockItem(ModBlocks.SHERRY, p));
-    public static final Item MOTHER_SNOW = registerItem(ModBlockItemIds.MOTHER_SNOW, p -> new DrinkBlockItem(ModBlocks.MOTHER_SNOW, p));
-    public static final Item LUMINOUS_BRIDE = registerItem(ModBlockItemIds.LUMINOUS_BRIDE, p -> new DrinkBlockItem(ModBlocks.LUMINOUS_BRIDE, p));
-    public static final Item GLOWFLOWER_BREW = registerItem(ModBlockItemIds.GLOWFLOWER_BREW, p -> new DrinkBlockItem(ModBlocks.GLOWFLOWER_BREW, p));
-    public static final Item SAUVIGNON_BLANC_DRY_WHITE = registerItem(ModBlockItemIds.SAUVIGNON_BLANC_DRY_WHITE, p -> new DrinkBlockItem(ModBlocks.SAUVIGNON_BLANC_DRY_WHITE, p));
-    public static final Item WATERMELON_JUICE = registerItem(ModBlockItemIds.WATERMELON_JUICE, p -> new DrinkBlockItem(ModBlocks.WATERMELON_JUICE, p));
+    public static final Item WINE = registerItem(ModBlockItemIds.WINE, p -> new DrinkBlockItem(ModBlocks.WINE, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item CHAMPAGNE = registerItem(ModBlockItemIds.CHAMPAGNE, p -> new DrinkBlockItem(ModBlocks.CHAMPAGNE, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item VODKA = registerItem(ModBlockItemIds.VODKA, p -> new DrinkBlockItem(ModBlocks.VODKA, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item BRANDY = registerItem(ModBlockItemIds.BRANDY, p -> new DrinkBlockItem(ModBlocks.BRANDY, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item CARIGNAN = registerItem(ModBlockItemIds.CARIGNAN, p -> new DrinkBlockItem(ModBlocks.CARIGNAN, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item SAKURA_WINE = registerItem(ModBlockItemIds.SAKURA_WINE, p -> new DrinkBlockItem(ModBlocks.SAKURA_WINE, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item PLUM_WINE = registerItem(ModBlockItemIds.PLUM_WINE, p -> new DrinkBlockItem(ModBlocks.PLUM_WINE, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item WHISKEY = registerItem(ModBlockItemIds.WHISKEY, p -> new DrinkBlockItem(ModBlocks.WHISKEY, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item ICE_WINE = registerItem(ModBlockItemIds.ICE_WINE, p -> new DrinkBlockItem(ModBlocks.ICE_WINE, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item VINEGAR = registerItem(ModBlockItemIds.VINEGAR, p -> new DrinkBlockItem(ModBlocks.VINEGAR, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item POLARIS_SWEET_WHITE = registerItem(ModBlockItemIds.POLARIS_SWEET_WHITE, p -> new DrinkBlockItem(ModBlocks.POLARIS_SWEET_WHITE, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item HONEY_WINE = registerItem(ModBlockItemIds.HONEY_WINE, p -> new DrinkBlockItem(ModBlocks.HONEY_WINE, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item RED_QUEEN = registerItem(ModBlockItemIds.RED_QUEEN, p -> new DrinkBlockItem(ModBlocks.RED_QUEEN, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item MINERS_STAR = registerItem(ModBlockItemIds.MINERS_STAR, p -> new DrinkBlockItem(ModBlocks.MINERS_STAR, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item RUM = registerItem(ModBlockItemIds.RUM, p -> new DrinkBlockItem(ModBlocks.RUM, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item RIESLING_DRY_WHITE = registerItem(ModBlockItemIds.RIESLING_DRY_WHITE, p -> new DrinkBlockItem(ModBlocks.RIESLING_DRY_WHITE, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item SUNSET_GLOW = registerItem(ModBlockItemIds.SUNSET_GLOW, p -> new DrinkBlockItem(ModBlocks.SUNSET_GLOW, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item MADAME_SHEXIANG = registerItem(ModBlockItemIds.MADAME_SHEXIANG, p -> new DrinkBlockItem(ModBlocks.MADAME_SHEXIANG, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item SWEET_BERRY_WINE = registerItem(ModBlockItemIds.SWEET_BERRY_WINE, p -> new DrinkBlockItem(ModBlocks.SWEET_BERRY_WINE, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item SHERRY = registerItem(ModBlockItemIds.SHERRY, p -> new DrinkBlockItem(ModBlocks.SHERRY, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item MOTHER_SNOW = registerItem(ModBlockItemIds.MOTHER_SNOW, p -> new DrinkBlockItem(ModBlocks.MOTHER_SNOW, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item LUMINOUS_BRIDE = registerItem(ModBlockItemIds.LUMINOUS_BRIDE, p -> new DrinkBlockItem(ModBlocks.LUMINOUS_BRIDE, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item GLOWFLOWER_BREW = registerItem(ModBlockItemIds.GLOWFLOWER_BREW, p -> new DrinkBlockItem(ModBlocks.GLOWFLOWER_BREW, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item SAUVIGNON_BLANC_DRY_WHITE = registerItem(ModBlockItemIds.SAUVIGNON_BLANC_DRY_WHITE, p -> new DrinkBlockItem(ModBlocks.SAUVIGNON_BLANC_DRY_WHITE, p.dispensed(ModDispenseBehaviors.BOTTLE)));
+    public static final Item WATERMELON_JUICE = registerItem(ModBlockItemIds.WATERMELON_JUICE, p -> new DrinkBlockItem(ModBlocks.WATERMELON_JUICE, p.dispensed(ModDispenseBehaviors.BOTTLE)));
 
     // 果汁桶
     public static final Item GRAPE_BUCKET = registerItem(ModItemIds.GRAPE_BUCKET, p -> new JuiceBucketItem(ModFluids.GRAPE_JUICE, p));
